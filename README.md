@@ -1,2 +1,4 @@
-# software-dev_s22
-Software Development, Spring 2022
+# Software Development
+ITWS 6700, Spring 2022
+
+Kat Lopez, Lanya Xiang, Matthew Youngbar, Gwyneth Yuen
