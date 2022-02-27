@@ -2,6 +2,8 @@ import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 import FrontPage from './FrontPage.js';
 
+// localhost:3000
+
 const Main = (props) => {
   //console.log(props);
   return (
