@@ -7,7 +7,7 @@ const Main = (props) => {
   return (
     <Switch>
       <Route exact path='/' render={
-        () => <div><ClientTopBar page="front" /><FrontPage/></div>
+        () => <div><FrontPage/></div>
       }></Route>
       {}
     </Switch>
