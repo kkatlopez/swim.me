@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { Container, Card, DropdownButton, Dropdown } from 'react-bootstrap';
 import '../css/meetresults.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowRight } from '@fortawesome/free-solid-svg-icons'
+import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 
 class FrontPage extends Component {
 	
@@ -31,21 +31,21 @@ class FrontPage extends Component {
               <Card.Body className="mt-2">
                   <Card.Title>RPI @ Skidmore</Card.Title>
                   <Card.Subtitle className="text-muted">January 22, 2022</Card.Subtitle>
-                  <FontAwesomeIcon icon={faArrowRight} className="fa"/>
+                  {/* <FontAwesomeIcon icon={faArrowRight} className="fa"/> */}
               </Card.Body>
             </Card>
             <Card className="meet-card">
               <Card.Body className="mt-2">
                 <Card.Title>MIT Invitational</Card.Title>
                 <Card.Subtitle className="text-muted">December 3, 2022</Card.Subtitle>
-                <FontAwesomeIcon icon={faArrowRight} className="fa"/>
+                {/* <FontAwesomeIcon icon={faArrowRight} className="fa"/> */}
               </Card.Body>
             </Card>
             <Card className="meet-card">
               <Card.Body className="mt-2">
                 <Card.Title>RPI vs. Vassar College</Card.Title>
                 <Card.Subtitle className="text-muted">November 13, 2021</Card.Subtitle>
-                <FontAwesomeIcon icon={faArrowRight} className="fa"/>
+                {/* <FontAwesomeIcon icon={faArrowRight} className="fa-landing"/> */}
               </Card.Body>
             </Card>
           </div>
