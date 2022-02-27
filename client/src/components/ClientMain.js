@@ -1,6 +1,8 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
-import FrontPage from './FrontPage.js';
+import MeetResults from './MeetResults.js';
+import RosterPage from './Roster.js';
+
 
 // localhost:3000
 
@@ -9,7 +11,10 @@ const Main = (props) => {
   return (
     <Switch>
       <Route exact path='/' render={
-        () => <div><FrontPage/></div>
+        () => <div><MeetResults/></div>
+      }></Route>
+      <Route exact path='/roster' render={
+        () => <div><RosterPage/></div>
       }></Route>
       {}
     </Switch>

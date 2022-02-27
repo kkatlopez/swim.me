@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 //import { Link, withRouter } from 'react-router-dom';
 import { Navbar, Container, Alert, Card } from 'react-bootstrap';
-import '../css/frontpage.css';
+// import '../css/frontpage.css';
 
 class FrontPage extends Component {
 	
@@ -14,7 +14,7 @@ class FrontPage extends Component {
   render() {
     return(
       <Container className="frontpage-main">
-        <h1 className="front-title">Welcome!</h1>
+        <h1 className="front-title">TEST!</h1>
         <Alert variant="success">
         <Alert.Heading>Hey, nice to see you</Alert.Heading>
         <p>

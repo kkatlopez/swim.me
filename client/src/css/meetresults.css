@@ -1,0 +1,10 @@
+.meet-card {
+    margin-bottom: 1.25rem;
+    height: 6.25rem;
+}
+
+svg {
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+}
