@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { Container, DropdownButton, Dropdown} from 'react-bootstrap';
 import '../css/alltimetop10.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import { faChevronRight, faChevronLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import Top10IndividualEvent from './Top10IndividualEvent.js';
 
 class AllTimeTop10 extends Component {
@@ -36,6 +36,9 @@ class AllTimeTop10 extends Component {
         <Container fluid className="siteHeader d-flex align-items-end">
           <h1 className="siteHeaderTitle px-3 mb-3">Times</h1>
         </Container>
+        <a href="/" className="standalone">
+                <p><FontAwesomeIcon icon={faChevronLeft} className="px-0"/> Back to time search</p>
+            </a>
         <Container className="px-4">
           <label>Event</label>
           <DropdownButton className="dropdown" title="Select an event" className="pb-3">
