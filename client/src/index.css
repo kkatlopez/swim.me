@@ -11,3 +11,53 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.page-container {
+  padding: 0 !important;
+}
+
+/* Header for each page */
+.siteHeader {
+  background-color: #1D62A0;
+  color: #fff;
+  height: 8rem;
+  margin-bottom: 1rem;
+}
+
+.siteHeaderTitle {
+  font-size: 40px;
+}
+
+/* Dropdown */
+.dropdown .btn-primary {
+  background-color: #fff;
+  color: #6C757D;
+  border-color: #CED4DA;
+}
+
+.dropdown .btn-primary:hover,
+.show > .btn-primary.dropdown-toggle {
+  background-color: #1D62A0 !important;
+  border-color: #CED4DA;
+}
+
+/* Tables */
+table {
+  border: 1px solid #DEE2E6;
+  margin-bottom: 0.5rem !important;
+}
+
+table > thead {
+  background-color: #868E96;
+  color: #fff;
+  border-bottom: hidden;
+}
+
+table > thead > tr > th {
+  font-weight: 500;
+}
+
+/* Links */
+a.standalone {
+  text-decoration: none !important;
+}
