@@ -17,7 +17,7 @@ app.use(function(req, res, next) {
   next();
 });
 
-const uri = "mongodb+srv://root:swim.me@cluster0.eeewg.mongodb.net/Cluster0";
+const uri = "mongodb+srv://root:hKTl1sOyZzIZWqlY@cluster0.eeewg.mongodb.net/Cluster0";
 mongoose.connect(uri, { useUnifiedTopology: true, useNewUrlParser: true });
 const connection = mongoose.connection;
 connection.on('error', console.error.bind(console, 'connection error:'));
