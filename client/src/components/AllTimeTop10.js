@@ -36,12 +36,12 @@ class AllTimeTop10 extends Component {
         <Container fluid className="siteHeader d-flex align-items-end">
           <h1 className="siteHeaderTitle px-3 mb-3">Times</h1>
         </Container>
-        <a href="/" className="standalone">
+        <Container className="px-4">
+          <a href="/" className="standalone">
                 <p><FontAwesomeIcon icon={faChevronLeft} className="px-0"/> Back to time search</p>
             </a>
-        <Container className="px-4">
           <label>Event</label>
-          <DropdownButton className="dropdown" title="Select an event" className="pb-3">
+          <DropdownButton className="dropdown pb-3" title="Select an event">
             <Dropdown.Item onClick={() => this.showTable("")}>-</Dropdown.Item>
             <Dropdown.Item href="#/action-1">W 50 Free</Dropdown.Item>
             <Dropdown.Item href="#/action-2">M 50 Free</Dropdown.Item>
