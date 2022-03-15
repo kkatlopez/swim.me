@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
 // import ReactDOM from 'react-dom';
 import { Container, Card, DropdownButton, Dropdown, Table } from 'react-bootstrap';
-import '../css/alltimetop10.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 
 class MeetTimes extends Component {
 	
