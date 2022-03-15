@@ -5,7 +5,8 @@ import MeetResults from './MeetResults.js';
 import RosterPage from './Roster.js';
 import SpecificMeet from './SpecificMeet.js'
 import AllTimeTop10 from './AllTimeTop10.js';
-import Event from './Event.js'
+import Event from './Event.js';
+import Time from './Times.js';
 
 // localhost:3000
 
@@ -25,6 +26,9 @@ const Main = (props) => {
       }></Route>
       <Route exact path='/event' render={
         () => <div><Event/></div>
+      }></Route>
+      <Route exact path='/times' render={
+        () => <div><Time/></div>
       }></Route>
     </Switch>
     
