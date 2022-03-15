@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 // import ReactDOM from 'react-dom';
 import { Container, Card, DropdownButton, Dropdown, Table } from 'react-bootstrap';
 import '../css/alltimetop10.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 
 class Top10IndividualEvent extends Component {
 	
@@ -14,7 +16,7 @@ class Top10IndividualEvent extends Component {
     return(
           <div className="event-time">
             <h3>Top 10 Times for M 500 Free</h3>
-            <Table bordered>
+            <Table striped bordered hover>
               <thead>
                   <tr>
                   <th>#</th>

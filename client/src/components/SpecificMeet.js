@@ -26,7 +26,7 @@ class FrontPage extends Component {
             <p class="text-muted">January 22, 2022</p>
             <label>Event</label>
             <DropdownButton className="dropdown pb-3" title="Select an event">
-                <Dropdown.Item href="/event">W 200 Medley Relay</Dropdown.Item>
+                <Dropdown.Item href="#/action-1">W 200 Medley Relay</Dropdown.Item>
                 <Dropdown.Item href="#/action-2">M 200 Medley Relay</Dropdown.Item>
                 <Dropdown.Item href="#/action-3">W 1000 Free</Dropdown.Item>
                 <Dropdown.Item href="#/action-3">M 1000 Free</Dropdown.Item>
@@ -60,7 +60,7 @@ class FrontPage extends Component {
                             </tr>
                         </tbody>
                     </Table>
-                    <a href="/event" className="standalone view-all">
+                    <a href="" className="standalone view-all">
                         <p>View all results<FontAwesomeIcon icon={faChevronRight} /></p>
                     </a>
                 </div>
