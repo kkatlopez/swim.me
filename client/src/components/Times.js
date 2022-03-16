@@ -38,7 +38,7 @@ class AllTimeTop10 extends Component {
                 {/* i think i need to create a component for each of these tiles that are then triggered by an on-click function */}
                 <MeetTimes/>
             </Tab>
-            <Tab eventKey="latest" title="Latest" onClick={() => this.showMeet("")}>
+            <Tab eventKey="fastest" title="Fastest" onClick={() => this.showMeet("")}>
                 <LatestTimes/>
             </Tab>
             <Tab eventKey="event" title="By Event">

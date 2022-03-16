@@ -34,7 +34,7 @@ class FrontPage extends Component {
               <Card.Body className="mt-2">
                   <Card.Title>RPI @ Skidmore</Card.Title>
                   <Card.Subtitle className="text-muted">January 22, 2022</Card.Subtitle>
-                  {/* <FontAwesomeIcon icon={faArrowRight} className="fa"/> */}
+                  <a href="/meet" className="stretched-link"></a>
               </Card.Body>
             </Card>
             <Card className="meet-card">
