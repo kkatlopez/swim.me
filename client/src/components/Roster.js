@@ -83,12 +83,12 @@ class FrontPage extends Component {
             <Card.Body>
               <Card.Title>Gwyneth Yuen</Card.Title>
               <Card.Text>
-                <div>BK/FR</div>
+                <div>FR/BK</div>
                 <div>Senior</div>
                 <div>Princeton Jct., NJ</div>
               </Card.Text>
             </Card.Body>
-            <a href="/" className="stretched-link"></a>
+            <a href="/roster/profile" className="stretched-link"></a>
           </Card>
         </Container>
       </Container>   

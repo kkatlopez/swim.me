@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 // import ReactDOM from 'react-dom';
 import { Container, Form, FormControl, Button, Tabs, Tab } from 'react-bootstrap';
 import MeetTimes from './MeetTimes.js';
-import LatestTimes from './LatestTimes.js';
+import FastestTimes from './FastestTimes.js';
 import EventTimes from './EventTimes.js';
 
 class AllTimeTop10 extends Component {
@@ -39,7 +39,7 @@ class AllTimeTop10 extends Component {
                 <MeetTimes/>
             </Tab>
             <Tab eventKey="fastest" title="Fastest" onClick={() => this.showMeet("")}>
-                <LatestTimes/>
+                <FastestTimes/>
             </Tab>
             <Tab eventKey="event" title="By Event">
                 <EventTimes/>

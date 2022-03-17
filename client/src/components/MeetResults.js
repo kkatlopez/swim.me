@@ -19,9 +19,9 @@ class FrontPage extends Component {
           <h1 className="siteHeaderTitle px-3 mb-3">Meet Results</h1>
         </Container>
         <Container className="px-4">
-        <a href="/" className="standalone">
+            {/* <a href="/" className="standalone">
                 <p><FontAwesomeIcon icon={faChevronLeft} className="px-0"/> Back to all meets</p>
-            </a>
+            </a> */}
           <label>Meet</label>
           <DropdownButton className="dropdown pb-3" title="Select a meet">
             <Dropdown.Item href="/meet">RPI @ Skidmore</Dropdown.Item>

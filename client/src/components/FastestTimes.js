@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 // import ReactDOM from 'react-dom';
 import { Table } from 'react-bootstrap';
 
-class LatestTimes extends Component {
+class FastestTimes extends Component {
 	
   constructor(props) {
     super(props);
@@ -71,4 +71,4 @@ class LatestTimes extends Component {
   }
 }
 
-export default(LatestTimes);
+export default(FastestTimes);

@@ -19,7 +19,7 @@ class FrontPage extends Component {
           <h1 className="siteHeaderTitle px-3 mb-3">Meet Results</h1>
         </Container>
         <Container className="px-4">
-            <a href="/" className="standalone">
+            <a href="/meet" className="standalone">
                 <p><FontAwesomeIcon icon={faChevronLeft} className="px-0"/> Back to meet</p>
             </a>
             <h2>RPI @ Skidmore</h2>

@@ -7,6 +7,7 @@ import SpecificMeet from './SpecificMeet.js'
 import AllTimeTop10 from './AllTimeTop10.js';
 import Event from './Event.js';
 import Time from './Times.js';
+import RosterProfile from './RosterProfile.js'
 
 // localhost:3000
 
@@ -32,6 +33,9 @@ const Main = (props) => {
       }></Route>
       <Route exact path='/roster' render={
         () => <div><Roster/></div>
+      }></Route>
+      <Route exact path='/roster/profile' render={
+        () => <div><RosterProfile/></div>
       }></Route>
     </Switch>
     
