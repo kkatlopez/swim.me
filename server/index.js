@@ -25,11 +25,11 @@ mongoose.set('useFindAndModify', false);
 connection.once('open', () => {
   console.log('MongoDB database connection established successfully!');
 
-  connection.db.collection("meet-info", function (err, collection) {
-    collection.find({}).toArray(function (err, data) {
-      console.log(data); // it will print your collection data
-    })
-  });
+  // connection.db.collection("meet-info", function (err, collection) {
+  //   collection.find({}).toArray(function (err, data) {
+  //     console.log(data); // it will print your collection data
+  //   })
+  // });
 
   // mongoose.connection.db.listCollections().toArray(function (err, names) {
   //   console.log(names); // [{ name: 'dbname.myCollection' }]
@@ -62,9 +62,10 @@ const meet_info = mongoose.model('meet-info', meet_info_schema);
 app.get("/meet_info", async (req, res) => {
   try {
     connection.db.collection("meet-info", function (err, collection) {
-      collection.find({}).toArray(function (err, data) {
-        console.log(data); // it will print your collection data
-        return data;
+      var mysort = { "meetStartDate": -1 };
+      collection.find({}).sort(mysort).toArray(function (err, data) {
+        //console.log(data); // it will print your collection data
+        res.send(data);
       })
     });
   } catch (error) {

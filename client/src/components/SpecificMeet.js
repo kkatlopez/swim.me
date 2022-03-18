@@ -5,7 +5,7 @@ import '../css/specificmeet.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronRight, faChevronLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 
-class FrontPage extends Component {
+class SpecificMeet extends Component {
 	
   constructor(props) {
 	super(props);
@@ -104,4 +104,4 @@ class FrontPage extends Component {
   }
 }
 
-export default(FrontPage);
+export default(SpecificMeet);

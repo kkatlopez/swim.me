@@ -18,16 +18,17 @@ const Main = (props) => {
       <Route exact path='/' render={
         () => <div><MeetResults/></div>
       }></Route>
-      <Route exact path='/meet' render={
+      {/* <Route exact path='/meet/:meetName' render={
         () => <div><SpecificMeet/></div>
-      }></Route>
-      {/* {} */}
+      }></Route> */}
+      <Route path="/meet/:meetName" component={SpecificMeet} />
+      <Route path="/event/:eventName" component={Event} />
       <Route exact path='/alltimetop10' render={
         () => <div><AllTimeTop10/></div>
       }></Route>
-      <Route exact path='/event' render={
+      {/* <Route exact path='/event' render={
         () => <div><Event/></div>
-      }></Route>
+      }></Route> */}
       <Route exact path='/times' render={
         () => <div><Time/></div>
       }></Route>
