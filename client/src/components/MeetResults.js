@@ -5,6 +5,7 @@ import '../css/meetresults.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight, faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import MeetCard from "./MeetCard.js";
+import moment from 'moment';
 
 class FrontPage extends Component {
 	
@@ -65,7 +66,7 @@ class FrontPage extends Component {
           <div className="meet-cards">
             {
               this.state.meetlist.map( (lister) => {
-                  return(<MeetCard meetname={lister.meetName} meetdate={lister.meetStartDate}/>)
+                  return(<MeetCard meetname={lister.meetName} meetdate={moment(lister.meetStartDate).format('ll')}/>)
               })
             }
             {/* <Card className="meet-card">
