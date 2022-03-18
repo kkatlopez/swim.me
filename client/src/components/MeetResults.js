@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { Container, Card, DropdownButton, Dropdown } from 'react-bootstrap';
 import '../css/meetresults.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import { faArrowRight, faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 
 class FrontPage extends Component {
 	
@@ -19,9 +19,12 @@ class FrontPage extends Component {
           <h1 className="siteHeaderTitle px-3 mb-3">Meet Results</h1>
         </Container>
         <Container className="px-4">
+            {/* <a href="/" className="standalone">
+                <p><FontAwesomeIcon icon={faChevronLeft} className="px-0"/> Back to all meets</p>
+            </a> */}
           <label>Meet</label>
-          <DropdownButton className="dropdown" title="Select a meet" className="pb-3">
-            <Dropdown.Item href="#/action-1">RPI @ Skidmore</Dropdown.Item>
+          <DropdownButton className="dropdown pb-3" title="Select a meet">
+            <Dropdown.Item href="/meet">RPI @ Skidmore</Dropdown.Item>
             <Dropdown.Item href="#/action-2">MIT Invitational</Dropdown.Item>
             <Dropdown.Item href="#/action-3">RPI vs. Vassar College</Dropdown.Item>
           </DropdownButton>
@@ -31,7 +34,7 @@ class FrontPage extends Component {
               <Card.Body className="mt-2">
                   <Card.Title>RPI @ Skidmore</Card.Title>
                   <Card.Subtitle className="text-muted">January 22, 2022</Card.Subtitle>
-                  {/* <FontAwesomeIcon icon={faArrowRight} className="fa"/> */}
+                  <a href="/meet" className="stretched-link"></a>
               </Card.Body>
             </Card>
             <Card className="meet-card">

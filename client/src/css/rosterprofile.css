@@ -1,0 +1,34 @@
+img {
+    width: 60vw;
+    /* align-self: center; */
+}
+
+@media screen and (min-width: 1000px) {
+    img {
+      width: 20vw;
+    }
+}
+
+@media screen and (min-width: 400px) and (max-width: 999px) {
+    img {
+        width: 40vw;
+    }
+}
+
+
+.img-thumbnail {
+    margin: 2px;
+}
+
+.info > p {
+    margin: 0;
+}
+
+hr {
+    width: 90vw;
+    margin: 1.25rem auto !important;
+}
+
+label {
+    margin-left: 0.25rem !important;
+}
