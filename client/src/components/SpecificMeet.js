@@ -28,7 +28,11 @@ class SpecificMeet extends Component {
           var namelist = [];
           var i;
           for (i = 0; i < specific_result.meetEvents.length; i++) {
-            namelist.push(specific_result.meetEvents[i][0]);
+            if (specific_result.meetEvents[i][1].length == 0) {
+              continue;
+            } else {
+              namelist.push(specific_result.meetEvents[i][0]);
+            }
           }
           this.setState({
             eventlist: specific_result.meetEvents,
