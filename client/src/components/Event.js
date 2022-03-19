@@ -31,52 +31,50 @@ class Event extends Component {
     return(
       <Container fluid className="page-container">
         <Container fluid className="siteHeader d-flex align-items-end">
-          <h1 className="siteHeaderTitle px-3 mb-3">{this.state.name} Results</h1>
+          <h1 className="siteHeaderTitle px-3 mb-3">Event Results</h1>
         </Container>
         <Container className="px-4">
-          {/* change this href: */}
-            <a href="/meet" className="standalone">
+            <a href={"/meet/" + this.props.match.params.meetName} className="standalone">
                 <p><FontAwesomeIcon icon={faChevronLeft} className="px-0"/> Back to meet</p>
             </a>
-
+            <h2>{this.state.name}</h2>            
             <div className="event">
-                <h4>W 200 Medley Relay</h4>
                 <Table bordered>
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Time</th>
-                                <th>Score</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Rensselaer</td>
-                                <td>1:54.53</td>
-                                <td>11.00</td>
-                            </tr>
-                            <tr>
-                                <td>Rensselaer</td>
-                                <td>1:56.95</td>
-                                <td>4.00</td>
-                            </tr>
-                            <tr>
-                                <td>Skidmore</td>
-                                <td>2:01.94</td>
-                                <td>2.00</td>
-                            </tr>
-                            <tr>
-                                <td>Rensselaer</td>
-                                <td>2:03.40</td>
-                                <td>–</td>
-                            </tr>
-                            <tr>
-                                <td>Skidmore</td>
-                                <td>2:07.65</td>
-                                <td>–</td>
-                            </tr>
-                        </tbody>
-                    </Table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Time</th>
+                            <th>Score</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Rensselaer</td>
+                            <td>1:54.53</td>
+                            <td>11.00</td>
+                        </tr>
+                        <tr>
+                            <td>Rensselaer</td>
+                            <td>1:56.95</td>
+                            <td>4.00</td>
+                        </tr>
+                        <tr>
+                            <td>Skidmore</td>
+                            <td>2:01.94</td>
+                            <td>2.00</td>
+                        </tr>
+                        <tr>
+                            <td>Rensselaer</td>
+                            <td>2:03.40</td>
+                            <td>–</td>
+                        </tr>
+                        <tr>
+                            <td>Skidmore</td>
+                            <td>2:07.65</td>
+                            <td>–</td>
+                        </tr>
+                    </tbody>
+                </Table>
             </div>
 
         </Container>
