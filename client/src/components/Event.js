@@ -12,31 +12,27 @@ class Event extends Component {
     this.state = {
       name: "",
       meetname: "",
-      meetdate: ""
+      meetdate: "",
+      results: []
       }
   }
 
   // use populateEvents() from SpecificMeet.js 
-
-  populateEvents() {
+  showResultTable() {
     fetch("http://localhost:3001/meet_info")
       .then(res => res.json())
       .then(
         (result) => {
-          var specific_result = result.find(x => (x.meetName === this.state.name && x.meetStartDate === this.state.date));
-          //var specific_event = specific_result.find(x => (x.eventName === this.statename))
-          var namelist = [];
+          var specific_result = result.find(x => (x.meetName === this.state.meetname && x.meetStartDate === this.state.meetdate));
           var i;
+          var eventresults = [];
           for (i = 0; i < specific_result.meetEvents.length; i++) {
-            if (specific_result.meetEvents[i][1].length == 0) {
-              continue;
-            } else {
-              namelist.push(specific_result.meetEvents[i][0]);
+            if (specific_result.meetEvents[i][0] == this.state.name) {
+              eventresults = specific_result.meetEvents[i];
             }
           }
           this.setState({
-            eventlist: specific_result.meetEvents,
-            eventname: namelist
+            results: eventresults[1]
           });
         },
         (error) => {
@@ -47,7 +43,6 @@ class Event extends Component {
         }
       )
   }
-
   
   componentDidMount(){
     var event = this.props.match.params.eventName;
@@ -57,7 +52,7 @@ class Event extends Component {
         meetname: split[0],
         meetdate: split[1]
     })
-
+    this.showResultTable();
   }
 	
   render() {
@@ -77,35 +72,19 @@ class Event extends Component {
                     <tr>
                         <th>Name</th>
                         <th>Time</th>
-                        <th>Score</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                        <td>Rensselaer</td>
-                        <td>1:54.53</td>
-                        <td>11.00</td>
-                    </tr>
-                    <tr>
-                        <td>Rensselaer</td>
-                        <td>1:56.95</td>
-                        <td>4.00</td>
-                    </tr>
-                    <tr>
-                        <td>Skidmore</td>
-                        <td>2:01.94</td>
-                        <td>2.00</td>
-                    </tr>
-                    <tr>
-                        <td>Rensselaer</td>
-                        <td>2:03.40</td>
-                        <td>–</td>
-                    </tr>
-                    <tr>
-                        <td>Skidmore</td>
-                        <td>2:07.65</td>
-                        <td>–</td>
-                    </tr>
+                  {
+                    this.state.results.map( (lister) => {
+                      return(
+                        <tr>
+                          <td>{lister[0]}</td>
+                          <td>{lister[1]}</td>
+                        </tr>
+                      )
+                    })
+                  }
                   </tbody>
                 </Table>
             </div>

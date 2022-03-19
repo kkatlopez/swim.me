@@ -25,10 +25,11 @@ class SpecificMeet extends Component {
       .then(
         (result) => {
           var specific_result = result.find(x => (x.meetName === this.state.name && x.meetStartDate === this.state.date));
+          // console.log(specific_result);
           var namelist = [];
           var i;
           for (i = 0; i < specific_result.meetEvents.length; i++) {
-            if (specific_result.meetEvents[i][1].length == 0) {
+            if (specific_result.meetEvents[i][1].length === 0) {
               continue;
             } else {
               namelist.push(specific_result.meetEvents[i][0]);
@@ -38,6 +39,7 @@ class SpecificMeet extends Component {
             eventlist: specific_result.meetEvents,
             eventname: namelist
           });
+          console.log(specific_result.meetEvents);
         },
         (error) => {
           this.setState({
@@ -76,7 +78,7 @@ class SpecificMeet extends Component {
               this.state.eventname.map( (lister) => {
                 // console.log((lister.eventlist)[0]);
                   //console.log(lister);
-                  return(<Dropdown.Item href={"/meet/" + this.props.match.params.meetName + "/event/" + lister} eventinfo = {this.state.eventlist}>{lister}</Dropdown.Item>)
+                  return(<Dropdown.Item href={"/meet/" + this.props.match.params.meetName + "/event/" + lister} eventinfo={this.state.eventlist}>{lister}</Dropdown.Item>)
               }) 
             }
             
