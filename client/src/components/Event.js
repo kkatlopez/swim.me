@@ -16,6 +16,39 @@ class Event extends Component {
       }
   }
 
+  // use populateEvents() from SpecificMeet.js 
+
+  populateEvents() {
+    fetch("http://localhost:3001/meet_info")
+      .then(res => res.json())
+      .then(
+        (result) => {
+          var specific_result = result.find(x => (x.meetName === this.state.name && x.meetStartDate === this.state.date));
+          //var specific_event = specific_result.find(x => (x.eventName === this.statename))
+          var namelist = [];
+          var i;
+          for (i = 0; i < specific_result.meetEvents.length; i++) {
+            if (specific_result.meetEvents[i][1].length == 0) {
+              continue;
+            } else {
+              namelist.push(specific_result.meetEvents[i][0]);
+            }
+          }
+          this.setState({
+            eventlist: specific_result.meetEvents,
+            eventname: namelist
+          });
+        },
+        (error) => {
+          this.setState({
+            isLoaded: true,
+            error
+          });
+        }
+      )
+  }
+
+  
   componentDidMount(){
     var event = this.props.match.params.eventName;
     var split = this.props.match.params.meetName.split('_');
@@ -40,40 +73,40 @@ class Event extends Component {
             <h2>{this.state.name}</h2>            
             <div className="event">
                 <Table bordered>
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Time</th>
-                            <th>Score</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Rensselaer</td>
-                            <td>1:54.53</td>
-                            <td>11.00</td>
-                        </tr>
-                        <tr>
-                            <td>Rensselaer</td>
-                            <td>1:56.95</td>
-                            <td>4.00</td>
-                        </tr>
-                        <tr>
-                            <td>Skidmore</td>
-                            <td>2:01.94</td>
-                            <td>2.00</td>
-                        </tr>
-                        <tr>
-                            <td>Rensselaer</td>
-                            <td>2:03.40</td>
-                            <td>–</td>
-                        </tr>
-                        <tr>
-                            <td>Skidmore</td>
-                            <td>2:07.65</td>
-                            <td>–</td>
-                        </tr>
-                    </tbody>
+                  <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Time</th>
+                        <th>Score</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                        <td>Rensselaer</td>
+                        <td>1:54.53</td>
+                        <td>11.00</td>
+                    </tr>
+                    <tr>
+                        <td>Rensselaer</td>
+                        <td>1:56.95</td>
+                        <td>4.00</td>
+                    </tr>
+                    <tr>
+                        <td>Skidmore</td>
+                        <td>2:01.94</td>
+                        <td>2.00</td>
+                    </tr>
+                    <tr>
+                        <td>Rensselaer</td>
+                        <td>2:03.40</td>
+                        <td>–</td>
+                    </tr>
+                    <tr>
+                        <td>Skidmore</td>
+                        <td>2:07.65</td>
+                        <td>–</td>
+                    </tr>
+                  </tbody>
                 </Table>
             </div>
 

@@ -76,7 +76,7 @@ class SpecificMeet extends Component {
               this.state.eventname.map( (lister) => {
                 // console.log((lister.eventlist)[0]);
                   //console.log(lister);
-                  return(<Dropdown.Item href={"/meet/" + this.props.match.params.meetName + "/event/" + lister} eventsinfo = {this.state.eventlist}>{lister}</Dropdown.Item>)
+                  return(<Dropdown.Item href={"/meet/" + this.props.match.params.meetName + "/event/" + lister} eventinfo = {this.state.eventlist}>{lister}</Dropdown.Item>)
               }) 
             }
             
