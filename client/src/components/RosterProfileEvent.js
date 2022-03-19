@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 // import ReactDOM from 'react-dom';
-import { Container, Table, Dropdown, DropdownButton } from 'react-bootstrap';
+import { Container } from 'react-bootstrap';
 import EventTimes from './EventTimes.js';
 
 class RosterProfileLatest extends Component {
@@ -21,6 +21,8 @@ class RosterProfileLatest extends Component {
             break;
           case "":
             this.setState({ showTable: false });
+            break;
+          default:
             break;
         }
       }

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
+//import ReactDOM from 'react-dom';
 //import { Link, withRouter } from 'react-router-dom';
-import { Container, Form, FormControl, Button, Card, List } from 'react-bootstrap';
+import { Container, Form, FormControl, Button, Card } from 'react-bootstrap';
 import '../css/roster.css';
 
 // import '../css/frontpage.css';
@@ -10,7 +10,9 @@ class FrontPage extends Component {
 	
   constructor(props) {
 	super(props);
-		
+  this.state = {
+        
+  };
   }
 	
   render() {

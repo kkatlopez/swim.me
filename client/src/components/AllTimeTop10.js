@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { Container, DropdownButton, Dropdown} from 'react-bootstrap';
 import '../css/alltimetop10.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronRight, faChevronLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import Top10IndividualEvent from './Top10IndividualEvent.js';
 
 class AllTimeTop10 extends Component {

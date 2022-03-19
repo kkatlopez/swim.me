@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 // import ReactDOM from 'react-dom';
-import { Container, Card, DropdownButton, Dropdown } from 'react-bootstrap';
+import { Container, DropdownButton, Dropdown } from 'react-bootstrap';
 import '../css/meetresults.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowRight, faChevronLeft } from '@fortawesome/free-solid-svg-icons';
+//import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+//import { faArrowRight, faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import MeetCard from "./MeetCard.js";
 import moment from 'moment';
 
@@ -40,7 +40,6 @@ class FrontPage extends Component {
 
   componentDidMount(){
     this.populateMeet();
-    console.log("hello");
   }
 	
   render() {
@@ -50,9 +49,6 @@ class FrontPage extends Component {
           <h1 className="siteHeaderTitle px-3 mb-3">Meet Results</h1>
         </Container>
         <Container className="px-4">
-            {/* <a href="/" className="standalone">
-                <p><FontAwesomeIcon icon={faChevronLeft} className="px-0"/> Back to all meets</p>
-            </a> */}
           <label>Meet</label>
           <DropdownButton className="dropdown pb-3" title="Select a meet">
             {
@@ -66,30 +62,10 @@ class FrontPage extends Component {
           <div className="meet-cards">
             {
               this.state.meetlist.map( (lister) => {
-                  return(<MeetCard meetname={lister.meetName} meetdate={moment(lister.meetStartDate).format('ll')}/>)
+                  return(<MeetCard meetname={lister.meetName} meetdate={moment(lister.meetStartDate).format('ll')} meetoriginaldate={lister.meetStartDate}/>)
               })
             }
-            {/* <Card className="meet-card">
-              <Card.Body className="mt-2">
-                  <Card.Title>RPI @ Skidmore</Card.Title>
-                  <Card.Subtitle className="text-muted">January 22, 2022</Card.Subtitle>
-                  <a href="/meet" className="stretched-link"></a>
-              </Card.Body>
-            </Card>
-            <Card className="meet-card">
-              <Card.Body className="mt-2">
-                <Card.Title>MIT Invitational</Card.Title>
-                <Card.Subtitle className="text-muted">December 3, 2022</Card.Subtitle>
-                
-              </Card.Body>
-            </Card>
-            <Card className="meet-card">
-              <Card.Body className="mt-2">
-                <Card.Title>RPI vs. Vassar College</Card.Title>
-                <Card.Subtitle className="text-muted">November 13, 2021</Card.Subtitle>
-                
-              </Card.Body>
-            </Card> */}
+
           </div>
         </Container>
       </Container>      

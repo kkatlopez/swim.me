@@ -5,6 +5,9 @@ import { Container, Table } from 'react-bootstrap';
 class RosterProfileLatest extends Component {
     constructor(props) {
       super(props);
+      this.state = {
+        
+      };
     }
 
     render() {

@@ -1,10 +1,10 @@
 
 import React, { Component } from 'react';
 // import ReactDOM from 'react-dom';
-import { Container, DropdownButton, Dropdown, Table } from 'react-bootstrap';
+import { Container, Table } from 'react-bootstrap';
 import '../css/event.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronRight, faChevronLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 
 class EventTable extends Component {
 	

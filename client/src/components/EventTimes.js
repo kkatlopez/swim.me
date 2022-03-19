@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 // import ReactDOM from 'react-dom';
-import { Container, Card, DropdownButton, Dropdown, Table } from 'react-bootstrap';
+import { DropdownButton, Dropdown, Table } from 'react-bootstrap';
 import '../css/eventtimes.css';
 
 class EventTimes extends Component {
@@ -22,6 +22,8 @@ class EventTimes extends Component {
         break;
       case "":
         this.setState({ showEvent: false });
+        break;
+      default:
         break;
     }
   }

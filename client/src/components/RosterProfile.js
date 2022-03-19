@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
+// import ReactDOM from 'react-dom';
 //import { Link, withRouter } from 'react-router-dom';
 import { Container, DropdownButton, Dropdown } from 'react-bootstrap';
 import '../css/rosterprofile.css';
@@ -32,6 +32,8 @@ class RosterProfile extends Component {
         break;
       case "":
         this.setState({ showTable: false });
+        break;
+      default:
         break;
     }
   }

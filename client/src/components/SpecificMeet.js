@@ -1,15 +1,56 @@
 import React, { Component } from 'react';
 // import ReactDOM from 'react-dom';
-import { Container, DropdownButton, Dropdown, Table } from 'react-bootstrap';
+import { Container, DropdownButton, Dropdown } from 'react-bootstrap';
 import '../css/specificmeet.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronRight, faChevronLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import { faChevronLeft} from '@fortawesome/free-solid-svg-icons';
+import SpecificMeetCard from './SpecificMeetCard';
+import moment from 'moment';
 
 class SpecificMeet extends Component {
 	
   constructor(props) {
 	super(props);
-		
+    this.state = {
+        name: "",
+        date: "",
+        eventlist: [],
+        eventname: [],
+      }
+  }
+
+  populateEvents() {
+    fetch("http://localhost:3001/meet_info")
+      .then(res => res.json())
+      .then(
+        (result) => {
+          var specific_result = result.find(x => (x.meetName === this.state.name && x.meetStartDate === this.state.date));
+          var namelist = [];
+          var i;
+          for (i = 0; i < specific_result.meetEvents.length; i++) {
+            namelist.push(specific_result.meetEvents[i][0]);
+          }
+          this.setState({
+            eventlist: specific_result.meetEvents,
+            eventname: namelist
+          });
+        },
+        (error) => {
+          this.setState({
+            isLoaded: true,
+            error
+          });
+        }
+      )
+  }
+
+  componentDidMount(){
+    var split = this.props.match.params.meetName.split('_');
+    this.setState({
+        name: split[0],
+        date: split[1]
+    })
+    this.populateEvents();
   }
 	
   render() {
@@ -22,80 +63,27 @@ class SpecificMeet extends Component {
             <a href="/" className="standalone">
                 <p><FontAwesomeIcon icon={faChevronLeft} className="px-0"/> Back to all meets</p>
             </a>
-            <h2>RPI @ Skidmore</h2>
-            <p class="text-muted">January 22, 2022</p>
+            <h2>{this.state.name}</h2>
+            <p class="text-muted">{moment(this.state.date).format('ll')}</p>
+
             <label>Event</label>
             <DropdownButton className="dropdown pb-3" title="Select an event">
-                <Dropdown.Item href="/event">W 200 Medley Relay</Dropdown.Item>
-                <Dropdown.Item href="#/action-2">M 200 Medley Relay</Dropdown.Item>
-                <Dropdown.Item href="#/action-3">W 1000 Free</Dropdown.Item>
-                <Dropdown.Item href="#/action-3">M 1000 Free</Dropdown.Item>
-            </DropdownButton>
-            <div className="events">
-                <div className="event">
-                    <h4>W 200 Medley Relay</h4>
-                    <Table bordered>
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Time</th>
-                                <th>Score</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Rensselaer</td>
-                                <td>1:54.53</td>
-                                <td>11.00</td>
-                            </tr>
-                            <tr>
-                                <td>Rensselaer</td>
-                                <td>1:56.95</td>
-                                <td>4.00</td>
-                            </tr>
-                            <tr>
-                                <td>Skidmore</td>
-                                <td>2:01.94</td>
-                                <td>2.00</td>
-                            </tr>
-                        </tbody>
-                    </Table>
-                    <a href="/event" className="standalone view-all">
-                        <p>View all results<FontAwesomeIcon icon={faChevronRight} /></p>
-                    </a>
-                </div>
-                <div className="event">
-                    <h4>M 200 Medley Relay</h4>
-                    <Table bordered>
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Time</th>
-                                <th>Score</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Rensselaer</td>
-                                <td>1:38.51</td>
-                                <td>11.00</td>
-                            </tr>
-                            <tr>
-                                <td>Rensselaer</td>
-                                <td>1:39.06</td>
-                                <td>4.00</td>
-                            </tr>
-                            <tr>
-                                <td>Skidmore</td>
-                                <td>1:42.74</td>
-                                <td>2.00</td>
-                            </tr>
-                        </tbody>
-                    </Table>
-                    <a href="" className="standalone view-all">
-                        <p>View all results<FontAwesomeIcon icon={faChevronRight} /></p>
-                    </a>
-                </div>
+            {
+              this.state.eventname.map( (lister) => {
+                // console.log((lister.eventlist)[0]);
+                  //console.log(lister);
+                  return(<Dropdown.Item href={"/meet/" + this.props.match.params.meetName + "/event/" + lister} eventsinfo = {this.state.eventlist}>{lister}</Dropdown.Item>)
+              }) 
+            }
+            
+            </DropdownButton> 
+
+            <div className="specific-meet-cards">
+            {
+              this.state.eventname.map( (lister) => {
+                  return(<SpecificMeetCard eventlink={"/meet/" + this.props.match.params.meetName + "/event/" + lister} eventnameslist={this.state.eventname} eventname={lister} eventinfo={this.state.eventlist}>{lister}</SpecificMeetCard>)
+              })
+            }
             </div>
             
         </Container>

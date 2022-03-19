@@ -1,7 +1,6 @@
-
 import React, { Component } from 'react';
 // import ReactDOM from 'react-dom';
-import { Container, Card, Dropdown, Table } from 'react-bootstrap';
+import { Container, Card } from 'react-bootstrap';
 import '../css/meetresults.css';
 
 class MeetCard extends Component {
@@ -10,7 +9,8 @@ class MeetCard extends Component {
 	super(props);
     this.state = {
         name: this.props.meetname,
-        date: this.props.meetdate
+        date: this.props.meetdate,
+        ogdate: this.props.meetoriginaldate
       }
   }
 	
@@ -21,7 +21,7 @@ class MeetCard extends Component {
               <Card.Body className="mt-2">
                   <Card.Title>{this.state.name}</Card.Title>
                   <Card.Subtitle className="text-muted">{this.state.date}</Card.Subtitle>
-                  <a href={"/meet/" + this.state.name} className="stretched-link"></a>
+                  <a href={"/meet/" + this.state.name + "_" + this.state.ogdate} className="stretched-link"></a>
               </Card.Body>
             </Card>
       </Container>      

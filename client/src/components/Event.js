@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 // import ReactDOM from 'react-dom';
-import { Container, DropdownButton, Dropdown, Table } from 'react-bootstrap';
+import { Container, DropdownButton, Dropdown } from 'react-bootstrap';
 import '../css/event.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronRight, faChevronLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import { faChevronLeft} from '@fortawesome/free-solid-svg-icons';
 import EventTable from "./EventTable.js";
 
 class FrontPage extends Component {
@@ -27,7 +27,7 @@ class FrontPage extends Component {
           console.log(result);
           var fullList = result;
           console.log(this.props);
-          var temp = result.findIndex(x => x.meet_name == this.props.match.params.eventName);
+          var temp = result.findIndex(x => x.meet_name === this.props.match.params.eventName);
           console.log(temp);
           this.setState({
             meetinfo: fullList[temp]

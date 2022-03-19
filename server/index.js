@@ -58,13 +58,29 @@ const meet_info = mongoose.model('meet-info', meet_info_schema);
 
 //---------------------------------------------------WEB APP FUNCTIONS---------------------------------------------------
 
-//GET Meet Info
+//GET All Meet Info
 app.get("/meet_info", async (req, res) => {
   try {
     connection.db.collection("meet-info", function (err, collection) {
       var mysort = { "meetStartDate": -1 };
       collection.find({}).sort(mysort).toArray(function (err, data) {
         //console.log(data); // it will print your collection data
+        res.send(data);
+      })
+    });
+  } catch (error) {
+    return console.log(error);
+  }
+});
+
+//GET Specific Meet Info
+app.get("/meet_info_specific", async (req, res) => {
+  try {
+    connection.db.collection("meet-info", function (err, collection) {
+      console.log(req.body.name);
+      console.log(req.body.date);
+      collection.find({ meet_name: req.body.name, meet_start_date: req.body.date }).toArray(function (err, data) {
+        console.log(data); // it will print your collection data
         res.send(data);
       })
     });

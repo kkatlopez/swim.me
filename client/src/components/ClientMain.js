@@ -22,7 +22,7 @@ const Main = (props) => {
         () => <div><SpecificMeet/></div>
       }></Route> */}
       <Route path="/meet/:meetName" component={SpecificMeet} />
-      <Route path="/event/:eventName" component={Event} />
+      <Route path="/meet/:meetName/event/:eventName" component={Event} />
       <Route exact path='/alltimetop10' render={
         () => <div><AllTimeTop10/></div>
       }></Route>
