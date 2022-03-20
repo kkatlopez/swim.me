@@ -90,6 +90,19 @@ app.get("/meet_info_specific", async (req, res) => {
 });
 
 //GET Swimmer Info
+app.get("/swimmers", async (req, res) => {
+  try {
+    var mysort = { "lastName": 1 };
+    connection.db.collection("swimmer-info", function (err, collection) {
+      collection.find({}).sort(mysort).toArray(function (err, data) {
+        console.log(data); // it will print your collection data
+        res.send(data);
+      })
+    });
+  } catch (error) {
+    return console.log(error);
+  }
+});
 
 //GET Top 10
 
