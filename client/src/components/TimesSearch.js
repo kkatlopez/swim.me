@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-// import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom';
 import { Container, Form, FormControl, Button, Tabs, Tab } from 'react-bootstrap';
 import MeetTimes from './MeetTimes.js';
 import FastestTimes from './FastestTimes.js';
@@ -15,22 +15,36 @@ class TimesSearch extends Component {
     this.state = {
         swimmernames: [],
         allswimmerinfo: [],
-        showTable: false
+        showTable: false,
+        query: ""
     };
     this.showTable = this.showTable.bind(this);
     }
 
-    showTable(event) {
-      console.log(event);
-      switch (event) {
-        case "M 500 Free":
-          this.setState({ showTable: true });
-          break;
-        case "":
-          this.setState({ showTable: false });
-          break;
-      }
-    }
+  showTable(event) {
+    // var node = document.getElementsByClassName('divider text')[0];
+    // var a = ReactDOM.findDOMNode(node);
+    // console.log(a.textContent);
+
+    // var splitname = a.textContent.split(" ");
+    // var specific_result = this.state.allswimmerinfo.find(x => (x.firstName === splitname[0] && x.lastName === splitname[1]));
+    // console.log(specific_result);
+    // var d = specific_result.bestTimes;
+    // var b = specific_result.meetsSwam;
+    // var c = specific_result.eventsSwam;
+    // console.log(d);
+    // console.log(b);
+    // console.log(c);
+
+    // this.setState({
+    //   fastestTimes: d,
+    //   meetsSwam: b,
+    //   eventsSwam: c
+    // });
+    // console.log(this.state.meetsSwam);
+    //console.log(event);
+    this.setState({ showTable: true });
+  }
 
   getSwimmerTimes() {
     fetch("http://localhost:3001/swimmers")
@@ -72,17 +86,10 @@ class TimesSearch extends Component {
         </Container>
         <Container className="px-4">
         <br/>
-        {/* <Dropdown
-          clearable
-          fluid
-          search
-          selection
-          options={this.state.swimmernames}
-          placeholder='Search for a Swimmer'
-        /> */}
         <SwimmerSearch swimmernames={this.state.swimmernames}/>
+        <Button onClick={() => this.showTable("")}>Show Results</Button>
         <br/>
-        <Times/>
+        {showTable && <Times swimmers={this.state.allswimmerinfo}/>}
 
         </Container>
       </Container>      

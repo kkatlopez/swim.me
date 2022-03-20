@@ -1,70 +1,53 @@
 import React, { Component } from 'react';
-// import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom';
 import { Table } from 'react-bootstrap';
+import moment from 'moment';
 
 class FastestTimes extends Component {
 	
   constructor(props) {
     super(props);
     this.state = {
-      event: "",
-      showLatest: false
+      times: []
     };
-    this.showLatest = this.showLatest.bind(this);
   }
 
-  showLatest(event) {
-    console.log(event);
-    switch (event) {
-      case "RPI @ Skidmore":
-        this.setState({ showLatest: true });
-        break;
-      case "":
-        this.setState({ showLatest: false });
-        break;
-    }
+  componentDidMount(){
+    
+    this.setState({ times: this.props.best });
+    console.log(this.state.best);
   }
 	
+  
+
   render() {
     return(
         <div className="latest">
-            <div>
-              <Table bordered>
-                <thead>
+          <div className="event">
+                <Table bordered>
+                  <thead>
                     <tr>
-                    <th>Event</th>
-                    <th>Time</th>
-                    <th>Date</th>
+                        <th>Event</th>
+                        <th>Time</th>
+                        <th>Meet</th>
+                        <th>Date</th>
                     </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                    <td>50 Y Free</td>
-                    <td>25.25</td>
-                    <td>Oct 21, 2016</td>
-                    </tr>
-                    <tr>
-                    <td>50 L Free</td>
-                    <td>26.95</td>
-                    <td>Jul 20, 2019</td>
-                    </tr>
-                    <tr>
-                    <td>100 Y Free</td>
-                    <td>51.01</td>
-                    <td>Dec 03, 2017</td>
-                    </tr>
-                    <tr>
-                    <td>100 L Free</td>
-                    <td>56.49</td>
-                    <td>Jul 22, 2018</td>
-                    </tr>
-                    <tr>
-                    <td>200 Y Free</td>
-                    <td>1:46.19</td>
-                    <td>Feb 19, 2018</td>
-                    </tr>
-                </tbody>
-              </Table> 
+                  </thead>
+                  <tbody>
+                  {
+                    this.state.times.map( (lister) => {
+                      return(
+                        <tr>
+                          <td>{lister[0]}</td>
+                          <td>{lister[1]}</td>
+                          <td>{lister[2]}</td>
+                          <td>{moment(lister[3]).format('ll')}</td>
+                        </tr>
+                      )
+                    })
+                  }
+                  </tbody>
+                </Table>
             </div>
         </div>    
     );
