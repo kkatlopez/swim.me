@@ -13,6 +13,12 @@ Figma link for high fidelity mockups: https://www.figma.com/proto/rpXX7rce6HMEcr
 Current flow for meet pages: MeetResults.js (with MeetCard.js) > SpecificMeet.js (with SpecificMeetCard.js) > Event.js
 
 THINGS WE NEED TO DO:
-- Implement search on Roster.js, Times.js
-- Import data (hometown, best strokes, class year, etc.) to database for Roster.js and RosterCard.js
-- Get scores for each meet and display on SpecificMeet.js
+- Implement search on Roster.js, Times.js (Lanya's code)
+- Matthew: Import data (hometown, best strokes, class year, etc.) to database for Roster.js and RosterCard.js
+- Matthew: Get scores for each meet and display on SpecificMeet.js
+- Matthew and Gwyneth: Admin + coach pages
+    • Create alerts
+    • Create, edit, delete users
+    • Edit swimmer info
+- Login system
+- Firebase messaging
