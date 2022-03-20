@@ -47,9 +47,21 @@ var meet_info_schema = new Schema({
   meet_start_date: { type: Date },
   meet_end_date: { type: Date },
   meet_location: { type: String },
-  meet_events: [ String]
+  meet_events: [ String ]
 }, { versionKey: false });
 const meet_info = mongoose.model('meet-info', meet_info_schema);
+
+var swimmer_info = new Schema ({
+  first_name: { type: String },
+  last_name: { type: String },
+  events_swam: [ String ],
+  best_times: [ String ],
+  meets_swam: [ String ],
+  season_swam:[ String ],
+  hometown: { type: String },
+  primary_stroke: { type: String },
+  high_school: { type: String }
+})
 
 //Swimmer Info
 

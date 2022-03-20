@@ -6,7 +6,7 @@ import Roster from './Roster.js';
 import SpecificMeet from './SpecificMeet.js'
 import AllTimeTop10 from './AllTimeTop10.js';
 import Event from './Event.js';
-import Time from './Times.js';
+import TimesSearch from './TimesSearch.js';
 import RosterProfile from './RosterProfile.js'
 
 // localhost:3000
@@ -26,7 +26,7 @@ const Main = (props) => {
         () => <div><AllTimeTop10/></div>
       }></Route>
       <Route exact path='/times' render={
-        () => <div><Time/></div>
+        () => <div><TimesSearch/></div>
       }></Route>
       <Route exact path='/roster' render={
         () => <div><Roster/></div>
