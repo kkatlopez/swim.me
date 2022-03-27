@@ -55,6 +55,14 @@ const meet_info = mongoose.model('meet-info', meet_info_schema);
 
 //Top 10
 
+//Meet Info
+var alert_schema = new Schema({
+  alert_text: { type: String },
+  alert_type: { type: String },
+  alert_end_date: { type: Date },
+}, { versionKey: false });
+const alert_info = mongoose.model('alerts', alert_schema);
+
 
 //---------------------------------------------------WEB APP FUNCTIONS---------------------------------------------------
 
@@ -77,6 +85,20 @@ app.get("/meet_info", async (req, res) => {
 //GET Top 10
 
 //GET Credentials
+
+//GET Alert Info
+app.get("/alert_info", async (req, res) => {
+  try {
+    connection.db.collection("alerts", function (err, collection) {
+      collection.find({}).toArray(function (err, data) {
+        console.log(data); // it will print your collection data
+        return data;
+      })
+    });
+  } catch (error) {
+    return console.log(error);
+  }
+});
 
 
 //---------------------------------------------------ADMIN FUNCTIONS---------------------------------------------------

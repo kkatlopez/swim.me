@@ -8,6 +8,7 @@ import AllTimeTop10 from './AllTimeTop10.js';
 import Event from './Event.js';
 import Time from './Times.js';
 import RosterProfile from './RosterProfile.js'
+import Admin from './Admin.js'
 
 // localhost:3000
 
@@ -36,6 +37,9 @@ const Main = (props) => {
       }></Route>
       <Route exact path='/roster/profile' render={
         () => <div><RosterProfile/></div>
+      }></Route>
+      <Route exact path='/admin' render={
+        () => <div><Admin/></div>
       }></Route>
     </Switch>
     
