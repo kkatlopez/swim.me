@@ -8,6 +8,7 @@ import AllTimeTop10 from './AllTimeTop10.js';
 import Event from './Event.js';
 import TimesSearch from './TimesSearch.js';
 import RosterProfile from './RosterProfile.js'
+import Times from './Times.js';
 
 // localhost:3000
 
@@ -21,13 +22,13 @@ const Main = (props) => {
 
       <Route exact path="/meet/:meetName" component={SpecificMeet} />
       <Route exact path="/meet/:meetName/event/:eventName" component={Event} />
-
       <Route exact path='/alltimetop10' render={
         () => <div><AllTimeTop10/></div>
       }></Route>
       <Route exact path='/times' render={
         () => <div><TimesSearch/></div>
       }></Route>
+      <Route exact path="/times/:swimmerName" component={Times} />
       <Route exact path='/roster' render={
         () => <div><Roster/></div>
       }></Route>

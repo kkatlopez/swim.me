@@ -51,6 +51,7 @@ var meet_info_schema = new Schema({
 }, { versionKey: false });
 const meet_info = mongoose.model('meet-info', meet_info_schema);
 
+//Swimmer Info
 var swimmer_info = new Schema ({
   first_name: { type: String },
   last_name: { type: String },
@@ -62,8 +63,6 @@ var swimmer_info = new Schema ({
   primary_stroke: { type: String },
   high_school: { type: String }
 })
-
-//Swimmer Info
 
 //Top 10
 
@@ -81,7 +80,7 @@ app.get("/meet_info", async (req, res) => {
       })
     });
   } catch (error) {
-    return console.log(error);
+      return console.log(error);
   }
 });
 
@@ -97,7 +96,7 @@ app.get("/meet_info_specific", async (req, res) => {
       })
     });
   } catch (error) {
-    return console.log(error);
+      return console.log(error);
   }
 });
 
@@ -112,7 +111,22 @@ app.get("/swimmers", async (req, res) => {
       })
     });
   } catch (error) {
-    return console.log(error);
+      return console.log(error);
+  }
+});
+
+app.get("/specific_swimmer", async (req, res) => {
+  try {
+    connection.db.collection("swimmer-info", function (err, collection) {
+      // var split = req.body.name.split(" ");
+      var split = ['Kat', 'Lopez'];
+      collection.find({ firstName: split[0], lastName: split[1] }).toArray(function (err, data) {
+        console.log(data); // it will print your collection data
+        res.send(data);
+      })
+    });
+  } catch (error) {
+      return console.log(error);
   }
 });
 

@@ -1,5 +1,6 @@
-import React, { Component } from 'react';
+import React, { Component, Route } from 'react';
 import ReactDOM from 'react-dom';
+import { withRouter } from 'react-router-dom';
 import { Container, Form, FormControl, Button, Tabs, Tab } from 'react-bootstrap';
 import MeetTimes from './MeetTimes.js';
 import FastestTimes from './FastestTimes.js';
@@ -15,35 +16,19 @@ class TimesSearch extends Component {
     this.state = {
         swimmernames: [],
         allswimmerinfo: [],
-        showTable: false,
-        query: ""
+        //showTable: false,
+        query: "",
     };
-    this.showTable = this.showTable.bind(this);
+    //this.showTable = this.showTable.bind(this);
     }
 
-  showTable(event) {
-    // var node = document.getElementsByClassName('divider text')[0];
-    // var a = ReactDOM.findDOMNode(node);
-    // console.log(a.textContent);
 
-    // var splitname = a.textContent.split(" ");
-    // var specific_result = this.state.allswimmerinfo.find(x => (x.firstName === splitname[0] && x.lastName === splitname[1]));
-    // console.log(specific_result);
-    // var d = specific_result.bestTimes;
-    // var b = specific_result.meetsSwam;
-    // var c = specific_result.eventsSwam;
-    // console.log(d);
-    // console.log(b);
-    // console.log(c);
-
-    // this.setState({
-    //   fastestTimes: d,
-    //   meetsSwam: b,
-    //   eventsSwam: c
-    // });
-    // console.log(this.state.meetsSwam);
-    //console.log(event);
-    this.setState({ showTable: true });
+  redirect() {
+    var node = document.getElementsByClassName('divider text')[0];
+    var a = ReactDOM.findDOMNode(node);
+    console.log(a.textContent);
+    var redirect = "/times/" + a.textContent;
+    this.props.history.push(redirect);
   }
 
   getSwimmerTimes() {
@@ -87,9 +72,9 @@ class TimesSearch extends Component {
         <Container className="px-4">
         <br/>
         <SwimmerSearch swimmernames={this.state.swimmernames}/>
-        <Button onClick={() => this.showTable("")}>Show Results</Button>
+        <Button onClick={() => this.redirect()}>Show Results</Button>
         <br/>
-        {showTable && <Times swimmers={this.state.allswimmerinfo}/>}
+        {/* {showTable && <Times swimmers={this.state.allswimmerinfo}/>} */}
 
         </Container>
       </Container>      
@@ -102,4 +87,4 @@ styleLink.rel = "stylesheet";
 styleLink.href = "https://cdn.jsdelivr.net/npm/semantic-ui/dist/semantic.min.css";
 document.head.appendChild(styleLink);
 
-export default(TimesSearch);
+export default withRouter(TimesSearch);

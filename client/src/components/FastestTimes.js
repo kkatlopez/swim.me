@@ -12,13 +12,36 @@ class FastestTimes extends Component {
     };
   }
 
-  componentDidMount(){
-    
-    this.setState({ times: this.props.best });
-    console.log(this.state.best);
+  populateEvents() {
+    fetch("http://localhost:3001/swimmers")
+      .then(res => res.json())
+      .then(
+        (result) => {
+          var specific_result = result.find(x => (x.firstName === this.state.firstname && x.lastName === this.state.lastname));
+          this.setState({
+            times: specific_result.bestTimes
+          });
+          console.log(this.state.times);
+          console.log(specific_result);
+        },
+        (error) => {
+          this.setState({
+            isLoaded: true,
+            error
+          });
+        }
+      )
   }
-	
-  
+
+  componentDidMount(){
+    var split = this.props.name.split(' ');
+    console.log(split);
+    this.setState({
+        firstname: split[0],
+        lastname: split[1]
+    });
+    this.populateEvents();
+  }
 
   render() {
     return(
