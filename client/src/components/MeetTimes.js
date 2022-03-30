@@ -34,7 +34,6 @@ class MeetTimes extends Component {
 
   componentDidMount(){
     var split = this.props.name.split(' ');
-    console.log(split);
     this.setState({
         firstname: split[0],
         lastname: split[1]
@@ -42,14 +41,16 @@ class MeetTimes extends Component {
     this.populateEvents();
   }
 
-  // showMeet(meet) {
-  //   console.log(event);
-  //   switch (event) {
-  //     default:
-  //       this.setState({ showLatest: false });
-  //       break;
-  //   }
-  // }
+  showMeet(meet) {
+    console.log(meet);
+    switch (meet) {
+      case (meet == "Skidmore vs. Rensselaer"):
+        this.setState({ showMeet: true });
+      default:
+        this.setState({ showMeet: false });
+        break;
+    }
+  }
 	
   render() {
     return(
@@ -62,13 +63,11 @@ class MeetTimes extends Component {
               <Dropdown.Item href="#">RPI vs. Vassar College</Dropdown.Item> */}
               {
                 this.state.times.map( (lister) => {
-                    return(<Dropdown.Item onClick={() => this.showMeet()}>{lister[0]}</Dropdown.Item>)
+                    return(<Dropdown.Item meetname={lister[0]} meetstart={lister[1]} onClick={() => this.showMeet("Skidmore vs. Rensselaer")}>{lister[0]} </Dropdown.Item>)
                 })
               }
-
-
             </DropdownButton>
-            {this.state.showLatest && 
+            {this.state.showMeet && 
               <div>
                 <h2>RPI @ Skidmore</h2>
                 <Table bordered>

@@ -12,7 +12,7 @@ Figma link for high fidelity mockups: https://www.figma.com/proto/rpXX7rce6HMEcr
 
 Current flow for meet pages: MeetResults.js (with MeetCard.js) > SpecificMeet.js (with SpecificMeetCard.js) > Event.js
 
-Current flow for swimmer time search: TimesSearch.js > Times.js
+Current flow for swimmer time search: TimesSearch.js > Times.js > MeetTimes.js + FastestTimes.js + EventTimes.js
 
 THINGS WE NEED TO DO:
 - Implement search on Roster.js, Times.js (Lanya's code)
