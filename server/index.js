@@ -79,7 +79,90 @@ app.get("/meet_info", async (req, res) => {
 //GET Credentials
 
 
-//---------------------------------------------------ADMIN FUNCTIONS---------------------------------------------------
+//Admin Login
+app.post("/verify_credentials", async (req, res) => {
+  console.log(req.body.user);
+  connection.db.collection("credentials", function (err, collection) {
+    // coll.collection("credentials", function (err, collection) {
+    collection.countDocuments({ "username": req.body.user }, function (err, count) {
+      // console.log(collection.find({}).toArray());
+      try {
+        if (count > 0) {
+          collection.find({ "username": req.body.user }).toArray(function (err, data) {
+            console.log(data);
+            bcrypt.compare(req.body.pass, data[0].password, function (error, isMatch) {
+              if (error) {
+                console.log(error);
+                return res.send({ "Result": false });
+              } else if (!isMatch) { //|| !data[0].admin
+                console.log("Invalid Login Attempt");
+                return res.send({ "Result": false });
+              } else {
+                return res.send({ "Result": true, "Admin": data[0].admin });
+              }
+            });
+          })
+        }
+        else {
+          console.log(count);
+          return res.send({ "Result": false });
+        }
+      }
+      catch (err) {
+        console.log(err);
+      }
+    });
+  });
+  // });
+});
+
+
+app.post("/add_user", async (req, res) => {
+  console.log(req.body.user);
+  connection.db.collection("credentials", function (err, collection) {
+    collection.countDocuments({ "username": req.body.user }, function (err, count) {
+      try {
+        if (count > 0) {
+          return res.send({ "Result": false });
+        }
+        else {
+          const saltRounds = 10; // data processing time
+
+          var username = req.body.user;
+          var password = req.body.pass;
+
+          // salt, hash, and store
+          bcrypt.hash(password, saltRounds, function(err, hash) {
+
+            var UserSchema = mongoose.Schema({
+              username: String,
+              password: String,
+              admin: Boolean
+              // admin: req.body.admin
+            });
+
+            // compile schema to model
+            var User = mongoose.model('User', UserSchema, 'credentials');
+
+            // a document instance
+            var user = new User({ username: username, password: hash, admin: false });
+
+            // save model to database
+            user.save(function (err, book) {
+              if (err) return console.error(err);
+              console.log("Created new user");
+            });
+          });
+          // console.log(count);
+          return res.send({ "Result": true });
+        }
+      }
+      catch (err) {
+        console.log(err);
+      }
+    });
+  });
+});
 
 //
 
@@ -92,6 +175,3 @@ app.listen(PORT, () => {
 
 
 //---------------------------------------------------TEST CODE---------------------------------------------------
-
-
-
