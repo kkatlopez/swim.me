@@ -24,21 +24,60 @@ connection.on('error', console.error.bind(console, 'connection error:'));
 mongoose.set('useFindAndModify', false);
 connection.once('open', () => {
   console.log('MongoDB database connection established successfully!');
+
+  connection.db.collection("meet-info", function (err, collection) {
+    collection.find({}).toArray(function (err, data) {
+      console.log(data); // it will print your collection data
+    })
+  });
+
+  // mongoose.connection.db.listCollections().toArray(function (err, names) {
+  //   console.log(names); // [{ name: 'dbname.myCollection' }]
+  //   module.exports.Collection = names;
+  // });
 });
 
 connection.catch(err => console.log(err));
 
 //---------------------------------------------------MongoDB SCHEMAS---------------------------------------------------
 
+//Meet Info
+var meet_info_schema = new Schema({
+  meet_name: { type: String },
+  meet_start_date: { type: Date },
+  meet_end_date: { type: Date },
+  meet_location: { type: String },
+  meet_events: [ String]
+}, { versionKey: false });
+const meet_info = mongoose.model('meet-info', meet_info_schema);
 
+//Swimmer Info
+
+//Top 10
 
 
 //---------------------------------------------------WEB APP FUNCTIONS---------------------------------------------------
 
+//GET Meet Info
+app.get("/meet_info", async (req, res) => {
+  try {
+    connection.db.collection("meet-info", function (err, collection) {
+      collection.find({}).toArray(function (err, data) {
+        console.log(data); // it will print your collection data
+        return data;
+      })
+    });
+  } catch (error) {
+    return console.log(error);
+  }
+});
 
+//GET Swimmer Info
 
+//GET Top 10
 
-//---------------------------------------------------ADMIN FUNCTIONS---------------------------------------------------
+//GET Credentials
+
 
 //Admin Login
 app.post("/verify_credentials", async (req, res) => {
@@ -125,6 +164,7 @@ app.post("/add_user", async (req, res) => {
   });
 });
 
+//
 
 
 //---------------------------------------------------MISC FUNCTIONS---------------------------------------------------
