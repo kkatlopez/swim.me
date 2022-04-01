@@ -1,5 +1,5 @@
 // server/index.js
-
+require('dotenv').config();
 const express = require("express");
 const bcrypt = require("bcryptjs");
 const mongoose = require('mongoose'),
@@ -17,7 +17,8 @@ app.use(function(req, res, next) {
   next();
 });
 
-const uri = "mongodb+srv://root:hKTl1sOyZzIZWqlY@cluster0.eeewg.mongodb.net/swimdotme";
+// const uri = "mongodb+srv://root:hKTl1sOyZzIZWqlY@cluster0.eeewg.mongodb.net/swimdotme";
+const uri = "mongodb+srv://" + String(process.env.MONGOPASS) + "@cluster0.eeewg.mongodb.net/" + String(process.env.DBNAME);
 mongoose.connect(uri, { useUnifiedTopology: true, useNewUrlParser: true });
 const connection = mongoose.connection;
 connection.on('error', console.error.bind(console, 'connection error:'));
@@ -64,7 +65,7 @@ app.get("/meet_info", async (req, res) => {
     connection.db.collection("meet-info", function (err, collection) {
       collection.find({}).toArray(function (err, data) {
         console.log(data); // it will print your collection data
-        return data;
+        res.send(data);
       })
     });
   } catch (error) {
