@@ -1,5 +1,5 @@
 import React from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
 
 import MeetResults from './MeetResults.js';
 import Roster from './Roster.js';
@@ -8,7 +8,7 @@ import AllTimeTop10 from './AllTimeTop10.js';
 import Event from './Event.js';
 import Time from './Times.js';
 import RosterProfile from './RosterProfile.js'
-import Admin from './Admin.js'
+import UserLanding from './UserLogin.js';
 
 // localhost:3000
 
@@ -17,6 +17,9 @@ const Main = (props) => {
   return (
     <Switch>
       <Route exact path='/' render={
+        () => <div><UserLanding/></div>
+      }></Route>
+      <Route exact path='/results' render={
         () => <div><MeetResults/></div>
       }></Route>
       <Route exact path='/meet' render={
@@ -38,11 +41,9 @@ const Main = (props) => {
       <Route exact path='/roster/profile' render={
         () => <div><RosterProfile/></div>
       }></Route>
-      <Route exact path='/admin' render={
-        () => <div><Admin/></div>
-      }></Route>
+      <Redirect from='*' to='/' />
     </Switch>
-    
+
   );
 }
 

@@ -1,17 +1,26 @@
 import React, { Component } from 'react';
 // import ReactDOM from 'react-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { Container, DropdownButton, Dropdown, Table } from 'react-bootstrap';
 import '../css/specificmeet.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronRight, faChevronLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 
 class FrontPage extends Component {
-	
+
   constructor(props) {
-	super(props);
-		
+		super(props);
+		if(this.props.location.state == undefined){
+			this.props.history.push("/", { logged: false });
+		}
+		else if (!('logged' in this.props.location.state)){
+			this.props.history.push("/", { logged: false });
+		}
+		else if(this.props.location.state.logged == false){
+			this.props.history.push("/", { logged: false });
+		}
   }
-	
+
   render() {
     return(
       <Container fluid className="page-container">
@@ -97,11 +106,11 @@ class FrontPage extends Component {
                     </a>
                 </div>
             </div>
-            
+
         </Container>
-      </Container>      
+      </Container>
     );
   }
 }
 
-export default(FrontPage);
+export default withRouter(FrontPage);

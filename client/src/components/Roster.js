@@ -1,18 +1,28 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 //import { Link, withRouter } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { Container, Form, FormControl, Button, Card, List } from 'react-bootstrap';
 import '../css/roster.css';
 
 // import '../css/frontpage.css';
 
 class FrontPage extends Component {
-	
+
   constructor(props) {
-	super(props);
-		
+		super(props);
+		if(this.props.location.state == undefined){
+			this.props.history.push("/", { logged: false });
+		}
+		else if (!('logged' in this.props.location.state)){
+			this.props.history.push("/", { logged: false });
+		}
+		else if(this.props.location.state.logged == false){
+			this.props.history.push("/", { logged: false });
+		}
+
   }
-	
+
   render() {
     return(
       <Container fluid className="page-container">
@@ -29,7 +39,7 @@ class FrontPage extends Component {
                   className="me-2"
                   aria-label="Search"
                   />
-                  <Button>Search</Button>   
+                  <Button>Search</Button>
               </div>
           </Form>
         </Container>
@@ -91,9 +101,9 @@ class FrontPage extends Component {
             <a href="/roster/profile" className="stretched-link"></a>
           </Card>
         </Container>
-      </Container>   
+      </Container>
     );
   }
 }
 
-export default(FrontPage);
+export default withRouter(FrontPage);

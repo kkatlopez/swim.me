@@ -1,17 +1,26 @@
 import React, { Component } from 'react';
 // import ReactDOM from 'react-dom';
 import { Container, DropdownButton, Dropdown, Table } from 'react-bootstrap';
+import { Link, withRouter } from 'react-router-dom';
 import '../css/event.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronRight, faChevronLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 
 class FrontPage extends Component {
-	
+
   constructor(props) {
-	super(props);
-		
+		super(props);
+		if(this.props.location.state == undefined){
+			this.props.history.push("/", { logged: false });
+		}
+		else if (!('logged' in this.props.location.state)){
+			this.props.history.push("/", { logged: false });
+		}
+		else if(this.props.location.state.logged == false){
+			this.props.history.push("/", { logged: false });
+		}
   }
-	
+
   render() {
     return(
       <Container fluid className="page-container">
@@ -74,9 +83,9 @@ class FrontPage extends Component {
                 <p className="text-right">View next event: M 200 Medley Relay <FontAwesomeIcon icon={faChevronRight} className="px-0"/></p>
             </a>
         </Container>
-      </Container>      
+      </Container>
     );
   }
 }
 
-export default(FrontPage);
+export default withRouter(FrontPage);
