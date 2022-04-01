@@ -21,6 +21,10 @@ class UserLanding extends Component {
     this.changePass = this.changePass.bind(this);
     this.confirmCreds = this.confirmCreds.bind(this);
 
+    if (this.props.location.state != undefined && this.props.location.state.logged){
+      this.props.history.push("/results", this.props.location.state);
+    }
+
   }
 
   checkSubmittable = function(){
@@ -44,7 +48,7 @@ class UserLanding extends Component {
       .then(
         (result) => {
           if (result.Result == true) {
-            this.props.history.push("/results", { logged: true, admin: result.Admin});
+            this.props.history.push("/results", { logged: true, admin: result.Admin, user: this.user});
           }
           else{
             this.setState({

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 // import ReactDOM from 'react-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { Container, Form, FormControl, Button, Tabs, Tab } from 'react-bootstrap';
 import MeetTimes from './MeetTimes.js';
 import FastestTimes from './FastestTimes.js';
@@ -7,11 +8,20 @@ import EventTimes from './EventTimes.js';
 
 class AllTimeTop10 extends Component {
   constructor(props) {
-	super(props);
-    this.state = {
-        event: "",
-        showLatest: false
-    };
+  	super(props);
+      this.state = {
+          event: "",
+          showLatest: false
+      };
+      if(this.props.location.state == undefined){
+        this.props.history.push("/", { logged: false });
+      }
+      else if (!('logged' in this.props.location.state)){
+        this.props.history.push("/", { logged: false });
+      }
+      else if(this.props.location.state.logged == false){
+        this.props.history.push("/", { logged: false });
+      }
     }
 
   render() {
@@ -30,7 +40,7 @@ class AllTimeTop10 extends Component {
                 className="me-2"
                 aria-label="Search"
                 />
-                <Button>Search</Button>   
+                <Button>Search</Button>
             </div>
         </Form>
         <Tabs defaultActiveKey="meet" id="uncontrolled-tab-example" className="mb-3 justify-content-center">
@@ -46,9 +56,9 @@ class AllTimeTop10 extends Component {
             </Tab>
         </Tabs>
         </Container>
-      </Container>      
+      </Container>
     );
   }
 }
 
-export default(AllTimeTop10);
+export default withRouter(AllTimeTop10);

@@ -1,22 +1,32 @@
 import React, { Component } from 'react';
 // import ReactDOM from 'react-dom';
 import { Container, DropdownButton, Dropdown} from 'react-bootstrap';
+import { Link, withRouter } from 'react-router-dom';
 import '../css/alltimetop10.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronRight, faChevronLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import Top10IndividualEvent from './Top10IndividualEvent.js';
 
 class AllTimeTop10 extends Component {
-	
+
   constructor(props) {
-	super(props);
-  this.state = {
-    event: "",
-    showTable: false
-  };
-  this.showTable = this.showTable.bind(this);
+		super(props);
+	  this.state = {
+	    event: "",
+	    showTable: false
+	  };
+	  this.showTable = this.showTable.bind(this);
+		if(this.props.location.state == undefined){
+			this.props.history.push("/", { logged: false });
+		}
+		else if (!('logged' in this.props.location.state)){
+			this.props.history.push("/", { logged: false });
+		}
+		else if(this.props.location.state.logged == false){
+			this.props.history.push("/", { logged: false });
+		}
   }
-	
+
   showTable(event) {
     console.log(event);
     switch (event) {
@@ -56,11 +66,11 @@ class AllTimeTop10 extends Component {
           </DropdownButton>
 
           {showTable && <Top10IndividualEvent/>}
-          
+
         </Container>
-      </Container>      
+      </Container>
     );
   }
 }
 
-export default(AllTimeTop10);
+export default withRouter(AllTimeTop10);

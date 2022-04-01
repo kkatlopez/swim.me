@@ -1,5 +1,5 @@
 import React from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
 
 import MeetResults from './MeetResults.js';
 import Roster from './Roster.js';
@@ -41,6 +41,7 @@ const Main = (props) => {
       <Route exact path='/roster/profile' render={
         () => <div><RosterProfile/></div>
       }></Route>
+      <Redirect from='*' to='/' />
     </Switch>
 
   );
