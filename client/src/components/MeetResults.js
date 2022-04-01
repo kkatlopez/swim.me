@@ -5,7 +5,7 @@ import '../css/meetresults.css';
 //import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 //import { faArrowRight, faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import MeetCard from "./MeetCard.js";
-import Navigation from "./Navigation.js";
+// import Navigation from "./Navigation.js";
 import moment from 'moment';
 
 class FrontPage extends Component {
@@ -70,7 +70,7 @@ class FrontPage extends Component {
           </div>
         </Container>
 
-        <Navigation/>
+        {/* <Navigation/> */}
       </Container>  
     );
   }
