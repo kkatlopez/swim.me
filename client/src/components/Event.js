@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 // import ReactDOM from 'react-dom';
-import { Container, Table} from 'react-bootstrap';
+import { Container, DropdownButton, Dropdown, Table } from 'react-bootstrap';
+import { Link, withRouter } from 'react-router-dom';
 import '../css/event.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft} from '@fortawesome/free-solid-svg-icons';
@@ -15,6 +16,15 @@ class Event extends Component {
       meetdate: "",
       results: []
       }
+    if(this.props.location.state == undefined){
+			this.props.history.push("/", { logged: false });
+		}
+		else if (!('logged' in this.props.location.state)){
+			this.props.history.push("/", { logged: false });
+		}
+		else if(this.props.location.state.logged == false){
+			this.props.history.push("/", { logged: false });
+		}
   }
 
   // use populateEvents() from SpecificMeet.js 
@@ -54,7 +64,7 @@ class Event extends Component {
     })
     this.showResultTable();
   }
-	
+
   render() {
     return(
       <Container fluid className="page-container">
@@ -90,9 +100,9 @@ class Event extends Component {
             </div>
 
         </Container>
-      </Container>      
+      </Container>
     );
   }
 }
 
-export default(Event);
+export default withRouter(Event);

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-//import ReactDOM from 'react-dom';
-//import { Link, withRouter } from 'react-router-dom';
-import { Container, Form, FormControl, Button, Card } from 'react-bootstrap';
+import { Link, withRouter } from 'react-router-dom';
+import { Container, Form, FormControl, Button, Card, List } from 'react-bootstrap';
 import '../css/roster.css';
 import RosterCard from './RosterCard.js';
 import { useState } from "react";
@@ -13,6 +12,15 @@ class Roster extends Component {
     currentswimmers: [],
     resultfound: false
   };
+  if(this.props.location.state == undefined){
+    this.props.history.push("/", { logged: false });
+  }
+  else if (!('logged' in this.props.location.state)){
+    this.props.history.push("/", { logged: false });
+  }
+  else if(this.props.location.state.logged == false){
+    this.props.history.push("/", { logged: false });
+  }
   }
 
   populateProfiles() {
@@ -55,6 +63,7 @@ class Roster extends Component {
         </Container>
         <Container className="px-4">
           <Form className="pb-3">
+
             {/* !!!!!! IMPLEMENT SEARCH FUNCTION: !!!!!! */}
             <label>Search for a swimmer</label>
             <div className="d-flex">
@@ -75,9 +84,9 @@ class Roster extends Component {
             })
           }
         </Container>
-      </Container>   
+      </Container>
     );
   }
 }
 
-export default(Roster);
+export default withRouter(Roster);

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { Container, Form, FormControl, Button, Tabs, Tab } from 'react-bootstrap';
 import MeetTimes from './MeetTimes.js';
 import FastestTimes from './FastestTimes.js';
@@ -18,6 +19,15 @@ class Times extends Component {
         eventsSwam: [],
         meetsSwam: []
     };
+    if(this.props.location.state == undefined){
+        this.props.history.push("/", { logged: false });
+      }
+      else if (!('logged' in this.props.location.state)){
+        this.props.history.push("/", { logged: false });
+      }
+      else if(this.props.location.state.logged == false){
+        this.props.history.push("/", { logged: false });
+      }
   }
 
   // getSwimmerTimes(url) {
@@ -109,6 +119,19 @@ class Times extends Component {
         <a href="/times" className="standalone">
           <p><FontAwesomeIcon icon={faChevronLeft} className="px-0"/> Back to search</p>
         </a>
+        <Form className="pb-3">
+            <label>Search for a swimmer</label>
+                <div className="d-flex">
+                <FormControl
+                type="search"
+                placeholder="Enter a name"
+                className="me-2"
+                aria-label="Search"
+                />
+                <Button>Search</Button>
+            </div>
+        </Form>
+
         <Tabs defaultActiveKey="meet" id="uncontrolled-tab-example" className="mb-3 justify-content-center">
             <Tab eventKey="meet" title="Meet">
                 <MeetTimes name={this.props.match.params.swimmerName}/>
@@ -121,9 +144,9 @@ class Times extends Component {
             </Tab>
         </Tabs>
         </Container>
-      </Container>      
+      </Container>
     );
   }
 }
 
-export default(Times);
+export default withRouter(Times);

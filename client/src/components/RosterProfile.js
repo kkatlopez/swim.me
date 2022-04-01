@@ -3,12 +3,13 @@ import React, { Component } from 'react';
 //import { Link, withRouter } from 'react-router-dom';
 import { Container, DropdownButton, Dropdown } from 'react-bootstrap';
 import '../css/rosterprofile.css';
+import { Link, withRouter } from 'react-router-dom';
 import RosterProfileLatest from './RosterProfileLatest';
 import RosterProfileFastest from './RosterProfileFastest.js';
 import RosterProfileEvent from './RosterProfileEvent.js';
 
 class RosterProfile extends Component {
-	
+
   constructor(props) {
     super(props);
     this.state = {
@@ -20,6 +21,16 @@ class RosterProfile extends Component {
     this.showTable = this.showTable.bind(this);
     this.showFastest = this.showFastest.bind(this);
     this.showEvent = this.showEvent.bind(this);
+
+		if(this.props.location.state == undefined){
+      this.props.history.push("/", { logged: false });
+    }
+    else if (!('logged' in this.props.location.state)){
+      this.props.history.push("/", { logged: false });
+    }
+    else if(this.props.location.state.logged == false){
+      this.props.history.push("/", { logged: false });
+    }
   }
 
   showTable(event) {
@@ -63,7 +74,7 @@ class RosterProfile extends Component {
         break;
     }
   }
-	
+
   render() {
     const { showTable } = this.state;
     const { showFastest } = this.state;
@@ -98,13 +109,13 @@ class RosterProfile extends Component {
             </DropdownButton>
 
             {(showTable && <RosterProfileLatest/>) ||
-            (showFastest && <RosterProfileFastest/>) || 
+            (showFastest && <RosterProfileFastest/>) ||
             (showEvent && <RosterProfileEvent/> )}
         </Container>
-        
-      </Container>   
+
+      </Container>
     );
   }
 }
 
-export default(RosterProfile);
+export default withRouter(RosterProfile);

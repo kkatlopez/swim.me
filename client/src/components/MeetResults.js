@@ -1,21 +1,31 @@
 import React, { Component } from 'react';
 // import ReactDOM from 'react-dom';
-import { Container, DropdownButton, Dropdown } from 'react-bootstrap';
+import { Container, DropdownButton, Dropdown, Card } from 'react-bootstrap';
+import { Link, withRouter } from 'react-router-dom';
 import '../css/meetresults.css';
-//import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-//import { faArrowRight, faChevronLeft } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowRight, faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import MeetCard from "./MeetCard.js";
 // import Navigation from "./Navigation.js";
 import moment from 'moment';
 
-class FrontPage extends Component {
-	
+class MeetResults extends Component {
+
   constructor(props) {
-	super(props);
-  this.state = {
-    meetlist: [],
-    dropdownlist: []  
-  }
+    super(props);
+    this.state = {
+      meetlist: [],
+      dropdownlist: []  
+    }
+    if(this.props.location.state == undefined){
+      this.props.history.push("/", { logged: false });
+    }
+    else if (!('logged' in this.props.location.state)){
+      this.props.history.push("/", { logged: false });
+    }
+    else if(this.props.location.state.logged == false){
+      this.props.history.push("/", { logged: false });
+    }
   }
 
   //AJAX Calls
@@ -41,8 +51,9 @@ class FrontPage extends Component {
 
   componentDidMount(){
     this.populateMeet();
+
   }
-	
+
   render() {
     return(
       <Container fluid className="page-container">
@@ -72,8 +83,9 @@ class FrontPage extends Component {
 
         {/* <Navigation/> */}
       </Container>  
+
     );
   }
 }
 
-export default(FrontPage);
+export default withRouter(MeetResults);
