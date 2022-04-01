@@ -4,6 +4,8 @@ import { Container, Form, FormControl, Button, Tabs, Tab } from 'react-bootstrap
 import MeetTimes from './MeetTimes.js';
 import FastestTimes from './FastestTimes.js';
 import EventTimes from './EventTimes.js';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronLeft} from '@fortawesome/free-solid-svg-icons';
 
 class Times extends Component {
   constructor(props) {
@@ -104,6 +106,9 @@ class Times extends Component {
         </Container>
         <Container className="px-4">
         <br/>
+        <a href="/times" className="standalone">
+          <p><FontAwesomeIcon icon={faChevronLeft} className="px-0"/> Back to search</p>
+        </a>
         <Tabs defaultActiveKey="meet" id="uncontrolled-tab-example" className="mb-3 justify-content-center">
             <Tab eventKey="meet" title="Meet">
                 <MeetTimes name={this.props.match.params.swimmerName}/>

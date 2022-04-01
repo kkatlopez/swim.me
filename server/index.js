@@ -85,33 +85,27 @@ app.get("/meet_info", async (req, res) => {
   }
 });
 
-// app.get("/meet_info/:meet", async (req, res) => {
-//   var first = "Kat";
-//   var last = "Lopez";
-//   var meet = "Rensselaer vs. Skidmore";
-// )};
-
-app.get("/meet_info/:meet", async (req, res, db) => {
-  // var name = "Kat Lopez";
-  var first = req.body.firstName;
-  var last = req.body.lastName;
-  var full = first + " " + last;
-  // var meet = "Rensselaer vs. Skidmore";
-  // var start = new Date("2019-01-26T00:00:00.000Z");
+app.get("/meet_info/:searchterm", async (req, res, db) => {
+  var info = req.params.searchterm.split("~"); // get search term from URL === first~last~meetname~startdate
+  console.log(info);
+  var full = info[0] + " " + info[1];
+  var meetname = info[2];
+  console.log(meetname);
+  var startdate = new Date(info[3]);
   var results = [];
   try {
     connection.db.collection("meet-info", function (err, collection) {
-      collection.find({ meetName: req.body.meet, meetStartDate: req.body.date }).toArray(function (err, data) {
-        for (i = 0; i < data.length; i++) { // entire meet
-          for (j = 0; j < data[i].meetEvents.length; j++) { // meetEvents
-            for (k = 0; k < data[i].meetEvents[j][1].length; k++) { // j === event[0][1] array (meet results array)
-              console.log(data[i].meetEvents[j][1][k][0] == full);
-              if (data[i].meetEvents[j][1][k][0] == full) { // k === event participant
+      collection.find({ meetName: meetname, meetStartDate: startdate }).toArray(function (err, data) {
+        // entire meet:
+        for (i = 0; i < data.length; i++) { 
+          // meetEvents:
+          for (j = 0; j < data[i].meetEvents.length; j++) {
+            for (k = 0; k < data[i].meetEvents[j][1].length; k++) {     // j === event[0][1] array (meet results array)
+              if (data[i].meetEvents[j][1][k][0] == full) {             // k === event participant
                 // meetEvents[j][0] === event name
                 // meetEvents[j][1][k][1] === time swam
                 // k + 1 === place
                 results.push([ data[i].meetEvents[j][0], data[i].meetEvents[j][1][k][1], (k + 1) ]);
-                // console.log(results);
               }
             }
           }

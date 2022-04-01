@@ -8,18 +8,27 @@ class MeetTimes extends Component {
     super(props);
     this.state = {
       meetlist: [],
-      times: []
+      times: [],
+      events: [],
+      first: "",
+      last: "",
+      meetname: "",
+      date: "",
+      showMeet: false
     };
   }
 
-  populateEvents() {
+  // finding swimmer:
+  getSwimmer() {
     fetch("http://localhost:3001/swimmers")
       .then(res => res.json())
       .then(
         (result) => {
           var specific_result = result.find(x => (x.firstName === this.state.firstname && x.lastName === this.state.lastname));
           this.setState({
-            times: specific_result.meetsSwam
+            times: specific_result.meetsSwam,
+            first: this.state.firstname,
+            last: this.state.lastname
           });
           console.log(this.state.times);
         },
@@ -32,24 +41,43 @@ class MeetTimes extends Component {
       )
   }
 
+  // get times for table:
+  timesTable() {
+    var link = "http://localhost:3001/meet_info/" + this.state.first + "~" + this.state.last + "~" + this.state.meetname + "~" + this.state.date;
+    console.log(link);
+    fetch(link)
+      .then(res => res.json())
+      .then(
+        (result) => {
+          this.setState({
+            events: result
+          });
+        }
+      )
+  }
+
+  // show meet table:
+  showMeet(meetname) {
+    this.timesTable()
+    console.log(meetname);
+    switch(meetname) {
+    case (meetname != ''):
+        this.setState({ showMeet: true });
+        break;
+    default:
+        this.setState({ showMeet: false });
+        break;
+    }
+  }
+
   componentDidMount(){
     var split = this.props.name.split(' ');
     this.setState({
         firstname: split[0],
         lastname: split[1]
     });
-    this.populateEvents();
-  }
-
-  showMeet(meet) {
-    console.log(meet);
-    switch (meet) {
-      case (meet == "Skidmore vs. Rensselaer"):
-        this.setState({ showMeet: true });
-      default:
-        this.setState({ showMeet: false });
-        break;
-    }
+    this.getSwimmer();
+    this.timesTable();
   }
 	
   render() {
@@ -57,13 +85,9 @@ class MeetTimes extends Component {
           <div className="meet">
             <label className="pt-3">Meet</label>
             <DropdownButton className="dropdown pb-3" title="Select a meet">
-              {/* <Dropdown.Item onClick={() => this.showLatest("")}>-</Dropdown.Item>
-              <Dropdown.Item href="#" onClick={() => this.showLatest("RPI @ Skidmore")}>RPI @ Skidmore</Dropdown.Item>
-              <Dropdown.Item href="#">MIT Invitational</Dropdown.Item>
-              <Dropdown.Item href="#">RPI vs. Vassar College</Dropdown.Item> */}
               {
                 this.state.times.map( (lister) => {
-                    return(<Dropdown.Item meetname={lister[0]} meetstart={lister[1]} onClick={() => this.showMeet("Skidmore vs. Rensselaer")}>{lister[0]} </Dropdown.Item>)
+                    return(<Dropdown.Item meetname={lister[0]} meetstart={lister[1]} onClick={() => this.showMeet(lister[0])}>{lister[0]} </Dropdown.Item>)
                 })
               }
             </DropdownButton>
@@ -80,7 +104,16 @@ class MeetTimes extends Component {
                       </tr>
                   </thead>
                   <tbody>
-                      <tr>
+                    {
+                      this.state.events.map( (lister) => {
+                        return(
+                          <tr>
+                            
+                          </tr>
+                        )
+                      })
+                    }
+                      {/* <tr>
                       <td>1000 Y Free</td>
                       <td>10:06.50</td>
                       <td>3rd</td>
@@ -91,7 +124,7 @@ class MeetTimes extends Component {
                       <td>4:55.52</td>
                       <td>1st</td>
                       <td>-0.2%</td>
-                      </tr>
+                      </tr> */}
                   </tbody>
                 </Table> 
                 </div> }
