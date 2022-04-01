@@ -1,8 +1,13 @@
 from pymongo import MongoClient
 from SwimScraper import SwimScraper as ss
 from datetime import date, datetime
+import os
+from dotenv import load_dotenv
 
-client = MongoClient('mongodb+srv://root:swim.me@cluster0.eeewg.mongodb.net/Cluster0')
+load_dotenv()
+mongoPass = os.getenv('MONGOPASS')
+dbName = os.getenv('DBNAME')
+client = MongoClient('mongodb+srv://' + mongoPass + '@cluster0.eeewg.mongodb.net/' + dbName)
 
 db = client['swimdotme']
 meetCollection = db['meet-info']
