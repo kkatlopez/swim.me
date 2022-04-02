@@ -52,10 +52,23 @@ var meet_info_schema = new Schema({
 const meet_info = mongoose.model('meet-info', meet_info_schema);
 
 //Swimmer Info
+var swimmer_info_schema = new Schema({
+  first_name: { type: String },
+  last_name: { type: String },
+  events_swam: [String],
+  best_times: [[String, String, String, String, Date]],
+  meets_swam: [[String, Date]],
+  seasons_swam: [String],
+  position: String,
+  class_year: String,
+  hometown: String,
+  high_school: String
+}, { versionKey: false });
+const swimmer_info = mongoose.model('swimmer-info', swimmer_info_schema);
 
 //Top 10
 
-//Meet Info
+//Alert Info
 var alert_schema = new Schema({
   alert_text: { type: String },
   alert_type: { type: String },
@@ -81,6 +94,25 @@ app.get("/meet_info", async (req, res) => {
 });
 
 //GET Swimmer Info
+app.get("/swimmer_info", async (req, res) => {
+  try {
+    connection.db.collection("swimmer-info", function (err, collection) {
+      var this_year = new Date().getFullYear();
+      var this_month = new Date().getMonth();
+      var season = (this_year-1).toString() + "-" + this_year.toString();
+      if(this_month >= 9) {
+        var season = this_year.toString() + "-" + (this_year+1).toString();
+      }
+      
+      collection.find({seasonsSwam: season}).toArray(function (err, data) {
+        // console.log(data);
+        res.send(data);
+      })
+    });
+  } catch (error) {
+    return console.log(error);
+  }
+});
 
 //GET Top 10
 
@@ -138,6 +170,58 @@ app.post("/verify_credentials", async (req, res) => {
   // });
 });
 
+//Edit Swimmer
+app.post("/edit_swimmer_info", async (req, res) => {
+  connection.db.collection("swimmer-info", function (err, collection) {
+    collection.countDocuments({ "first_name": req.body.first }, function (err, count) {
+      try{
+        return res.send({ "Result": true });
+      }
+      catch (err) {
+        console.log(err);
+      }
+    });
+  });
+});
+
+//Create Alert
+app.post("/create_alert", async (req, res) => {
+  connection.db.collection("alerts", function (err, collection) {
+    collection.countDocuments({ "alert_text": req.body.text, "alert_type": req.body.type, "alert_end_date": req.body.endDate }, function (err, count) {
+      try {
+        if (count > 0) {
+          return res.send({ "Result": false });
+        }
+        else {
+          var alert_text = req.body.text;
+          var alert_type = req.body.type;
+          var alert_date = req.body.endDate;
+          var today = new Date().toISOString().split('T')[0];
+          if(alert_text == "" || alert_type == "Select alert priority" || alert_date < today) {
+            return res.send({ "Result": false });
+          }
+
+          // compile schema to model
+          var Alert = mongoose.model('Alert', alert_schema, 'alerts');
+
+          // a document instance
+          var user = new Alert({ alert_end_date: alert_date, alert_text: alert_text, alert_type: alert_type });
+
+          // save model to database
+          user.save(function (err, book) {
+            if (err) return console.error(err);
+            console.log("Created new alert");
+          });
+          // console.log(count);
+          return res.send({ "Result": true });
+        }
+      }
+      catch (err) {
+        console.log(err);
+      }
+    });
+  });
+});
 
 app.post("/add_user", async (req, res) => {
   console.log(req.body.user);

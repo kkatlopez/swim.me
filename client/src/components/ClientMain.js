@@ -9,6 +9,11 @@ import Event from './Event.js';
 import Time from './Times.js';
 import RosterProfile from './RosterProfile.js'
 import UserLanding from './UserLogin.js';
+import Admin from './Admin.js';
+import AdminCreateAlert from './AdminCreateAlert';
+import AdminModifyUser from './AdminModifyUser.js';
+import AdminEditSwimmer from './AdminEditSwimmer.js';
+import AdminEditForm from './AdminEditForm.js';
 
 // localhost:3000
 
@@ -40,6 +45,21 @@ const Main = (props) => {
       }></Route>
       <Route exact path='/roster/profile' render={
         () => <div><RosterProfile/></div>
+      }></Route>
+      <Route exact path='/admin' render={
+        () => <div><Admin/></div>
+      }></Route>
+      <Route exact path='/admin/create-alert' render={
+        () => <div><AdminCreateAlert/></div>
+      }></Route>
+      <Route exact path='/admin/edit-swimmer' render={
+        () => <div><AdminEditSwimmer/></div>
+      }></Route>
+      <Route exact path='/admin/edit-swimmer-form' render={
+        () => <div><AdminEditForm/></div>
+      }></Route>
+      <Route exact path='/admin/modify-user' render={
+        () => <div><AdminModifyUser/></div>
       }></Route>
       <Redirect from='*' to='/' />
     </Switch>
