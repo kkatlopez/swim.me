@@ -9,7 +9,9 @@ class AdminEditSwimmer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      swimmers: []
+      swimmers: [],
+      searchTerm: "",
+      // test: "original",
     }
     // if(this.props.location.state == undefined){
 		// 	this.props.history.push("/", { logged: false });
@@ -22,15 +24,45 @@ class AdminEditSwimmer extends Component {
 		// }
     this.getInfo = this.getInfo.bind(this);
     this.addRow = this.addRow.bind(this);
+    this.searchSwimmer = this.searchSwimmer.bind(this);
+    this.changeTerm = this.changeTerm.bind(this);
   }
 
-  newButton = function() {
-    return (
-        <Button variant="outline-primary" size="sm"
-        as={Link} to={{pathname: "/admin/edit-swimmer-form"}}>
-          <FontAwesomeIcon icon={faPenToSquare} className="px-0"/>
-        </Button>
-    )}
+  // newButton = function() {
+  //   return (
+  //       <Button variant="outline-primary" size="sm"
+  //       as={Link} to={{pathname: "/admin/edit-swimmer-form"}}>
+  //         <FontAwesomeIcon icon={faPenToSquare} className="px-0"/>
+  //       </Button>
+  // )}
+
+  changeTerm = (event) => {
+    this.setState({searchTerm: event.target.value});
+  }
+
+  searchSwimmer = function() {
+  // Declare variables
+    var input, filter, table, tr, td, txtValue;
+    // input = document.getElementById("myInput");
+    // filter = input.value.toUpperCase();
+    filter = this.state.searchTerm.toUpperCase();
+    table = document.getElementById("myTable");
+    tr = table.getElementsByTagName("tr");
+
+    // Loop through all table rows, and hide those who don't match the search query
+    for (let i = 0; i < tr.length; i++) {
+      td = tr[i].getElementsByTagName("td")[0];
+      if (td) {
+        txtValue = td.textContent || td.innerText;
+        // this.setState({test: txtValue});
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+          tr[i].style.display = "";
+        } else {
+          tr[i].style.display = "none";
+        }
+      }
+    }
+  }
 
   addRow = function(firstName, lastName, position, classYear, hometown, highSchool) {
     var tableBody = document.getElementById('myTableBody');
@@ -72,7 +104,11 @@ class AdminEditSwimmer extends Component {
       .then(
         (result) => {
           if (result.Result == true) {
-            // this.state = result;
+            this.state = {
+              swimmers: [],
+              searchTerm: "",
+              // test: "",
+            }
             // this.state.swimmers = "hello results retrieved";
             // this.props.history.push({
             //   first: result.first,
@@ -86,7 +122,18 @@ class AdminEditSwimmer extends Component {
             // });
           }
           else{
+            this.state = {
+              swimmers: [],
+              searchTerm: ""
+            }
+            this.setState({swimmers: []});
             this.setState({swimmers: result});
+
+            var table = document.getElementById("myTable");
+            for(let i = 0; i < table.childNodes.length; i++) {
+              table.childNodes[i].remove();
+            }
+
             for(let i = 0; i < this.state.swimmers.length; i++) {
               this.addRow(this.state.swimmers.at(i).firstName,
               this.state.swimmers.at(i).lastName, 
@@ -96,16 +143,12 @@ class AdminEditSwimmer extends Component {
               this.state.swimmers.at(i).highSchool
             );
         };
-            // this.setState({
-            //   first: "",
-            //   last: "",
-            //   pos: "",
-            //   class: "",
-            //   hometown: "",
-            //   highschool: "",
-            //   isubmittable: true
-            // });
-          }
+          this.state = {
+            swimmers: [],
+            searchTerm: "",
+            // test: "reset"
+          };
+        }
         },
         (error) => {
           // this.setState({
@@ -133,16 +176,19 @@ class AdminEditSwimmer extends Component {
               <label>Search for a swimmer</label>
                   <div className="d-flex">
                   <FormControl
+                  id="myInput"
                   type="search"
-                  placeholder="Enter a name"
+                  placeholder="Enter a first name"
                   className="me-2"
                   aria-label="Search"
+                  value={this.state.searchTerm}
+                  onChange={this.changeTerm}
                   />
-                  <Button>Search</Button>
+                  <Button onClick={this.searchSwimmer}>Search</Button>
               </div>
           </Form>
-          <Button onClick={this.getInfo}>Get Info</Button>
-          <Table id="myTable" bordered>
+          {/* <Button onClick={this.getInfo}>Get Info</Button> */}
+          <Table id="myTable" bordered hover>
             <thead>
               <tr>
                 <th>First Name</th>
@@ -157,6 +203,9 @@ class AdminEditSwimmer extends Component {
             <tbody id="myTableBody">
             </tbody>
           </Table>
+          <script type="text/javascript">
+            {this.getInfo()}
+          </script>
         </Container>
       </Container>
     );
