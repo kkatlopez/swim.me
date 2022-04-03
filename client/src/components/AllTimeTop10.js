@@ -59,7 +59,7 @@ class AllTimeTop10 extends Component {
         this.setState({ showTable: true });
         break;
     }
-    
+
   }
 
   populateTop10() {
@@ -93,6 +93,13 @@ class AllTimeTop10 extends Component {
     this.populateTop10();
   }
 
+  backToAllTimes() {
+    var logged = this.props.location.state.logged;
+    var admin = this.props.location.state.adin
+    var user = this.props.location.state.user;
+    this.props.history.push("/times", { logged: logged, admin: admin, user: user} );
+  }
+
   render() {
     const { showTable } = this.state;
     return(
@@ -101,7 +108,7 @@ class AllTimeTop10 extends Component {
           <h1 className="siteHeaderTitle px-3 mb-3">All-Time Top 10</h1>
         </Container>
         <Container className="px-4">
-          <a href="/times" className="standalone">
+          <a onClick={() => this.backToAllTimes()} className="standalone back-link">
                 <p><FontAwesomeIcon icon={faChevronLeft} className="px-0"/> Back to time search</p>
             </a>
           <label>Event</label>
@@ -109,13 +116,13 @@ class AllTimeTop10 extends Component {
           {
               this.state.eventnames.map( (lister) => {
                   return(<Dropdown.Item onClick={() => this.showTable({lister})}>{lister}</Dropdown.Item>)
-              }) 
+              })
           }
           </DropdownButton>
 
           {/* {showTable && <Top10IndividualEvent eventinfo = {this.state.eventresults}/>} */}
 
-          {showTable && 
+          {showTable &&
             <div className="event-time">
             <h3>Top 10 Times for {this.state.eventresults.event[0]}</h3>
             <Table bordered>
@@ -135,13 +142,13 @@ class AllTimeTop10 extends Component {
                       <td>{this.state.eventresults.event[1][0][2]}</td>
                       </tr>
                     </tbody> */}
-                    
+
                     <tbody>
               {
                 this.state.eventresults.event[1].map( (lister, index) => {
                   var index = index + 1;
                   return(
-                    
+
                       <tr>
                       <td>{index}</td>
                       <td>{lister[0]}</td>
@@ -149,12 +156,12 @@ class AllTimeTop10 extends Component {
                       <td>{lister[2]}</td>
                       </tr>
                     )
-                    
-                }) 
+
+                })
               }
               </tbody>
             </Table>
-          </div>    
+          </div>
           }
 
         </Container>
@@ -164,4 +171,4 @@ class AllTimeTop10 extends Component {
   }
 }
 
-export default (AllTimeTop10);
+export default withRouter(AllTimeTop10);
