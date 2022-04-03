@@ -13,18 +13,18 @@ class MeetResults extends Component {
 
   constructor(props) {
     super(props);
+    // if(this.props.location.state == undefined){
+    //   this.props.history.push("/", { logged: false });
+    // }
+    // else if (!('logged' in this.props.location.state)){
+    //   this.props.history.push("/", { logged: false });
+    // }
+    // else if(this.props.location.state.logged == false){
+    //   this.props.history.push("/", { logged: false });
+    // }
     this.state = {
       meetlist: [],
       dropdownlist: []  
-    }
-    if(this.props.location.state == undefined){
-      this.props.history.push("/", { logged: false });
-    }
-    else if (!('logged' in this.props.location.state)){
-      this.props.history.push("/", { logged: false });
-    }
-    else if(this.props.location.state.logged == false){
-      this.props.history.push("/", { logged: false });
     }
   }
 
@@ -39,6 +39,7 @@ class MeetResults extends Component {
             meetlist: result,
             dropdownlist: [result[0], result[1],result[2],result[3],result[4],result[5],result[6],result[7],result[8],result[9],result[10]]
           });
+          // console.log(this.state.meetlist);
         },
         (error) => {
           this.setState({
@@ -51,7 +52,6 @@ class MeetResults extends Component {
 
   componentDidMount(){
     this.populateMeet();
-
   }
 
   render() {
@@ -65,7 +65,7 @@ class MeetResults extends Component {
           <DropdownButton className="dropdown pb-3" title="Select a meet">
             {
               this.state.dropdownlist.map( (lister) => {
-                  return(<Dropdown.Item href={"/meet/" + lister.meetName}>{lister.meetName}</Dropdown.Item>)
+                return(<Dropdown.Item href={"/meet/" + lister.meetName}>{lister.meetName}</Dropdown.Item>)
               })
             }
 
@@ -74,7 +74,11 @@ class MeetResults extends Component {
           <div className="meet-cards">
             {
               this.state.meetlist.map( (lister) => {
-                  return(<MeetCard meetname={lister.meetName} meetdate={moment(lister.meetStartDate).format('ll')} meetoriginaldate={lister.meetStartDate}/>)
+                  return(<MeetCard meetname={lister.meetName} meetdate={moment(lister.meetStartDate).format('ll')} meetoriginaldate={lister.meetStartDate}
+                  // logged={this.props.location.state.logged}
+                  // admin={this.props.location.state.admin}
+                  // user={this.props.location.state.user}
+                  />)
               })
             }
 
@@ -88,4 +92,4 @@ class MeetResults extends Component {
   }
 }
 
-export default withRouter(MeetResults);
+export default (MeetResults);

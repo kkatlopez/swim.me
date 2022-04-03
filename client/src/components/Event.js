@@ -16,15 +16,15 @@ class Event extends Component {
       meetdate: "",
       results: []
       }
-    if(this.props.location.state == undefined){
-			this.props.history.push("/", { logged: false });
-		}
-		else if (!('logged' in this.props.location.state)){
-			this.props.history.push("/", { logged: false });
-		}
-		else if(this.props.location.state.logged == false){
-			this.props.history.push("/", { logged: false });
-		}
+    // if(this.props.location.state == undefined){
+		// 	this.props.history.push("/", { logged: false });
+		// }
+		// else if (!('logged' in this.props.location.state)){
+		// 	this.props.history.push("/", { logged: false });
+		// }
+		// else if(this.props.location.state.logged == false){
+		// 	this.props.history.push("/", { logged: false });
+		// }
   }
 
   // use populateEvents() from SpecificMeet.js 
@@ -33,9 +33,11 @@ class Event extends Component {
       .then(res => res.json())
       .then(
         (result) => {
+          console.log(result);
           var specific_result = result.find(x => (x.meetName === this.state.meetname && x.meetStartDate === this.state.meetdate));
           var i;
           var eventresults = [];
+          console.log(specific_result);
           for (i = 0; i < specific_result.meetEvents.length; i++) {
             if (specific_result.meetEvents[i][0] == this.state.name) {
               eventresults = specific_result.meetEvents[i];
@@ -105,4 +107,4 @@ class Event extends Component {
   }
 }
 
-export default withRouter(Event);
+export default (Event);

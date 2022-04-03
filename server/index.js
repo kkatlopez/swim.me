@@ -85,6 +85,22 @@ app.get("/meet_info", async (req, res) => {
   }
 });
 
+app.get("/meet_info/:meetterm", async (req, res) => {
+  var info = req.params.meetterm.split("~"); // get search term from URL === meetname~startdate
+  // localhost:3001/meet_info/MIT%20Invitational~2021-12-03T00:00:00.000+00:00
+  var meetname = info[0];
+  var startdate = new Date(info[1]);
+  try {
+    connection.db.collection("meet-info", function (err, collection) {
+      collection.find({ meetName: meetname, meetStartDate: startdate }).toArray(function (err, data) {
+        res.send(data);
+      })
+    });
+  } catch (error) {
+      return console.log(error);
+  }
+});
+
 app.get("/meet_info/:searchterm", async (req, res, db) => {
   var info = req.params.searchterm.split("~"); // get search term from URL === first~last~meetname~startdate
   console.log(info);
@@ -179,10 +195,10 @@ app.post("/verify_credentials", async (req, res) => {
       try {
         if (count > 0) {
           collection.find({ "username": req.body.user }).toArray(function (err, data) {
-            console.log(data);
+            // console.log(data);
             bcrypt.compare(req.body.pass, data[0].password, function (error, isMatch) {
               if (error) {
-                console.log(error);
+                // console.log(error);
                 return res.send({ "Result": false });
               } else if (!isMatch) { //|| !data[0].admin
                 console.log("Invalid Login Attempt");
@@ -194,7 +210,7 @@ app.post("/verify_credentials", async (req, res) => {
           })
         }
         else {
-          console.log(count);
+          // console.log(count);
           return res.send({ "Result": false });
         }
       }

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
+// import ReactDOM from 'react-dom';
+import { Container, DropdownButton, Dropdown } from 'react-bootstrap';
 import { Link, withRouter } from 'react-router-dom';
-import { Container, DropdownButton, Dropdown, Table } from 'react-bootstrap';
 import '../css/specificmeet.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft} from '@fortawesome/free-solid-svg-icons';
@@ -10,22 +11,22 @@ import moment from 'moment';
 class SpecificMeet extends Component {
 	
   constructor(props) {
-	super(props);
+	  super(props);
+    // if(this.props.location.state == undefined){
+    //   this.props.history.push("/", { logged: false });
+    // }
+    // else if (!('logged' in this.props.location.state)){
+    //   this.props.history.push("/", { logged: false });
+    // }
+    // else if(this.props.location.state.logged == false){
+    //   this.props.history.push("/", { logged: false });
+    // }
     this.state = {
-        name: "",
-        date: "",
-        eventlist: [],
-        eventname: [],
-      }
-    if(this.props.location.state == undefined){
-			this.props.history.push("/", { logged: false });
-		}
-		else if (!('logged' in this.props.location.state)){
-			this.props.history.push("/", { logged: false });
-		}
-		else if(this.props.location.state.logged == false){
-			this.props.history.push("/", { logged: false });
-		}
+      meetname: "",
+      meetdate: "",
+      eventlist: [],
+      eventname: []
+    }
   }
 
   populateEvents() {
@@ -33,8 +34,14 @@ class SpecificMeet extends Component {
       .then(res => res.json())
       .then(
         (result) => {
-          var specific_result = result.find(x => (x.meetName === this.state.name && x.meetStartDate === this.state.date));
-          // console.log(specific_result);
+          // var all = result;
+          // var meet = this.props.meetname;
+          // console.log(meet);
+          console.log(this.state.meetname);
+          console.log(this.state.meetdate);
+          console.log(result);
+          var specific_result = result.find(x => (x.meetName === this.state.meetname && x.meetStartDate === this.state.meetdate));
+          console.log(specific_result);
           var namelist = [];
           var i;
           for (i = 0; i < specific_result.meetEvents.length; i++) {
@@ -44,11 +51,12 @@ class SpecificMeet extends Component {
               namelist.push(specific_result.meetEvents[i][0]);
             }
           }
+          console.log(specific_result.meetEvents);
           this.setState({
             eventlist: specific_result.meetEvents,
-            eventname: namelist
+            eventname: namelist,
           });
-          console.log(specific_result.meetEvents);
+          console.log(this.state.eventname);
         },
         (error) => {
           this.setState({
@@ -62,12 +70,13 @@ class SpecificMeet extends Component {
   componentDidMount(){
     var split = this.props.match.params.meetName.split('_');
     this.setState({
-        name: split[0],
-        date: split[1]
+        meetname: split[0],
+        meetdate: split[1]
     })
+    console.log(split);
     this.populateEvents();
   }
-
+	
   render() {
     return(
       <Container fluid className="page-container">
@@ -78,7 +87,7 @@ class SpecificMeet extends Component {
             <a href="/" className="standalone">
                 <p><FontAwesomeIcon icon={faChevronLeft} className="px-0"/> Back to all meets</p>
             </a>
-            <h2>{this.state.name}</h2>
+            <h2>{this.state.meetname}</h2>
             <p class="text-muted">{moment(this.state.date).format('ll')}</p>
 
             <label>Event</label>
@@ -87,7 +96,11 @@ class SpecificMeet extends Component {
               this.state.eventname.map( (lister) => {
                 // console.log((lister.eventlist)[0]);
                   //console.log(lister);
-                  return(<Dropdown.Item href={"/meet/" + this.props.match.params.meetName + "/event/" + lister} eventinfo={this.state.eventlist}>{lister}</Dropdown.Item>)
+                  return(<Dropdown.Item href={"/meet/" + this.state.meetname + "/event/" + lister} eventinfo={this.state.eventlist}
+                  // logged={this.props.location.state.logged}
+                  // admin={this.props.location.state.admin}
+                  // user={this.props.location.state.user}
+                  >{lister}</Dropdown.Item>)
               }) 
             }
             
@@ -96,14 +109,19 @@ class SpecificMeet extends Component {
             <div className="specific-meet-cards">
             {
               this.state.eventname.map( (lister) => {
-                  return(<SpecificMeetCard eventlink={"/meet/" + this.props.match.params.meetName + "/event/" + lister} eventnameslist={this.state.eventname} eventname={lister} eventinfo={this.state.eventlist}>{lister}</SpecificMeetCard>)
+                  return(<SpecificMeetCard eventlink={"/meet/" + this.state.meetname + "_" + this.state.meetdate + "/event/" + lister} eventnameslist={this.state.eventname} eventname={lister} eventinfo={this.state.eventlist} 
+                  // logged={this.props.location.state.logged}
+                  // admin={this.props.location.state.admin}
+                  // user={this.props.location.state.user}
+                  >{lister}</SpecificMeetCard>)
               })
             }
             </div>
-
+            
         </Container>
-      </Container>
+      </Container>      
     );
   }
 }
-export default withRouter(SpecificMeet);
+
+export default (SpecificMeet);
