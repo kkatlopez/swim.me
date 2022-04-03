@@ -15,7 +15,7 @@ class Top10IndividualEvent extends Component {
 
   componentDidMount(){
     var result = this.props.eventlist.find(x => (x[0] === this.state.eventname));
-    console.log("rrived");
+    console.log("arrived");
     this.setState({
       eventresults: result
     });
