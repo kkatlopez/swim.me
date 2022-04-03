@@ -5,9 +5,10 @@ import { Link, withRouter } from 'react-router-dom';
 import '../css/event.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft} from '@fortawesome/free-solid-svg-icons';
+import Navigation from "./Navigation.js";
 
 class Event extends Component {
-	
+
   constructor(props) {
 	super(props);
     // if(this.props.location.state == undefined){
@@ -27,7 +28,7 @@ class Event extends Component {
     }
   }
 
-  // use populateEvents() from SpecificMeet.js 
+  // use populateEvents() from SpecificMeet.js
   showResultTable() {
     fetch("http://localhost:3001/meet_info")
       .then(res => res.json())
@@ -63,7 +64,7 @@ class Event extends Component {
         }
       )
   }
-  
+
   componentDidMount(){
     // var event = this.props.match.params.eventName;
     // console.log(event);
@@ -99,7 +100,7 @@ class Event extends Component {
             <a onClick={() => this.sendProps()} className="standalone meet-link">
                 <p><FontAwesomeIcon icon={faChevronLeft} className="px-0"/> Back to meet</p>
             </a>
-            <h2 className="sectionTitle">{this.state.name}</h2>            
+            <h2 className="sectionTitle">{this.state.name}</h2>
             <div className="event">
                 <Table bordered>
                   <thead>
@@ -124,7 +125,7 @@ class Event extends Component {
             </div>
 
         </Container>
-        <Navigation/>
+				<Navigation logged = {this.props.location.state.logged} admin = {this.props.location.state.admin} user = {this.props.location.state.user}/>
       </Container>
     );
   }

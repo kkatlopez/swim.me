@@ -3,6 +3,7 @@ import { Link, withRouter } from 'react-router-dom';
 import { Container, Form, FormControl, Button, Card, List } from 'react-bootstrap';
 import '../css/roster.css';
 import RosterCard from './RosterCard.js';
+import Navigation from "./Navigation.js";
 import { useState } from "react";
 
 class Roster extends Component {
@@ -73,7 +74,7 @@ class Roster extends Component {
                 className="me-2"
                 aria-label="Search"
                 />
-                <Button>Search</Button>   
+                <Button>Search</Button>
               </div>
             </Form>
         </Container>
@@ -84,7 +85,7 @@ class Roster extends Component {
             })
           }
         </Container>
-        <Navigation/>
+        <Navigation logged = {this.props.location.state.logged} admin = {this.props.location.state.admin} user = {this.props.location.state.user}/>
       </Container>
     );
   }

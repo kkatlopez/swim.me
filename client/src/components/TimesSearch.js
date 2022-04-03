@@ -7,6 +7,7 @@ import FastestTimes from './FastestTimes.js';
 import EventTimes from './EventTimes.js';
 import Times from './Times.js';
 import SwimmerSearch from './SwimmerSearch.js';
+import Navigation from "./Navigation.js";
 import { Dropdown } from 'semantic-ui-react';
 import pkg from 'semantic-ui-react/package.json'
 
@@ -89,7 +90,8 @@ class TimesSearch extends Component {
         {/* {showTable && <Times swimmers={this.state.allswimmerinfo}/>} */}
 
         </Container>
-      </Container>      
+        <Navigation logged = {this.props.location.state.logged} admin = {this.props.location.state.admin} user = {this.props.location.state.user}/>
+      </Container>
     );
   }
 }
