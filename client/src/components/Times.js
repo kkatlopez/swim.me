@@ -85,6 +85,7 @@ class Times extends Component {
             </Tab>
         </Tabs>
         </Container>
+        <Navigation/>
       </Container>
     );
   }

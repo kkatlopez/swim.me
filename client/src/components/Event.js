@@ -124,6 +124,7 @@ class Event extends Component {
             </div>
 
         </Container>
+        <Navigation/>
       </Container>
     );
   }

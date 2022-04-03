@@ -68,6 +68,7 @@ class AllTimeTop10 extends Component {
           {showTable && <Top10IndividualEvent/>}
 
         </Container>
+        <Navigation/>
       </Container>
     );
   }

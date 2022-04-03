@@ -94,7 +94,7 @@ class MeetResults extends Component {
           </div>
         </Container>
 
-        {/* <Navigation/> */}
+        <Navigation/>
       </Container>  
 
     );

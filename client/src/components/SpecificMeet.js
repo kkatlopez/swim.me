@@ -136,6 +136,7 @@ class SpecificMeet extends Component {
             </div>
             
         </Container>
+        <Navigation/>
       </Container>      
     );
   }

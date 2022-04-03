@@ -84,6 +84,7 @@ class Roster extends Component {
             })
           }
         </Container>
+        <Navigation/>
       </Container>
     );
   }
