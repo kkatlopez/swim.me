@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 // import ReactDOM from 'react-dom';
-import { Container, Card, DropdownButton, Dropdown, Table } from 'react-bootstrap';
+import { Table } from 'react-bootstrap';
 import '../css/alltimetop10.css';
 
 class Top10IndividualEvent extends Component {
 	
   constructor(props) {
 	super(props);
-		
+  this.state = {
+  }
   }
 	
   render() {

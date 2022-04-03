@@ -1,16 +1,18 @@
 import React, { Component } from 'react';
 // import ReactDOM from 'react-dom';
-import { Container, Card, DropdownButton, Dropdown } from 'react-bootstrap';
+import { Container, DropdownButton, Dropdown, Card } from 'react-bootstrap';
 import { Link, withRouter } from 'react-router-dom';
+import '../css/meetresults.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight, faChevronLeft } from '@fortawesome/free-solid-svg-icons';
-import '../css/meetresults.css';
+import MeetCard from "./MeetCard.js";
+// import Navigation from "./Navigation.js";
+import moment from 'moment';
 
-class FrontPage extends Component {
+class MeetResults extends Component {
 
   constructor(props) {
-		super(props);
-		//BELOW IS THE CODE TO BLOCK OFF THE DASH FROM LOGIN
+    super(props);
     if(this.props.location.state == undefined){
       this.props.history.push("/", { logged: false });
     }
@@ -20,6 +22,45 @@ class FrontPage extends Component {
     else if(this.props.location.state.logged == false){
       this.props.history.push("/", { logged: false });
     }
+    this.state = {
+      meetlist: [],
+      dropdownlist: [],
+      logged: this.props.location.state.logged,
+      admin: this.props.location.state.admin,
+      user: this.props.location.state.user
+    }
+  }
+
+  //AJAX Calls
+  populateMeet() {
+    fetch("http://localhost:3001/meet_info")
+      .then(res => res.json())
+      .then(
+        (result) => {
+          console.log(result);
+          this.setState({
+            meetlist: result,
+            dropdownlist: [result[0], result[1],result[2],result[3],result[4],result[5],result[6],result[7],result[8],result[9],result[10]]
+          });
+        },
+        (error) => {
+          this.setState({
+            isLoaded: true,
+            error
+          });
+        }
+      )
+  }
+
+  componentDidMount(){
+    this.populateMeet();
+  }
+
+  sendProps(lister) {
+    var logged = this.props.location.state.logged;
+    var admin = this.props.location.state.adin
+    var user = this.props.location.state.user;
+    this.props.history.push("/meet/"+ lister.meetName + "_" + lister.meetStartDate, { logged: logged, admin: admin, user: user} );
   }
 
   render() {
@@ -29,43 +70,35 @@ class FrontPage extends Component {
           <h1 className="siteHeaderTitle px-3 mb-3">Meet Results</h1>
         </Container>
         <Container className="px-4">
-            {/* <a href="/" className="standalone">
-                <p><FontAwesomeIcon icon={faChevronLeft} className="px-0"/> Back to all meets</p>
-            </a> */}
           <label>Meet</label>
           <DropdownButton className="dropdown pb-3" title="Select a meet">
-            <Dropdown.Item href="/meet">RPI @ Skidmore</Dropdown.Item>
-            <Dropdown.Item href="#/action-2">MIT Invitational</Dropdown.Item>
-            <Dropdown.Item href="#/action-3">RPI vs. Vassar College</Dropdown.Item>
+            {
+              this.state.dropdownlist.map( (lister) => {
+                return(<Dropdown.Item onClick={() => this.sendProps(lister)}>{lister.meetName}</Dropdown.Item>)
+              })
+            }
+
           </DropdownButton>
-          <h2>Latest Results</h2>
+          <h2 className="sectionTitle">Latest Results</h2>
           <div className="meet-cards">
-            <Card className="meet-card">
-              <Card.Body className="mt-2">
-                  <Card.Title>RPI @ Skidmore</Card.Title>
-                  <Card.Subtitle className="text-muted">January 22, 2022</Card.Subtitle>
-                  <a href="/meet" className="stretched-link"></a>
-              </Card.Body>
-            </Card>
-            <Card className="meet-card">
-              <Card.Body className="mt-2">
-                <Card.Title>MIT Invitational</Card.Title>
-                <Card.Subtitle className="text-muted">December 3, 2022</Card.Subtitle>
-                {/* <FontAwesomeIcon icon={faArrowRight} className="fa"/> */}
-              </Card.Body>
-            </Card>
-            <Card className="meet-card">
-              <Card.Body className="mt-2">
-                <Card.Title>RPI vs. Vassar College</Card.Title>
-                <Card.Subtitle className="text-muted">November 13, 2021</Card.Subtitle>
-                {/* <FontAwesomeIcon icon={faArrowRight} className="fa-landing"/> */}
-              </Card.Body>
-            </Card>
+            {
+              this.state.meetlist.map( (lister) => {
+                  return(<MeetCard meetname={lister.meetName} meetdate={moment(lister.meetStartDate).format('ll')} meetoriginaldate={lister.meetStartDate}
+                  logged={this.props.location.state.logged}
+                  admin={this.props.location.state.admin}
+                  user={this.props.location.state.user}
+                  />)
+              })
+            }
+
           </div>
         </Container>
-      </Container>
+
+        {/* <Navigation/> */}
+      </Container>  
+
     );
   }
 }
 
-export default withRouter(FrontPage);
+export default withRouter(MeetResults);

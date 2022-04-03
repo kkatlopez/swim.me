@@ -2,6 +2,10 @@ svg {
     padding-left: 0.5rem;
 }
 
+.event-card, .meet-link {
+    cursor: pointer;
+}
+
 .standalone.view-all > p {
     padding-bottom: 0.75rem;
 }

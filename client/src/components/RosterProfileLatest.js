@@ -5,12 +5,15 @@ import { Container, Table } from 'react-bootstrap';
 class RosterProfileLatest extends Component {
     constructor(props) {
       super(props);
+      this.state = {
+        
+      };
     }
 
     render() {
       return(
         <Container fluid className="page-container">
-            <h2>RPI @ Skidmore</h2>
+            <h2 className="sectionTitle">RPI @ Skidmore</h2>
             <p class="text-muted">January 22, 2022</p>
           <Container className="px-4">
           <Table bordered>

@@ -26,6 +26,11 @@ code {
 
 .siteHeaderTitle {
   font-size: 40px;
+  font-family: var(--bs-body-font-family);
+}
+
+.sectionTitle {
+  font-family: var(--bs-body-font-family);
 }
 
 /* Dropdown */
