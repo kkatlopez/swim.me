@@ -86,7 +86,7 @@ class RosterProfile extends Component {
           <h1 className="siteHeaderTitle px-3 mb-3">Roster</h1>
         </Container>
         <Container className="px-4">
-            <h2>Gwyneth Yuen</h2>
+            <h2 className="sectionTitle">Gwyneth Yuen</h2>
             <div className="d-flex">
                 <div>
                     <img src="https://rpiathletics.com/images/2021/10/5/Yuen_Gwyneth.jpg?width=300" className="img-thumbnail"></img>

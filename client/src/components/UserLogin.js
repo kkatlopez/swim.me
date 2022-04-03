@@ -48,7 +48,7 @@ class UserLanding extends Component {
       .then(
         (result) => {
           if (result.Result == true) {
-            this.props.history.push("/results", { logged: true, admin: result.Admin, user: this.user});
+            this.props.history.push("/results", { logged: true, admin: result.Admin, user: this.state.user});
           }
           else{
             this.setState({

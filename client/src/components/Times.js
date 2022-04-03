@@ -11,61 +11,24 @@ import { faChevronLeft} from '@fortawesome/free-solid-svg-icons';
 class Times extends Component {
   constructor(props) {
 	super(props);
-    this.state = {
-        firstname: '',
-        lastname: '',
-        results: [],
-        bestTimes: [],
-        eventsSwam: [],
-        meetsSwam: []
-    };
-    if(this.props.location.state == undefined){
-        this.props.history.push("/", { logged: false });
-      }
-      else if (!('logged' in this.props.location.state)){
-        this.props.history.push("/", { logged: false });
-      }
-      else if(this.props.location.state.logged == false){
-        this.props.history.push("/", { logged: false });
-      }
+  if(this.props.location.state == undefined){
+    this.props.history.push("/", { logged: false });
   }
-
-  // getSwimmerTimes(url) {
-  //   fetch("http://localhost:3001/specific_swimmer", {
-  //     method: 'GET',
-  //     headers: {
-  //       'Content-Type': 'application/json'
-  //     },
-  //     body: JSON.stringify({name: url})
-  //   })
-  //     .then(res => res.json())
-  //     .then(
-  //       (result) => {
-  //         console.log(result);
-  //         var splitname = url.split(' ');
-  //         var specific_result = result.find(x => (x.firstName === splitname[0] && x.lastName === splitname[1]));
-  //         console.log(specific_result);
-  //         console.log(specific_result.bestTimes);
-  //         this.setState({
-  //           bestTimes: specific_result.bestTimes,
-  //           eventsSwam: specific_result.eventsSwam,
-  //           meetsSwam: specific_result.meetsSwam
-  //         });
-  //       },
-  //       (error) => {
-  //         this.setState({
-  //           isLoaded: true,
-  //           error
-  //         });
-  //       }
-  //     )
-  // }
-  
-  // componentDidMount(){
-  //   var name = this.props.match.params.swimmerName;
-  //   console.log("hello");
-  //   this.getSwimmerTimes(name);
-  // }
+  else if (!('logged' in this.props.location.state)){
+    this.props.history.push("/", { logged: false });
+  }
+  else if(this.props.location.state.logged == false){
+    this.props.history.push("/", { logged: false });
+  }
+  this.state = {
+      firstname: '',
+      lastname: '',
+      results: [],
+      bestTimes: [],
+      eventsSwam: [],
+      meetsSwam: []
+  };
+  }
 
   populateEvents() {
     fetch("http://localhost:3001/swimmers")
@@ -73,21 +36,11 @@ class Times extends Component {
       .then(
         (result) => {
           var specific_result = result.find(x => (x.firstName === this.state.firstname && x.lastName === this.state.lastname));
-          // console.log(specific_result);
-          // var namelist = [];
-          // var i;
-          // for (i = 0; i < specific_result.meetEvents.length; i++) {
-          //   if (specific_result.meetEvents[i][1].length === 0) {
-          //     continue;
-          //   } else {
-          //     namelist.push(specific_result.meetEvents[i][0]);
-          //   }
-          // }
           this.setState({
             results: specific_result
           });
-          console.log(this.state.results);
-          console.log(specific_result);
+          //console.log(this.state.results);
+          //console.log(specific_result);
         },
         (error) => {
           this.setState({
@@ -100,7 +53,7 @@ class Times extends Component {
 
   componentDidMount(){
     var split = this.props.match.params.swimmerName.split(' ');
-    console.log(split);
+    //console.log(split);
     this.setState({
         firstname: split[0],
         lastname: split[1]
@@ -119,18 +72,6 @@ class Times extends Component {
         <a href="/times" className="standalone">
           <p><FontAwesomeIcon icon={faChevronLeft} className="px-0"/> Back to search</p>
         </a>
-        <Form className="pb-3">
-            <label>Search for a swimmer</label>
-                <div className="d-flex">
-                <FormControl
-                type="search"
-                placeholder="Enter a name"
-                className="me-2"
-                aria-label="Search"
-                />
-                <Button>Search</Button>
-            </div>
-        </Form>
 
         <Tabs defaultActiveKey="meet" id="uncontrolled-tab-example" className="mb-3 justify-content-center">
             <Tab eventKey="meet" title="Meet">

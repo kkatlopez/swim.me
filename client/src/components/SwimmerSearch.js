@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { Dropdown } from 'semantic-ui-react';
+import { Link, withRouter } from 'react-router-dom';
 
 class SwimmerSearch extends Component {
   constructor(props) {
@@ -8,6 +9,15 @@ class SwimmerSearch extends Component {
       this.state = {
           swimmernames: []
       };
+      // if(this.props.location.state == undefined){
+      //   this.props.history.push("/", { logged: false });
+      // }
+      // else if (!('logged' in this.props.location.state)){
+      //   this.props.history.push("/", { logged: false });
+      // }
+      // else if(this.props.location.state.logged == false){
+      //   this.props.history.push("/", { logged: false });
+      // }
   }
   
   getSwimmerTimes() {
@@ -36,10 +46,14 @@ class SwimmerSearch extends Component {
       )
   }
 
-  getTerm () {
+  getTerm() {
     var node = document.getElementsByClassName('divider text')[0];
     var a = ReactDOM.findDOMNode(node);
     console.log(a.textContent);
+    // var logged = this.props.location.state.logged;
+    // var admin = this.props.location.state.adin
+    // var user = this.props.location.state.user;
+    // this.props.history.push( { logged: logged, admin: admin, user: user} );
   }
 
   componentDidMount(){
@@ -61,5 +75,5 @@ class SwimmerSearch extends Component {
   }
 }
 
-export default(SwimmerSearch);
+export default withRouter(SwimmerSearch);
 
