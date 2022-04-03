@@ -100,7 +100,7 @@ class AllTimeTop10 extends Component {
           <h1 className="siteHeaderTitle px-3 mb-3">Times</h1>
         </Container>
         <Container className="px-4">
-          <a href="/" className="standalone">
+          <a href="/times" className="standalone">
                 <p><FontAwesomeIcon icon={faChevronLeft} className="px-0"/> Back to time search</p>
             </a>
           <label>Event</label>
