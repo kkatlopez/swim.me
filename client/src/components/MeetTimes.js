@@ -130,18 +130,6 @@ class MeetTimes extends Component {
                         )
                       })
                     }
-                      {/* <tr>
-                      <td>1000 Y Free</td>
-                      <td>10:06.50</td>
-                      <td>3rd</td>
-                      <td>-1.9%</td>
-                      </tr>
-                      <tr>
-                      <td>500 Y Free</td>
-                      <td>4:55.52</td>
-                      <td>1st</td>
-                      <td>-0.2%</td>
-                      </tr> */}
                   </tbody>
                 </Table> 
                 </div> }

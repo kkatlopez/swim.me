@@ -10,6 +10,7 @@ import SwimmerSearch from './SwimmerSearch.js';
 import Navigation from "./Navigation.js";
 import { Dropdown } from 'semantic-ui-react';
 import pkg from 'semantic-ui-react/package.json'
+import '../css/timessearch.css';
 
 class TimesSearch extends Component {
   constructor(props) {
@@ -75,6 +76,13 @@ class TimesSearch extends Component {
     this.getSwimmerTimes();
   }
 
+  goToTop10() {
+    var logged = this.props.location.state.logged;
+    var admin = this.props.location.state.adin
+    var user = this.props.location.state.user;
+    this.props.history.push("/alltimetop10", { logged: logged, admin: admin, user: user} );
+  }
+
   render() {
     const { showTable } = this.state;
     return(
@@ -83,11 +91,15 @@ class TimesSearch extends Component {
           <h1 className="siteHeaderTitle px-3 mb-3">Times</h1>
         </Container>
         <Container className="px-4">
-        <br/>
-        <SwimmerSearch swimmernames={this.state.swimmernames}/>
-        <Button onClick={() => this.redirect()}>Show Results</Button>
-        <br/>
-        {/* {showTable && <Times swimmers={this.state.allswimmerinfo}/>} */}
+          <br/>
+          <a onClick={() => this.goToTop10()} className="standalone top10-link">View all-time top 10</a>
+          <Container className="d-flex justify-content-between mt-3">
+            <SwimmerSearch swimmernames={this.state.swimmernames}/>
+            <Button onClick={() => this.redirect()}>Show Results</Button>
+            <br/>
+          </Container>
+
+          {/* {showTable && <Times swimmers={this.state.allswimmerinfo}/>} */}
 
         </Container>
         <Navigation logged = {this.props.location.state.logged} admin = {this.props.location.state.admin} user = {this.props.location.state.user}/>

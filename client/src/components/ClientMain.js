@@ -20,7 +20,9 @@ const Main = (props) => {
       <Route exact path='/results' render={
         () => <div><MeetResults/></div>
       }></Route>
-
+      <Route exact path='/login' render={
+        () => <div><UserLanding/></div>
+      }></Route>
       <Route exact path="/meet/:meetName" component={SpecificMeet} />
       <Route exact path="/meet/:meetName/event/:eventName" component={Event} />
       <Route exact path='/alltimetop10' render={
