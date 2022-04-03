@@ -41,7 +41,7 @@ class MeetCard extends Component {
               <Card.Subtitle className="text-muted">{this.state.date}</Card.Subtitle>
           </Card.Body>
         </Card>
-      </Container>      
+      </Container>       
     );
   }
 }

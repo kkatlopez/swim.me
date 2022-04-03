@@ -39,7 +39,7 @@ const Main = (props) => {
       <Route exact path='/' render={
         () => <div><UserLanding/></div>
       }></Route>
-      {/* <Redirect from='*' to='/results' /> */}
+      <Redirect from='*' to='/' />
     </Switch>
 
   );
