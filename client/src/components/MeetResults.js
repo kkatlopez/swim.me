@@ -6,7 +6,7 @@ import '../css/meetresults.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight, faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import MeetCard from "./MeetCard.js";
-// import Navigation from "./Navigation.js";
+import Navigation from "./Navigation.js";
 import moment from 'moment';
 
 class MeetResults extends Component {
@@ -94,8 +94,8 @@ class MeetResults extends Component {
           </div>
         </Container>
 
-        {/* <Navigation/> */}
-      </Container>  
+        <Navigation logged = {this.props.location.state.logged} admin = {this.props.location.state.admin} user = {this.props.location.state.user}/>
+      </Container>
 
     );
   }
