@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { Dropdown } from 'semantic-ui-react';
 import { Link, withRouter } from 'react-router-dom';
+import '../css/swimmersearch.css';
 
 class SwimmerSearch extends Component {
   constructor(props) {
@@ -63,6 +64,7 @@ class SwimmerSearch extends Component {
   render() {
     return(
       <Dropdown
+        className="swimmer-search"
         clearable
         fluid
         search

@@ -97,7 +97,7 @@ class AllTimeTop10 extends Component {
     return(
       <Container fluid className="page-container">
         <Container fluid className="siteHeader d-flex align-items-end">
-          <h1 className="siteHeaderTitle px-3 mb-3">Times</h1>
+          <h1 className="siteHeaderTitle px-3 mb-3">All-Time Top 10</h1>
         </Container>
         <Container className="px-4">
           <a href="/times" className="standalone">

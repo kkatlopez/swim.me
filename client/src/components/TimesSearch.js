@@ -82,11 +82,15 @@ class TimesSearch extends Component {
           <h1 className="siteHeaderTitle px-3 mb-3">Times</h1>
         </Container>
         <Container className="px-4">
-        <br/>
-        <SwimmerSearch swimmernames={this.state.swimmernames}/>
-        <Button onClick={() => this.redirect()}>Show Results</Button>
-        <br/>
-        {/* {showTable && <Times swimmers={this.state.allswimmerinfo}/>} */}
+          <br/>
+          <a href="/alltimetop10" className="standalone">View all-time top 10</a>
+          <Container className="d-flex justify-content-between mt-3">
+            <SwimmerSearch swimmernames={this.state.swimmernames}/>
+            <Button onClick={() => this.redirect()}>Show Results</Button>
+            <br/>
+          </Container>
+          
+          {/* {showTable && <Times swimmers={this.state.allswimmerinfo}/>} */}
 
         </Container>
       </Container>      
