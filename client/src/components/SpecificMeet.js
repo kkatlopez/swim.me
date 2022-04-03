@@ -12,20 +12,23 @@ class SpecificMeet extends Component {
 	
   constructor(props) {
 	  super(props);
-    // if(this.props.location.state == undefined){
-    //   this.props.history.push("/", { logged: false });
-    // }
-    // else if (!('logged' in this.props.location.state)){
-    //   this.props.history.push("/", { logged: false });
-    // }
-    // else if(this.props.location.state.logged == false){
-    //   this.props.history.push("/", { logged: false });
-    // }
+    if(this.props.location.state == undefined){
+      this.props.history.push("/", { logged: false });
+    }
+    else if (!('logged' in this.props.location.state)){
+      this.props.history.push("/", { logged: false });
+    }
+    else if(this.props.location.state.logged == false){
+      this.props.history.push("/", { logged: false });
+    }
     this.state = {
       meetname: "",
       meetdate: "",
       eventlist: [],
-      eventname: []
+      eventname: [],
+      logged: this.props.location.state.logged,
+      admin: this.props.location.state.admin,
+      user: this.props.location.state.user
     }
   }
 
@@ -76,6 +79,20 @@ class SpecificMeet extends Component {
     console.log(split);
     this.populateEvents();
   }
+
+  sendProps(eventname) {
+    var logged = this.props.location.state.logged;
+    var admin = this.props.location.state.adin
+    var user = this.props.location.state.user;
+    this.props.history.push("/meet/" + this.state.meetname + "_" + this.state.meetdate + "/event/" + eventname, { logged: logged, admin: admin, user: user} );
+  }
+
+  backToAllMeets() {
+    var logged = this.props.location.state.logged;
+    var admin = this.props.location.state.adin
+    var user = this.props.location.state.user;
+    this.props.history.push("/results", { logged: logged, admin: admin, user: user} );
+  }
 	
   render() {
     return(
@@ -84,10 +101,13 @@ class SpecificMeet extends Component {
           <h1 className="siteHeaderTitle px-3 mb-3">Meet Results</h1>
         </Container>
         <Container className="px-4">
-            <a href="/" className="standalone">
+            {/* <a href="/results" className="standalone">
                 <p><FontAwesomeIcon icon={faChevronLeft} className="px-0"/> Back to all meets</p>
+            </a> */}
+            <a onClick={() => this.backToAllMeets()} className="standalone meet-link">
+              <p><FontAwesomeIcon icon={faChevronLeft} className="px-0"/> Back to all meets</p>
             </a>
-            <h2>{this.state.meetname}</h2>
+            <h2 className="sectionTitle">{this.state.meetname}</h2>
             <p class="text-muted">{moment(this.state.date).format('ll')}</p>
 
             <label>Event</label>
@@ -96,10 +116,10 @@ class SpecificMeet extends Component {
               this.state.eventname.map( (lister) => {
                 // console.log((lister.eventlist)[0]);
                   //console.log(lister);
-                  return(<Dropdown.Item href={"/meet/" + this.state.meetname + "/event/" + lister} eventinfo={this.state.eventlist}
-                  // logged={this.props.location.state.logged}
-                  // admin={this.props.location.state.admin}
-                  // user={this.props.location.state.user}
+                  return(<Dropdown.Item onClick={() => this.sendProps(lister)} eventinfo={this.state.eventlist}
+                  logged={this.props.location.state.logged}
+                  admin={this.props.location.state.admin}
+                  user={this.props.location.state.user}
                   >{lister}</Dropdown.Item>)
               }) 
             }
@@ -110,9 +130,6 @@ class SpecificMeet extends Component {
             {
               this.state.eventname.map( (lister) => {
                   return(<SpecificMeetCard eventlink={"/meet/" + this.state.meetname + "_" + this.state.meetdate + "/event/" + lister} eventnameslist={this.state.eventname} eventname={lister} eventinfo={this.state.eventlist} 
-                  // logged={this.props.location.state.logged}
-                  // admin={this.props.location.state.admin}
-                  // user={this.props.location.state.user}
                   >{lister}</SpecificMeetCard>)
               })
             }
@@ -124,4 +141,4 @@ class SpecificMeet extends Component {
   }
 }
 
-export default (SpecificMeet);
+export default withRouter(SpecificMeet);

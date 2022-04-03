@@ -17,10 +17,7 @@ const Main = (props) => {
   //console.log(props);
   return (
     <Switch>
-      <Route exact path='/chat' render={
-        () => <div><UserLanding/></div>
-      }></Route>
-      <Route exact path='/' render={
+      <Route exact path='/results' render={
         () => <div><MeetResults/></div>
       }></Route>
 
@@ -38,6 +35,9 @@ const Main = (props) => {
       }></Route>
       <Route exact path='/roster/profile' render={
         () => <div><RosterProfile/></div>
+      }></Route>
+      <Route exact path='/' render={
+        () => <div><UserLanding/></div>
       }></Route>
       {/* <Redirect from='*' to='/results' /> */}
     </Switch>

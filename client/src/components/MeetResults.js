@@ -13,18 +13,21 @@ class MeetResults extends Component {
 
   constructor(props) {
     super(props);
-    // if(this.props.location.state == undefined){
-    //   this.props.history.push("/", { logged: false });
-    // }
-    // else if (!('logged' in this.props.location.state)){
-    //   this.props.history.push("/", { logged: false });
-    // }
-    // else if(this.props.location.state.logged == false){
-    //   this.props.history.push("/", { logged: false });
-    // }
+    if(this.props.location.state == undefined){
+      this.props.history.push("/", { logged: false });
+    }
+    else if (!('logged' in this.props.location.state)){
+      this.props.history.push("/", { logged: false });
+    }
+    else if(this.props.location.state.logged == false){
+      this.props.history.push("/", { logged: false });
+    }
     this.state = {
       meetlist: [],
-      dropdownlist: []  
+      dropdownlist: [],
+      logged: this.props.location.state.logged,
+      admin: this.props.location.state.admin,
+      user: this.props.location.state.user
     }
   }
 
@@ -39,7 +42,6 @@ class MeetResults extends Component {
             meetlist: result,
             dropdownlist: [result[0], result[1],result[2],result[3],result[4],result[5],result[6],result[7],result[8],result[9],result[10]]
           });
-          // console.log(this.state.meetlist);
         },
         (error) => {
           this.setState({
@@ -54,6 +56,13 @@ class MeetResults extends Component {
     this.populateMeet();
   }
 
+  sendProps(lister) {
+    var logged = this.props.location.state.logged;
+    var admin = this.props.location.state.adin
+    var user = this.props.location.state.user;
+    this.props.history.push("/meet/"+ lister.meetName + "_" + lister.meetStartDate, { logged: logged, admin: admin, user: user} );
+  }
+
   render() {
     return(
       <Container fluid className="page-container">
@@ -65,19 +74,19 @@ class MeetResults extends Component {
           <DropdownButton className="dropdown pb-3" title="Select a meet">
             {
               this.state.dropdownlist.map( (lister) => {
-                return(<Dropdown.Item href={"/meet/" + lister.meetName}>{lister.meetName}</Dropdown.Item>)
+                return(<Dropdown.Item onClick={() => this.sendProps(lister)}>{lister.meetName}</Dropdown.Item>)
               })
             }
 
           </DropdownButton>
-          <h2>Latest Results</h2>
+          <h2 className="sectionTitle">Latest Results</h2>
           <div className="meet-cards">
             {
               this.state.meetlist.map( (lister) => {
                   return(<MeetCard meetname={lister.meetName} meetdate={moment(lister.meetStartDate).format('ll')} meetoriginaldate={lister.meetStartDate}
-                  // logged={this.props.location.state.logged}
-                  // admin={this.props.location.state.admin}
-                  // user={this.props.location.state.user}
+                  logged={this.props.location.state.logged}
+                  admin={this.props.location.state.admin}
+                  user={this.props.location.state.user}
                   />)
               })
             }
@@ -92,4 +101,4 @@ class MeetResults extends Component {
   }
 }
 
-export default (MeetResults);
+export default withRouter(MeetResults);
