@@ -87,20 +87,19 @@ class MeetTimes extends Component {
             <DropdownButton className="dropdown pb-3" title="Select a meet">
               {
                 this.state.times.map( (lister) => {
-                    return(<Dropdown.Item meetname={lister[0]} meetstart={lister[1]} onClick={() => this.showMeet(lister[0])}>{lister[0]} </Dropdown.Item>)
+                    return(<Dropdown.Item meetname={lister} meetstart={lister[1]} onClick={() => this.showMeet(lister)}>{lister[0]} </Dropdown.Item>)
                 })
               }
             </DropdownButton>
             {this.state.showMeet && 
               <div>
-                <h2>RPI @ Skidmore</h2>
+                <h2 className="py-2">{this.state.meetname}</h2>
                 <Table bordered>
                   <thead>
                       <tr>
                       <th>Event</th>
                       <th>Time</th>
                       <th>Place</th>
-                      <th>Imp.</th>
                       </tr>
                   </thead>
                   <tbody>
@@ -108,23 +107,13 @@ class MeetTimes extends Component {
                       this.state.events.map( (lister) => {
                         return(
                           <tr>
-                            
+                            <td>{lister[0]}</td>
+                            <td>{lister[1]}</td>
+                            <td>{lister[2]}</td>
                           </tr>
                         )
                       })
                     }
-                      {/* <tr>
-                      <td>1000 Y Free</td>
-                      <td>10:06.50</td>
-                      <td>3rd</td>
-                      <td>-1.9%</td>
-                      </tr>
-                      <tr>
-                      <td>500 Y Free</td>
-                      <td>4:55.52</td>
-                      <td>1st</td>
-                      <td>-0.2%</td>
-                      </tr> */}
                   </tbody>
                 </Table> 
                 </div> }

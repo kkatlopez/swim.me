@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 // import ReactDOM from 'react-dom';
-import { Container, DropdownButton, Dropdown} from 'react-bootstrap';
+import { Container, DropdownButton, Dropdown, Table} from 'react-bootstrap';
 import { Link, withRouter } from 'react-router-dom';
 import '../css/alltimetop10.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -13,7 +13,8 @@ class AllTimeTop10 extends Component {
 		super(props);
 	  this.state = {
 	    eventnames: [],
-      selected: '',
+      eventresults: [],
+      name: '',
       events: [],
 	    showTable: false
 	  };
@@ -29,17 +30,35 @@ class AllTimeTop10 extends Component {
 		// }
   }
 
+
+
   showTable(eventname) {
     console.log(eventname.lister);
-    this.setState({
-      selected: eventname.lister
+    var result = this.state.events.find(x => (x.event[0] === eventname.lister));
+    console.log(result);
+    // this.setState({
+    //   name: eventname.lister,
+    //   eventresults: result,
+    //   showTable: true
+    // });
+
+    this.setState({ name: eventname.lister, eventresults: result }, function () {
+      console.log(this.state.eventresults);
+      this.setState({
+        showTable: true
+      });
     });
-    switch (eventname.lister) {
+    switch (eventname) {
+      case (eventname.lister != ''):
+        console.log("check");
+        this.setState({ showTable: true });
+        break;
       case "":
         console.log("check");
         this.setState({ showTable: true });
         break;
     }
+    
   }
 
   populateTop10() {
@@ -90,10 +109,52 @@ class AllTimeTop10 extends Component {
               this.state.eventnames.map( (lister) => {
                   return(<Dropdown.Item onClick={() => this.showTable({lister})}>{lister}</Dropdown.Item>)
               }) 
-            }
+          }
           </DropdownButton>
 
-          {showTable && <Top10IndividualEvent eventname = {this.state.selected} eventlist = {this.state.events}/>}
+          {/* {showTable && <Top10IndividualEvent eventinfo = {this.state.eventresults}/>} */}
+
+          {showTable && 
+            <div className="event-time">
+            <h3>Top 10 Times for {this.state.eventresults.event[0]}</h3>
+            <Table bordered>
+              <thead>
+                  <tr>
+                  <th>#</th>
+                  <th>Name</th>
+                  <th>Time</th>
+                  <th>Year</th>
+                  </tr>
+              </thead>
+              {/* <tbody>
+                      <tr>
+                      <td>1</td>
+                      <td>{this.state.eventresults.event[1][0][0]}</td>
+                      <td>{this.state.eventresults.event[1][0][1]}</td>
+                      <td>{this.state.eventresults.event[1][0][2]}</td>
+                      </tr>
+                    </tbody> */}
+                    
+                    <tbody>
+              {
+                this.state.eventresults.event[1].map( (lister, index) => {
+                  var index = index + 1;
+                  return(
+                    
+                      <tr>
+                      <td>{index}</td>
+                      <td>{lister[0]}</td>
+                      <td>{lister[1]}</td>
+                      <td>{lister[2]}</td>
+                      </tr>
+                    )
+                    
+                }) 
+              }
+              </tbody>
+            </Table>
+          </div>    
+          }
 
         </Container>
       </Container>
