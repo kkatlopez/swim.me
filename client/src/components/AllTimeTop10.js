@@ -6,6 +6,7 @@ import '../css/alltimetop10.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import Top10IndividualEvent from './Top10IndividualEvent.js';
+import Navigation from './Navigation.js';
 
 class AllTimeTop10 extends Component {
 
@@ -68,6 +69,7 @@ class AllTimeTop10 extends Component {
           {showTable && <Top10IndividualEvent/>}
 
         </Container>
+        <Navigation/>
       </Container>
     );
   }

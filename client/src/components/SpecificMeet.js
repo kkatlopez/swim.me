@@ -6,10 +6,11 @@ import '../css/specificmeet.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft} from '@fortawesome/free-solid-svg-icons';
 import SpecificMeetCard from './SpecificMeetCard';
+import Navigation from "./Navigation.js";
 import moment from 'moment';
 
 class SpecificMeet extends Component {
-	
+
   constructor(props) {
 	  super(props);
     if(this.props.location.state == undefined){
@@ -93,7 +94,7 @@ class SpecificMeet extends Component {
     var user = this.props.location.state.user;
     this.props.history.push("/results", { logged: logged, admin: admin, user: user} );
   }
-	
+
   render() {
     return(
       <Container fluid className="page-container">
@@ -121,22 +122,23 @@ class SpecificMeet extends Component {
                   admin={this.props.location.state.admin}
                   user={this.props.location.state.user}
                   >{lister}</Dropdown.Item>)
-              }) 
+              })
             }
-            
-            </DropdownButton> 
+
+            </DropdownButton>
 
             <div className="specific-meet-cards">
             {
               this.state.eventname.map( (lister) => {
-                  return(<SpecificMeetCard eventlink={"/meet/" + this.state.meetname + "_" + this.state.meetdate + "/event/" + lister} eventnameslist={this.state.eventname} eventname={lister} eventinfo={this.state.eventlist} 
+                  return(<SpecificMeetCard eventlink={"/meet/" + this.state.meetname + "_" + this.state.meetdate + "/event/" + lister} eventnameslist={this.state.eventname} eventname={lister} eventinfo={this.state.eventlist}
                   >{lister}</SpecificMeetCard>)
               })
             }
             </div>
-            
+
         </Container>
-      </Container>      
+        <Navigation logged = {this.props.location.state.logged} admin = {this.props.location.state.admin} user = {this.props.location.state.user}/>
+      </Container>
     );
   }
 }

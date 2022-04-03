@@ -6,7 +6,9 @@ import MeetTimes from './MeetTimes.js';
 import FastestTimes from './FastestTimes.js';
 import EventTimes from './EventTimes.js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Navigation from "./Navigation.js";
 import { faChevronLeft} from '@fortawesome/free-solid-svg-icons';
+import '../css/times.css';
 
 class Times extends Component {
   constructor(props) {
@@ -61,6 +63,13 @@ class Times extends Component {
     this.populateEvents();
   }
 
+  backToAllTimes() {
+    var logged = this.props.location.state.logged;
+    var admin = this.props.location.state.adin
+    var user = this.props.location.state.user;
+    this.props.history.push("/times", { logged: logged, admin: admin, user: user} );
+  }
+
   render() {
     return(
       <Container fluid className="page-container">
@@ -69,7 +78,7 @@ class Times extends Component {
         </Container>
         <Container className="px-4">
         <br/>
-        <a href="/times" className="standalone">
+        <a onClick={() => this.backToAllTimes()} className="standalone times-link">
           <p><FontAwesomeIcon icon={faChevronLeft} className="px-0"/> Back to search</p>
         </a>
 
@@ -85,6 +94,7 @@ class Times extends Component {
             </Tab>
         </Tabs>
         </Container>
+        <Navigation logged = {this.props.location.state.logged} admin = {this.props.location.state.admin} user = {this.props.location.state.user}/>
       </Container>
     );
   }

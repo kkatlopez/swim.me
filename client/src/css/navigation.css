@@ -1,0 +1,20 @@
+a {
+    color: #6C757D !important;
+}
+
+.icons > a:first-child {
+    color: #1D62A0 !important;
+}
+
+svg {
+    padding: 0 !important;
+}
+
+.navbar {
+    box-shadow: 0px -4px 10px rgba(0, 0, 0, 0.1);
+    color: #c1c7cd;
+}
+
+.navbar-nav {
+    width: 100%;
+}
