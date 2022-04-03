@@ -1,5 +1,5 @@
 // server/index.js
-
+require('dotenv').config();
 const express = require("express");
 const bcrypt = require("bcryptjs");
 const { info } = require("console");
@@ -18,7 +18,7 @@ app.use(function(req, res, next) {
   next();
 });
 
-const uri = "mongodb+srv://root:hKTl1sOyZzIZWqlY@cluster0.eeewg.mongodb.net/swimdotme";
+const uri = "mongodb+srv://" + String(process.env.MONGOPASS) + "@cluster0.eeewg.mongodb.net/" + String(process.env.DBNAME);
 mongoose.connect(uri, { useUnifiedTopology: true, useNewUrlParser: true });
 const connection = mongoose.connection;
 connection.on('error', console.error.bind(console, 'connection error:'));
@@ -85,7 +85,8 @@ app.get("/meet_info", async (req, res) => {
   }
 });
 
-app.get("/meet_info/:searchterm", async (req, res, db) => {
+// GET times for a meet for a specific swimmer
+app.get("/meet_info/:searchterm", async (req, res) => {
   var info = req.params.searchterm.split("~"); // get search term from URL === first~last~meetname~startdate
   console.log(info);
   var full = info[0] + " " + info[1];
@@ -110,13 +111,18 @@ app.get("/meet_info/:searchterm", async (req, res, db) => {
             }
           }
         }
+        console.log(results);
+        console.log('hello');
         res.send(results);
       })
     });
   } catch (error) {
       return console.log(error);
   }
-})
+});
+
+// GET meet times for a specific swimmer
+
 
 //GET Specific Meet Info
 app.get("/meet_info_specific", async (req, res) => {
@@ -125,7 +131,7 @@ app.get("/meet_info_specific", async (req, res) => {
       console.log(req.body.name);
       console.log(req.body.date);
       collection.find({ meet_name: req.body.name, meet_start_date: req.body.date }).toArray(function (err, data) {
-        console.log(data); // it will print your collection data
+        //console.log(data); // it will print your collection data
         res.send(data);
       })
     });
@@ -140,7 +146,7 @@ app.get("/swimmers", async (req, res) => {
     var mysort = { "lastName": 1 };
     connection.db.collection("swimmer-info", function (err, collection) {
       collection.find({}).sort(mysort).toArray(function (err, data) {
-        console.log(data); // it will print your collection data
+        // console.log(data); // it will print your collection data
         res.send(data);
       })
     });
@@ -149,27 +155,222 @@ app.get("/swimmers", async (req, res) => {
   }
 });
 
-app.get("/specific_swimmer", async (req, res) => {
+
+
+
+
+
+function getEvents(meetsswam, eventsswam, full) {
+  var results = [];
+  console.log("getevents");
+  // console.log(eventsswam);
+  //console.log(meetsswam);
+   //looping through events
+  connection.db.collection("meet-info", function (err, collection) {
+  var i;
+  //console.log(meetsswam);
+  for (i = 0; i < meetsswam.length; i++) {
+    // console.log(meetsswam[i][0]);
+    collection.find({ meetName: meetsswam[i][0] }).toArray(function (err, data) {
+      for (h = 0; h < eventsswam.length; h++) {
+        // console.log(eventsswam[h]);
+        // console.log(data);
+        // console.log('checkpoint');
+        for (i = 0; i < data.length; i++) { // found meets
+          for (j = 0; j < data[i].meetEvents.length; j++) { // looping through meetEvents
+            // console.log(data[i].meetEvents[j][0] + " " + eventsswam[h]);
+            if (data[i].meetEvents[j][0].includes(eventsswam[h])) {
+              for (k = 0; k < data[i].meetEvents[j][1].length; k++) {     // looping through event results array
+                if (data[i].meetEvents[j][1][k][0] === full) {             // k === event participant
+                console.log(data[i].meetEvents[j][1][k][0] + " " + full);
+                // meetEvents[j][0] === event name
+                // meetEvents[j][1] === meet date
+                // meetEvents[j][1][k][1] === time swam
+                // console.log(data[i].meetEvents[j][0] + " " + data[i].meetEvents[j][1] + " " + data[i].meetEvents[j][1][k][1]);
+                results.push([ data[i].meetEvents[j][0], data[i].meetEvents[j][1], data[i].meetEvents[j][1][k][1]]);
+                // console.log(results);
+                }
+              }
+            }
+          }
+        }
+      }
+    });
+  }
+  console.log(results);
+  return results;
+  });
+}
+
+app.get("/specific_swimmer/:name", async (req, res) => {
   try {
+    var split = req.params.name.split(" ");
+    var full = split[0] + " " + split[1];
+    // console.log('hello');
+    var eventsswam = [];
+    var meetsswam = [];
+    // var results = [];
     connection.db.collection("swimmer-info", function (err, collection) {
-      // var split = req.body.name.split(" ");
-      var split = ['Kat', 'Lopez'];
       collection.find({ firstName: split[0], lastName: split[1] }).toArray(function (err, data) {
-        console.log(data); // it will print your collection data
-        res.send(data);
+        eventsswam = data[0].eventsSwam;
+        meetsswam = data[0].meetsSwam;
+        var results = [];
+        // result = getEvents(meetsswam, eventsswam, full);
+        connection.db.collection("meet-info", function (err, collection) {
+          var h = 0, i = 0, j = 0, k = 0, l = 0;
+          //console.log(meetsswam);
+          //console.log(meetsswam);
+          for (l = 0; l < meetsswam.length - 1; l++) {
+            // console.log(meetsswam[i][0]);
+            collection.find({ meetName: meetsswam[l][0] }).toArray(function (err, data) {
+              for (h = 0; h < eventsswam.length - 1; h++) {
+                // console.log(eventsswam[h]);
+                // console.log(data);
+                console.log('checkpoint');
+                for (i = 0; i < data.length - 1; i++) { // found meets
+                  for (j = 0; j < data[i].meetEvents.length - 1; j++) { // looping through meetEvents
+                    // console.log(data[i].meetEvents[j][0] + " " + eventsswam[h]);
+                    // console.log('found event');
+                    for (k = 0; k < data[i].meetEvents[j][1].length - 1; k++) {     // looping through event results array
+                      if (data[i].meetEvents[j][0].includes(eventsswam[h]) && data[i].meetEvents[j][1][k][0] === full) {             // k === event participant
+                      console.log('found name');
+                      // console.log(data[i].meetEvents[j][1][k][0] + " " + full);
+                      // meetEvents[j][0] === event name
+                      // meetEvents[j][1] === meet date
+                      // meetEvents[j][1][k][1] === time swam
+                      // console.log(data[i].meetEvents[j][0] + " " + data[i].meetStartDate + " " + data[i].meetEvents[j][1][k][1]);
+                      results.push([data[i].meetEvents[j][0], data[i].meetName, data[i].meetStartDate, data[i].meetEvents[j][1][k][1]]);
+                      // console.log(results);
+
+                        if (l == meetsswam.length - 1 && h == eventsswam.length - 1 && i == data.length - 1 && j == data[i].meetEvents.length && k == data[i].meetEvents[j][1].length - 1) {
+                          console.log(results);
+                          console.log('success');
+                          // res.send(results);
+                        }
+                        else {
+                          console.log('fail');
+                          console.log(l);
+                          console.log(meetsswam.length - 1);
+                          console.log(h);
+                          console.log(eventsswam.length - 1);
+                          console.log(i);
+                          console.log(data.length - 1);
+                          console.log(j);
+                          console.log(data[i].meetEvents.length - 1);
+                          console.log(k);
+                          console.log(data[i].meetEvents[j][1].length - 1);
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            });
+          }
+          console.log(results);
+          res.send(results);
+        });
       })
     });
+    
   } catch (error) {
-      return console.log(error);
+    return console.log(error);
   }
 });
+
+
+
+
+
 
 //GET Top 10
 
 //GET Credentials
 
+//Admin Login
+app.post("/verify_credentials", async (req, res) => {
+  console.log(req.body.user);
+  connection.db.collection("credentials", function (err, collection) {
+    // coll.collection("credentials", function (err, collection) {
+    collection.countDocuments({ "username": req.body.user }, function (err, count) {
+      // console.log(collection.find({}).toArray());
+      try {
+        if (count > 0) {
+          collection.find({ "username": req.body.user }).toArray(function (err, data) {
+            // console.log(data);
+            bcrypt.compare(req.body.pass, data[0].password, function (error, isMatch) {
+              if (error) {
+                // console.log(error);
+                return res.send({ "Result": false });
+              } else if (!isMatch) { //|| !data[0].admin
+                console.log("Invalid Login Attempt");
+                return res.send({ "Result": false });
+              } else {
+                return res.send({ "Result": true, "Admin": data[0].admin });
+              }
+            });
+          })
+        }
+        else {
+          // console.log(count);
+          return res.send({ "Result": false });
+        }
+      }
+      catch (err) {
+        console.log(err);
+      }
+    });
+  });
+  // });
+});
 
-//---------------------------------------------------ADMIN FUNCTIONS---------------------------------------------------
+
+app.post("/add_user", async (req, res) => {
+  console.log(req.body.user);
+  connection.db.collection("credentials", function (err, collection) {
+    collection.countDocuments({ "username": req.body.user }, function (err, count) {
+      try {
+        if (count > 0) {
+          return res.send({ "Result": false });
+        }
+        else {
+          const saltRounds = 10; // data processing time
+
+          var username = req.body.user;
+          var password = req.body.pass;
+
+          // salt, hash, and store
+          bcrypt.hash(password, saltRounds, function(err, hash) {
+
+            var UserSchema = mongoose.Schema({
+              username: String,
+              password: String,
+              admin: Boolean
+              // admin: req.body.admin
+            });
+
+            // compile schema to model
+            var User = mongoose.model('User', UserSchema, 'credentials');
+
+            // a document instance
+            var user = new User({ username: username, password: hash, admin: false });
+
+            // save model to database
+            user.save(function (err, book) {
+              if (err) return console.error(err);
+              console.log("Created new user");
+            });
+          });
+          // console.log(count);
+          return res.send({ "Result": true });
+        }
+      }
+      catch (err) {
+        console.log(err);
+      }
+    });
+  });
+});
 
 //
 
@@ -182,6 +383,3 @@ app.listen(PORT, () => {
 
 
 //---------------------------------------------------TEST CODE---------------------------------------------------
-
-
-

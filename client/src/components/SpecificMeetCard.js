@@ -1,19 +1,29 @@
 import React, { Component } from 'react';
 // import ReactDOM from 'react-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { Container, Card } from 'react-bootstrap';
 import '../css/specificmeet.css';
 
 class SpecificMeetCard extends Component {
 	
   constructor(props) {
-	super(props);
+    super(props);
+    if(this.props.location.state == undefined){
+      this.props.history.push("/", { logged: false });
+    }
+    else if (!('logged' in this.props.location.state)){
+      this.props.history.push("/", { logged: false });
+    }
+    else if(this.props.location.state.logged == false){
+      this.props.history.push("/", { logged: false });
+    }
     this.state = {
-        name: this.props.eventname,
-        link: this.props.eventlink,
-        events: this.props.eventinfo,
-        namelist: this.props.eventnamelist,
-        first: ""
-      }
+      name: this.props.eventname,
+      link: this.props.eventlink,
+      events: this.props.eventinfo,
+      namelist: this.props.eventnamelist,
+      first: ""
+    }
   }
 
   componentDidMount(){
@@ -25,14 +35,25 @@ class SpecificMeetCard extends Component {
     })
   }
 
+  sendProps(eventname) {
+    var logged = this.props.location.state.logged;
+    var admin = this.props.location.state.adin
+    var user = this.props.location.state.user;
+    this.props.history.push(this.state.link, { logged: logged, admin: admin, user: user} );
+  }
+
   render() {
     return(
         <Container fluid className="page-container">
             <Card className="event-card my-3">
-                <Card.Body>
+                <Card.Body onClick={() => this.sendProps(this.state.name)} >
                     <Card.Title className="align-middle">{this.state.name}</Card.Title>
                     <Card.Text>Winner: {this.state.first}</Card.Text>
-                    <a href={this.state.link} className="stretched-link"></a>
+                    {/* <a href={this.state.link} 
+                    logged={this.props.location.state.logged} 
+                    admin={this.props.location.state.admin}
+                    user={this.props.location.state.user}
+                    className="stretched-link"></a> */}
                 </Card.Body>
             </Card>
         </Container>  
@@ -40,4 +61,4 @@ class SpecificMeetCard extends Component {
   }
 }
 
-export default(SpecificMeetCard);
+export default withRouter(SpecificMeetCard);

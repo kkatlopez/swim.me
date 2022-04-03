@@ -1,5 +1,5 @@
 import React from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
 
 import MeetResults from './MeetResults.js';
 import Roster from './Roster.js';
@@ -9,6 +9,7 @@ import Event from './Event.js';
 import TimesSearch from './TimesSearch.js';
 import RosterProfile from './RosterProfile.js'
 import Times from './Times.js';
+import UserLanding from './UserLogin.js';
 
 // localhost:3000
 
@@ -16,7 +17,7 @@ const Main = (props) => {
   //console.log(props);
   return (
     <Switch>
-      <Route exact path='/' render={
+      <Route exact path='/results' render={
         () => <div><MeetResults/></div>
       }></Route>
 
@@ -35,8 +36,12 @@ const Main = (props) => {
       <Route exact path='/roster/profile' render={
         () => <div><RosterProfile/></div>
       }></Route>
+      <Route exact path='/' render={
+        () => <div><UserLanding/></div>
+      }></Route>
+      <Redirect from='*' to='/' />
     </Switch>
-    
+
   );
 }
 

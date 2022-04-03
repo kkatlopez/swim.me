@@ -21,7 +21,7 @@ class EventTimes extends Component {
         this.setState({ showEvent: true });
         break;
       case "":
-        this.setState({ showEvent: false });
+        this.setState({ showEvent: true });
         break;
       default:
         break;
@@ -45,7 +45,7 @@ class EventTimes extends Component {
             </DropdownButton>
             {this.state.showEvent && 
               <div>
-                <h2>500 Y Free</h2>
+                <h2 className="sectionTitle">500 Y Free</h2>
                 <Table bordered>
                   <thead>
                       <tr>

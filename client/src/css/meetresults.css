@@ -1,6 +1,7 @@
 .meet-card {
     margin-bottom: 1.25rem;
     height: 6.25rem;
+    cursor: pointer;
 }
 
 /* svg {

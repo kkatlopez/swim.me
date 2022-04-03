@@ -13,14 +13,23 @@ import pkg from 'semantic-ui-react/package.json'
 class TimesSearch extends Component {
   constructor(props) {
 	super(props);
-    this.state = {
-        swimmernames: [],
-        allswimmerinfo: [],
-        //showTable: false,
-        query: "",
-    };
-    //this.showTable = this.showTable.bind(this);
-    }
+  // if(this.props.location.state == undefined){
+  //   this.props.history.push("/", { logged: false });
+  // }
+  // else if (!('logged' in this.props.location.state)){
+  //   this.props.history.push("/", { logged: false });
+  // }
+  // else if(this.props.location.state.logged == false){
+  //   this.props.history.push("/", { logged: false });
+  // }
+  this.state = {
+      swimmernames: [],
+      allswimmerinfo: [],
+      //showTable: false,
+      query: "",
+  };
+  //this.showTable = this.showTable.bind(this);
+  }
 
 
   redirect() {
@@ -28,7 +37,10 @@ class TimesSearch extends Component {
     var a = ReactDOM.findDOMNode(node);
     console.log(a.textContent);
     var redirect = "/times/" + a.textContent;
-    this.props.history.push(redirect);
+    var logged = this.props.location.state.logged;
+    var admin = this.props.location.state.adin
+    var user = this.props.location.state.user;
+    this.props.history.push(redirect, { logged: logged, admin: admin, user: user} );
   }
 
   getSwimmerTimes() {
