@@ -53,7 +53,7 @@ var meet_info_schema = new Schema({
 const meet_info = mongoose.model('meet-info', meet_info_schema);
 
 //Swimmer Info
-var swimmer_info = new Schema ({
+var swimmer_info_schema = new Schema ({
   first_name: { type: String },
   last_name: { type: String },
   events_swam: [ String ],
@@ -63,10 +63,14 @@ var swimmer_info = new Schema ({
   hometown: { type: String },
   primary_stroke: { type: String },
   high_school: { type: String }
-})
+}, { versionKey: false });
+const swimmer_info = mongoose.model('swimmer-info', swimmer_info_schema);
 
 //Top 10
-
+var top_10_schema = new Schema({
+  event: [String]
+}, { versionKey: false });
+const top_10 = mongoose.model('top-10', top_10_schema);
 
 //---------------------------------------------------WEB APP FUNCTIONS---------------------------------------------------
 
@@ -181,6 +185,19 @@ app.get("/specific_swimmer", async (req, res) => {
 });
 
 //GET Top 10
+app.get("/top_10", async (req, res) => {
+  try {
+    connection.db.collection("top-10", function (err, collection) {
+      collection.find({}).toArray(function (err, data) {
+        console.log(data); // it will print your collection data
+        res.send(data);
+      })
+    });
+  } catch (error) {
+      return console.log(error);
+  }
+});
+
 
 //GET Credentials
 

@@ -7,14 +7,24 @@ class Top10IndividualEvent extends Component {
 	
   constructor(props) {
 	super(props);
-  this.state = {
+    this.state = {
+      eventname: this.props.eventname,
+      eventresults: []
+    }
   }
+
+  componentDidMount(){
+    var result = this.props.eventlist.find(x => (x[0] === this.state.eventname));
+    console.log("rrived");
+    this.setState({
+      eventresults: result
+    });
   }
 	
   render() {
     return(
           <div className="event-time">
-            <h3>Top 10 Times for M 500 Free</h3>
+            <h3>Top 10 Times for {this.state.eventname}</h3>
             <Table bordered>
               <thead>
                   <tr>
@@ -27,9 +37,9 @@ class Top10IndividualEvent extends Component {
               <tbody>
                   <tr>
                   <td>1</td>
-                  <td>Trevor Maxfield</td>
-                  <td>4:35:95</td>
-                  <td>2020</td>
+                  <td>{this.state.eventresults[1][0][0]}</td>
+                  <td>{this.state.eventresults[1][0][1]}</td>
+                  <td>{this.state.eventresults[1][0][2]}</td>
                   </tr>
                   <tr>
                   <td>2</td>

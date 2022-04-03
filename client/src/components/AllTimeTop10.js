@@ -12,31 +12,65 @@ class AllTimeTop10 extends Component {
   constructor(props) {
 		super(props);
 	  this.state = {
-	    event: "",
+	    eventnames: [],
+      selected: '',
+      events: [],
 	    showTable: false
 	  };
 	  this.showTable = this.showTable.bind(this);
-		if(this.props.location.state == undefined){
-			this.props.history.push("/", { logged: false });
-		}
-		else if (!('logged' in this.props.location.state)){
-			this.props.history.push("/", { logged: false });
-		}
-		else if(this.props.location.state.logged == false){
-			this.props.history.push("/", { logged: false });
-		}
+		// if(this.props.location.state == undefined){
+		// 	this.props.history.push("/", { logged: false });
+		// }
+		// else if (!('logged' in this.props.location.state)){
+		// 	this.props.history.push("/", { logged: false });
+		// }
+		// else if(this.props.location.state.logged == false){
+		// 	this.props.history.push("/", { logged: false });
+		// }
   }
 
-  showTable(event) {
-    console.log(event);
-    switch (event) {
-      case "M 500 Free":
+  showTable(eventname) {
+    console.log(eventname.lister);
+    this.setState({
+      selected: eventname.lister
+    });
+    switch (eventname.lister) {
+      case "":
+        console.log("check");
         this.setState({ showTable: true });
         break;
-      case "":
-        this.setState({ showTable: false });
-        break;
     }
+  }
+
+  populateTop10() {
+    fetch("http://localhost:3001/top_10")
+      .then(res => res.json())
+      .then(
+        (result) => {
+          console.log(result);
+          var names = [];
+          var i;
+          for (i = 0; i < result.length; i++) {
+            names.push(result[i].event[0]);
+          }
+          this.setState({
+            eventnames: names,
+            events: result
+          });
+          console.log(names);
+        },
+        (error) => {
+          this.setState({
+            isLoaded: true,
+            error
+          });
+        }
+      )
+  }
+
+  componentDidMount(){
+    console.log("hello");
+    this.populateTop10();
   }
 
   render() {
@@ -52,20 +86,14 @@ class AllTimeTop10 extends Component {
             </a>
           <label>Event</label>
           <DropdownButton className="dropdown pb-3" title="Select an event">
-            <Dropdown.Item onClick={() => this.showTable("")}>-</Dropdown.Item>
-            <Dropdown.Item href="#/action-1">W 50 Free</Dropdown.Item>
-            <Dropdown.Item href="#/action-2">M 50 Free</Dropdown.Item>
-            <Dropdown.Item href="#/action-3">W 100 Free</Dropdown.Item>
-            <Dropdown.Item href="#/action-4">M 100 Free</Dropdown.Item>
-            <Dropdown.Item href="#/action-5">W 200 Free</Dropdown.Item>
-            <Dropdown.Item href="#/action-6">M 200 Free</Dropdown.Item>
-            <Dropdown.Item href="#/action-7">W 500 Free</Dropdown.Item>
-            <Dropdown.Item onClick={() => this.showTable("M 500 Free")}>M 500 Free</Dropdown.Item>
-            <Dropdown.Item href="#/action-9">W 1000 Free</Dropdown.Item>
-            <Dropdown.Item href="#/action-10">M 1000 Free</Dropdown.Item>
+          {
+              this.state.eventnames.map( (lister) => {
+                  return(<Dropdown.Item onClick={() => this.showTable({lister})}>{lister}</Dropdown.Item>)
+              }) 
+            }
           </DropdownButton>
 
-          {showTable && <Top10IndividualEvent/>}
+          {showTable && <Top10IndividualEvent eventname = {this.state.selected} eventlist = {this.state.events}/>}
 
         </Container>
       </Container>
@@ -73,4 +101,4 @@ class AllTimeTop10 extends Component {
   }
 }
 
-export default withRouter(AllTimeTop10);
+export default (AllTimeTop10);
