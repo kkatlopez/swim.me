@@ -1,4 +1,5 @@
 .prof-card {
-    width: 150px;
+    width: 160px;
     margin: 0.75rem;
+    cursor: pointer;
 }

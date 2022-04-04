@@ -35,7 +35,7 @@ const Main = (props) => {
       <Route exact path='/roster' render={
         () => <div><Roster/></div>
       }></Route>
-      <Route exact path='/roster/profile' render={
+      <Route exact path='/roster/:firstName/:lastName' render={
         () => <div><RosterProfile/></div>
       }></Route>
       <Route exact path='/' render={

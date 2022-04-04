@@ -81,7 +81,7 @@ class Roster extends Component {
         <Container fluid className="d-flex flex-wrap justify-content-center">
           {
             this.state.currentswimmers.map( (lister) => {
-              return(<RosterCard first={lister.firstName} last={lister.lastName}/>)
+              return(<RosterCard first={lister.firstName} last={lister.lastName} year={lister.classYear} hs={lister.highSchool} hometown={lister.hometown} strokes={lister.position}/>)
             })
           }
         </Container>

@@ -1,28 +1,23 @@
 import React, { Component } from 'react';
 // import ReactDOM from 'react-dom';
 //import { Link, withRouter } from 'react-router-dom';
-import { Container, DropdownButton, Dropdown } from 'react-bootstrap';
+import { Container, DropdownButton, Dropdown, Tabs, Tab, Table } from 'react-bootstrap';
 import '../css/rosterprofile.css';
 import { Link, withRouter } from 'react-router-dom';
 import RosterProfileLatest from './RosterProfileLatest';
 import RosterProfileFastest from './RosterProfileFastest.js';
 import RosterProfileEvent from './RosterProfileEvent.js';
+import Navigation from "./Navigation.js";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronLeft} from '@fortawesome/free-solid-svg-icons';
+import moment from 'moment';
+// import { get } from 'express/lib/response';
 
 class RosterProfile extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      event: "",
-      showTable: false,
-      showFastest: false,
-      showEvent: false,
-    };
-    this.showTable = this.showTable.bind(this);
-    this.showFastest = this.showFastest.bind(this);
-    this.showEvent = this.showEvent.bind(this);
-
-		if(this.props.location.state == undefined){
+    if(this.props.location.state == undefined){
       this.props.history.push("/", { logged: false });
     }
     else if (!('logged' in this.props.location.state)){
@@ -31,54 +26,126 @@ class RosterProfile extends Component {
     else if(this.props.location.state.logged == false){
       this.props.history.push("/", { logged: false });
     }
+    this.state = {
+      firstname: this.props.match.params.firstName,
+      lastname: this.props.match.params.lastName,
+      year: "",
+      hs: "",
+      hometown: "",
+      strokes: "",
+      event: "",
+      latestmeet: [],
+      latestresults: [],
+      fullname: "",
+      fastest: [],
+      meetlink: "",
+      eventsswam: [],
+      showLatest: false,
+      show: false
+      // showFastest: false,
+      // showEvent: false,
+    };
+    this.getLatestMeet = this.getLatestMeet.bind(this);
+    // this.showFastest = this.showFastest.bind(this);
+    // this.showEvent = this.showEvent.bind(this);
   }
 
-  showTable(event) {
-    console.log(event);
-    switch (event) {
-      case "Latest":
-        this.setState({ showTable: true });
-        this.setState({ showFastest: false });
-        this.setState({ showEvent: false });
-        break;
-      case "":
-        this.setState({ showTable: false });
-        break;
-      default:
-        break;
-    }
+  getSwimmerInfo() {
+    fetch("http://localhost:3001/swimmers")
+      .then(res => res.json())
+      .then(
+        (result) => {
+          // console.log(result);
+          var specific_result = result.find(x => (x.firstName === this.state.firstname && x.lastName === this.state.lastname));
+          // console.log(specific_result);
+          this.setState({
+            year: specific_result.classYear,
+            hs: specific_result.highSchool,
+            hometown: specific_result.hometown,
+            strokes: specific_result.position,
+            latestmeet: specific_result.meetsSwam.at(-1),
+            fullname: this.state.firstname + " " + this.state.lastname
+          })
+        }
+      )
   }
 
-  showFastest(event) {
-    switch(event) {
-      case "Fastest":
-        this.setState({ showFastest: true });
-        this.setState({ showTable: false });
-        this.setState({ showEvent: false });
-        break;
-      case "":
-        this.setState( { showFastest: false });
-        break
-    }
+  getLatestMeet(latestmeet, fullname) {
+    fetch("http://localhost:3001/meet_info")
+      .then(res => res.json())
+      .then(
+        (result) => {
+          var specific_result = result.find(x => (x.meetName === this.state.latestmeet[0] && x.meetStartDate === this.state.latestmeet[1]));
+          var i, j, k, l;
+          var latest = [];
+          for (i = 0; i < specific_result.meetEvents.length; i++) {
+            for (j = 0; j < specific_result.meetEvents[i].length; j++) {
+              for (k = 0; k < specific_result.meetEvents[i][j].length; k++) {
+                if (specific_result.meetEvents[i][j][k][0] === this.state.fullname) {                  
+                  latest.push( [specific_result.meetEvents[i][0], specific_result.meetEvents[i][j][k][1], (k+1)] );
+                }
+              }
+            }
+          }
+          this.setState({
+            latestresults: latest
+          });
+        }
+      )
   }
 
-  showEvent(event) {
-    switch(event) {
-      case "Event":
-        this.setState({ showFastest: false });
-        this.setState({ showTable: false });
-        this.setState({ showEvent: true });
-        break;
-      case "":
-        this.setState( {showEvent: false });
-        break;
-    }
+  getFastest() {
+    fetch("http://localhost:3001/swimmers")
+      .then(res => res.json())
+      .then(
+        (result) => {
+          var specific_result = result.find(x => (x.firstName === this.state.firstname && x.lastName === this.state.lastname));
+          this.setState({
+            fastest: specific_result.bestTimes,
+          });
+        }
+      )
+  }
+
+
+  getEventsSwam() {
+    fetch("http://localhost:3001/swimmers")
+      .then(res => res.json())
+      .then(
+        (result) => {
+          var specific_result = result.find(x => (x.firstName === this.state.firstname && x.lastName === this.state.lastname));
+          this.setState({
+            eventsswam: specific_result.eventsSwam
+          });
+        }
+      )
+  }
+
+  sendProps() {
+    var logged = this.props.location.state.logged;
+    var admin = this.props.location.state.adin
+    var user = this.props.location.state.user;
+    this.props.history.push( { logged: logged, admin: admin, user: user} );
+  }
+
+  componentDidMount() {
+    this.getSwimmerInfo();
+    this.getLatestMeet(this.state.latestmeet, this.state.fullname);
+    this.getFastest();
+    this.getEventsSwam();
+  }
+
+  sendProps() {
+    var logged = this.props.location.state.logged;
+    var admin = this.props.location.state.adin
+    var user = this.props.location.state.user;
+    this.props.history.push("/roster", { logged: logged, admin: admin, user: user} );
   }
 
   render() {
-    const { showTable } = this.state;
-    const { showFastest } = this.state;
-    const { showEvent } = this.state;
+    // const { getLatestMeet } = this.state;
+    // const { showFastest } = this.state;
+    // const { showEvent } = this.state;
 
     return(
       <Container fluid className="page-container">
@@ -86,33 +153,94 @@ class RosterProfile extends Component {
           <h1 className="siteHeaderTitle px-3 mb-3">Roster</h1>
         </Container>
         <Container className="px-4">
-            <h2 className="sectionTitle">Gwyneth Yuen</h2>
-            <div className="d-flex">
-                <div>
-                    <img src="https://rpiathletics.com/images/2021/10/5/Yuen_Gwyneth.jpg?width=300" className="img-thumbnail"></img>
-                </div>
-                <div className="info px-2">
-                    <p><b>Position: </b>Freestyle/Backstroke</p>
-                    <p><b>Class: </b>Senior</p>
-                    <p><b>Hometown: </b>Princeton Jct., NJ</p>
-                    <p><b>High School: </b>West Windsor-Plainsboro North</p>
-                </div>
-            </div>
+          <a onClick={() => this.sendProps()} className="standalone meet-link">
+              <p><FontAwesomeIcon icon={faChevronLeft} className="icon px-0"/> Back to full roster</p>
+          </a>
+          <h1 className="sectionTitle">{this.state.firstname} {this.state.lastname}</h1>
+          <div className="d-flex">
+              <div>
+                  <img src="https://picsum.photos/300" className="img-thumbnail"></img>
+              </div>
+              <div className="info px-2">
+                  <p><b>Position: </b>{this.state.strokes}</p>
+                  <p><b>Class: </b>{this.state.year}</p>
+                  <p><b>Hometown: </b>{this.state.hometown}</p>
+                  <p><b>High School: </b>{this.state.hs}</p>
+              </div>
+          </div>
         </Container>
         <hr align="center"></hr>
         <Container className="px-4">
-            <label>View times by</label>
-            <DropdownButton className="dropdown pb-3" title="Select an option">
-                <Dropdown.Item href="#" onClick={() => this.showTable("Latest")}>Latest</Dropdown.Item>
-                <Dropdown.Item href="#" onClick={() => this.showFastest("Fastest")}>Fastest</Dropdown.Item>
-                <Dropdown.Item href="#" onClick={() => this.showEvent("Event")}>By Event</Dropdown.Item>
-            </DropdownButton>
-
-            {(showTable && <RosterProfileLatest/>) ||
-            (showFastest && <RosterProfileFastest/>) ||
-            (showEvent && <RosterProfileEvent/> )}
+        <Tabs defaultActiveKey="latest" id="uncontrolled-tab-example" className="my-3 justify-content-center">
+            <Tab eventKey="latest" title="Latest">
+                <h2>{this.state.latestmeet[0]}</h2>
+                <p class="text-muted">{moment(this.state.latestmeet[1]).format('ll')}</p>
+                <Table bordered>
+                  <thead>
+                    <tr>
+                      <th>Event</th>
+                      <th>Time</th>
+                      <th>Place</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  {
+                      this.state.latestresults.map( (lister) => {
+                        return(
+                          <tr>
+                            <td>{lister[0]}</td>
+                            <td>{lister[1]}</td>
+                            <td>{lister[2]}</td>
+                          </tr>
+                        )
+                      })
+                    }
+                  </tbody>
+                </Table>
+            </Tab>
+            <Tab eventKey="fastest" title="Fastest">
+              <Table bordered>
+                <thead>
+                  <tr>
+                    <th>Event</th>
+                    <th>Time</th>
+                    <th>Meet</th>
+                    <th>Date</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <a href></a>
+                {
+                    this.state.fastest.map( (lister) => {
+                      return(
+                        <tr>
+                          <td>{lister[0]}</td>
+                          <td>{lister[1]}</td>
+                          <td>{lister[2]}</td>
+                          <td>{moment(lister[3]).format('ll')}</td>
+                        </tr>
+                      )
+                    })
+                  }
+                </tbody>
+              </Table>
+            </Tab>
+            <Tab eventKey="event" title="By Event">
+              <label className="pt-3">Event</label>
+              <DropdownButton className="dropdown pb-3" title="Select an event">
+                {
+                  this.state.eventsswam.map( (lister) => {
+                    return(<Dropdown.Item>{lister}</Dropdown.Item>)
+                  })
+                }
+              </DropdownButton>
+            </Tab>
+        </Tabs>
+          {/* {(getLatestMeet && <RosterProfileLatest/>) ||
+          (showFastest && <RosterProfileFastest/>) ||
+          (showEvent && <RosterProfileEvent/> )} */}
         </Container>
-
+        <Navigation logged = {this.props.location.state.logged} admin = {this.props.location.state.admin} user = {this.props.location.state.user}/>
       </Container>
     );
   }

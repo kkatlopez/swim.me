@@ -82,7 +82,7 @@ class Times extends Component {
           <p><FontAwesomeIcon icon={faChevronLeft} className="px-0"/> Back to search</p>
         </a>
 
-        <Tabs defaultActiveKey="meet" id="uncontrolled-tab-example" className="mb-3 justify-content-center">
+        <Tabs defaultActiveKey="meet" id="uncontrolled-tab-example" className="my-3 justify-content-center">
             <Tab eventKey="meet" title="Meet">
                 <MeetTimes name={this.props.match.params.swimmerName}/>
             </Tab>

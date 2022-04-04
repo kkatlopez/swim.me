@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 // import ReactDOM from 'react-dom';
 import { DropdownButton, Dropdown, Table } from 'react-bootstrap';
 import { Link, withRouter } from 'react-router-dom';
+import moment from 'moment';
 
 class MeetTimes extends Component {
 	
@@ -74,14 +75,19 @@ class MeetTimes extends Component {
 
   // show meet table:
   showMeet(meetinfo) {
-    this.timesTable(meetinfo)
+    this.timesTable(meetinfo);
+    console.log(meetinfo);
     //console.log(meetinfo);
     switch(meetinfo) {
       // case (meetinfo != ''):
       //     this.setState({ showMeet: true });
       //     break;
       default:
-          this.setState({ showMeet: true, meetname: meetinfo[0] });
+          this.setState({ 
+            showMeet: true, 
+            meetname: meetinfo[0], 
+            startdate: meetinfo[1] 
+          });
           break;
     }
   }
@@ -110,6 +116,7 @@ class MeetTimes extends Component {
             {this.state.showMeet && 
               <div>
                 <h2 className="py-2">{this.state.meetname}</h2>
+                <h5>{moment(this.state.startdate).format('ll')}</h5>
                 <Table bordered>
                   <thead>
                       <tr>

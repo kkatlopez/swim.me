@@ -87,7 +87,7 @@ class MeetResults extends Component {
                   logged={this.props.location.state.logged}
                   admin={this.props.location.state.admin}
                   user={this.props.location.state.user}
-                  />)
+                  />) 
               })
             }
 

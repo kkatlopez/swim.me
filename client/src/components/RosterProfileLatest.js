@@ -6,8 +6,25 @@ class RosterProfileLatest extends Component {
     constructor(props) {
       super(props);
       this.state = {
-        
+        latesttimes: this.props.latestresults
       };
+      console.log(this.state.latesttimes);
+      console.log(this.props.latestresults)
+    }
+
+    getLatestTimes() {
+      this.setState({
+        latesttimes: this.props.latest
+      });
+      console.log('getlatest');
+      console.log(this.props.latestresults);
+      console.log(this.state.latesttimes);
+    }
+
+    componentDidMount(){
+      this.getLatestTimes();
+      console.log('hello');
+      console.log(this.state.latesttimes);
     }
 
     render() {

@@ -32,3 +32,11 @@ hr {
 label {
     margin-left: 0.25rem !important;
 }
+
+.fa-chevron-left {
+    padding-left: 0.5rem !important;
+}
+
+/* .page-container {
+    height: 105vh;
+} */

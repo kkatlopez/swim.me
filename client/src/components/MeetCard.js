@@ -22,7 +22,6 @@ class MeetCard extends Component {
       date: this.props.meetdate,
       ogdate: this.props.meetoriginaldate
     }
-    console.log(this.state.name);
   }
 
   sendProps() {
