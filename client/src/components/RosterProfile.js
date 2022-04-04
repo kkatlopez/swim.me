@@ -41,7 +41,8 @@ class RosterProfile extends Component {
       meetlink: "",
       eventsswam: [],
       showLatest: false,
-      show: false
+      show: false,
+      imageurl: this.props.url
       // showFastest: false,
       // showEvent: false,
     };
@@ -57,7 +58,7 @@ class RosterProfile extends Component {
         (result) => {
           // console.log(result);
           var specific_result = result.find(x => (x.firstName === this.state.firstname && x.lastName === this.state.lastname));
-          // console.log(specific_result);
+          console.log(this.state.lastname);
           this.setState({
             year: specific_result.classYear,
             hs: specific_result.highSchool,
@@ -75,7 +76,9 @@ class RosterProfile extends Component {
       .then(res => res.json())
       .then(
         (result) => {
+          console.log(result);
           var specific_result = result.find(x => (x.meetName === this.state.latestmeet[0] && x.meetStartDate === this.state.latestmeet[1]));
+          console.log(specific_result);
           var i, j, k, l;
           var latest = [];
           for (i = 0; i < specific_result.meetEvents.length; i++) {
@@ -117,6 +120,7 @@ class RosterProfile extends Component {
           this.setState({
             eventsswam: specific_result.eventsSwam
           });
+          console.log(this.state.eventsswam);
         }
       )
   }
@@ -154,14 +158,14 @@ class RosterProfile extends Component {
         </Container>
         <Container className="px-4">
           <a onClick={() => this.sendProps()} className="standalone meet-link">
-              <p><FontAwesomeIcon icon={faChevronLeft} className="icon px-0"/> Back to full roster</p>
+              <p className="pb-2"><FontAwesomeIcon icon={faChevronLeft} className="icon px-0"/> Back to full roster</p>
           </a>
           <h1 className="sectionTitle">{this.state.firstname} {this.state.lastname}</h1>
-          <div className="d-flex">
-              <div>
+          <div className="d-flex row">
+              <div className="col-5">
                   <img src="https://picsum.photos/300" className="img-thumbnail"></img>
               </div>
-              <div className="info px-2">
+              <div className="col info px-2">
                   <p><b>Position: </b>{this.state.strokes}</p>
                   <p><b>Class: </b>{this.state.year}</p>
                   <p><b>Hometown: </b>{this.state.hometown}</p>
@@ -169,11 +173,11 @@ class RosterProfile extends Component {
               </div>
           </div>
         </Container>
-        <hr align="center"></hr>
+        {/* <hr align="center"></hr> */}
         <Container className="px-4">
         <Tabs defaultActiveKey="latest" id="uncontrolled-tab-example" className="my-3 justify-content-center">
             <Tab eventKey="latest" title="Latest">
-                <h2>{this.state.latestmeet[0]}</h2>
+                <h2 className="sectionTitle">{this.state.latestmeet[0]}</h2>
                 <p class="text-muted">{moment(this.state.latestmeet[1]).format('ll')}</p>
                 <Table bordered>
                   <thead>
@@ -199,31 +203,33 @@ class RosterProfile extends Component {
                 </Table>
             </Tab>
             <Tab eventKey="fastest" title="Fastest">
-              <Table bordered>
-                <thead>
-                  <tr>
-                    <th>Event</th>
-                    <th>Time</th>
-                    <th>Meet</th>
-                    <th>Date</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <a href></a>
-                {
-                    this.state.fastest.map( (lister) => {
-                      return(
-                        <tr>
-                          <td>{lister[0]}</td>
-                          <td>{lister[1]}</td>
-                          <td>{lister[2]}</td>
-                          <td>{moment(lister[3]).format('ll')}</td>
-                        </tr>
-                      )
-                    })
-                  }
-                </tbody>
-              </Table>
+              <div className="dynamic-height">
+                <Table bordered>
+                  <thead>
+                    <tr>
+                      <th>Event</th>
+                      <th>Time</th>
+                      <th>Meet</th>
+                      <th>Date</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <a href></a>
+                  {
+                      this.state.fastest.map( (lister) => {
+                        return(
+                          <tr>
+                            <td>{lister[0]}</td>
+                            <td>{lister[1]}</td>
+                            <td>{lister[2]}</td>
+                            <td>{moment(lister[3]).format('l')}</td>
+                          </tr>
+                        )
+                      })
+                    }
+                  </tbody>
+                </Table>
+              </div>
             </Tab>
             <Tab eventKey="event" title="By Event">
               <label className="pt-3">Event</label>

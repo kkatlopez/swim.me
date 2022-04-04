@@ -71,7 +71,7 @@ class MeetResults extends Component {
         </Container>
         <Container className="px-4">
           <label>Meet</label>
-          <DropdownButton className="dropdown pb-3" title="Select a meet">
+          <DropdownButton className="dropdown" title="Select a meet">
             {
               this.state.dropdownlist.map( (lister) => {
                 return(<Dropdown.Item onClick={() => this.sendProps(lister)}>{lister.meetName}</Dropdown.Item>)
@@ -79,8 +79,8 @@ class MeetResults extends Component {
             }
 
           </DropdownButton>
-          <h2 className="sectionTitle">Latest Results</h2>
-          <div className="meet-cards">
+          <h2 className="sectionTitle mt-4 mb-2">Latest Results</h2>
+          <div className="meet-cards dynamic-height">
             {
               this.state.meetlist.map( (lister) => {
                   return(<MeetCard meetname={lister.meetName} meetdate={moment(lister.meetStartDate).format('ll')} meetoriginaldate={lister.meetStartDate}

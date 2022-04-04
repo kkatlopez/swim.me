@@ -108,7 +108,7 @@ class SpecificMeet extends Component {
             <a onClick={() => this.backToAllMeets()} className="standalone meet-link">
               <p><FontAwesomeIcon icon={faChevronLeft} className="px-0"/> Back to all meets</p>
             </a>
-            <h2 className="sectionTitle">{this.state.meetname}</h2>
+            <h2 className="sectionTitle mt-1 mb-0">{this.state.meetname}</h2>
             <p class="text-muted">{moment(this.state.date).format('ll')}</p>
 
             <label>Event</label>

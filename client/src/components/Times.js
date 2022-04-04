@@ -77,9 +77,8 @@ class Times extends Component {
           <h1 className="siteHeaderTitle px-3 mb-3">{this.state.firstname} {this.state.lastname}</h1>
         </Container>
         <Container className="px-4">
-        <br/>
         <a onClick={() => this.backToAllTimes()} className="standalone times-link">
-          <p><FontAwesomeIcon icon={faChevronLeft} className="px-0"/> Back to search</p>
+          <p className="pb-2"><FontAwesomeIcon icon={faChevronLeft} className="px-0"/> Back to search</p>
         </a>
 
         <Tabs defaultActiveKey="meet" id="uncontrolled-tab-example" className="my-3 justify-content-center">

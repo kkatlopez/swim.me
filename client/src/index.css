@@ -71,3 +71,8 @@ a.standalone {
 a.standalone > p {
   color: #0d6efd;
 }
+
+.dynamic-height {
+  height: auto;
+  padding-bottom: 6rem;
+}
