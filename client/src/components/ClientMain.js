@@ -10,6 +10,8 @@ import TimesSearch from './TimesSearch.js';
 import RosterProfile from './RosterProfile.js'
 import Times from './Times.js';
 import UserLanding from './UserLogin.js';
+import Messaging from './Messaging.js';
+import SpecificChat from './SpecificChat.js';
 
 // localhost:3000
 
@@ -38,6 +40,10 @@ const Main = (props) => {
       <Route exact path='/roster/profile' render={
         () => <div><RosterProfile/></div>
       }></Route>
+      <Route exact path='/chat' render={
+        () => <div><Messaging/></div>
+      }></Route>
+      <Route exact path="/chat/:chatID" component={SpecificChat} />
       <Route exact path='/' render={
         () => <div><UserLanding/></div>
       }></Route>
