@@ -8,6 +8,19 @@ const mongoose = require('mongoose'),
   salt_factor = 10;
 const PORT = process.env.PORT || 3001;
 
+var context = require('rabbit.js').createContext('amqps://' + String(process.env.RABBITMQUSER) + ':' + String(process.env.RABBITMQPASS) + '@woodpecker.rmq.cloudamqp.com/' + String(process.env.RABBITMQUSER));
+// var context = require('rabbit.js').createContext('amqps://dyifajdi:dY01hBir0J82rhSbYjBC0TwMH0BxjHSt@woodpecker.rmq.cloudamqp.com/dyifajdi');
+context.on('ready', function() {
+  var pub = context.socket('PUB'), sub = context.socket('SUB');
+  sub.pipe(process.stdout);
+  sub.connect('events', function() {
+    pub.connect('events', function() {
+      pub.write(JSON.stringify({welcome: 'rabbit.js'}), 'utf8');
+    });
+  });
+});
+
+
 const app = express();
 
 app.use(express.json());
@@ -102,7 +115,7 @@ app.get("/meet_info/:searchterm", async (req, res) => {
     connection.db.collection("meet-info", function (err, collection) {
       collection.find({ meetName: meetname, meetStartDate: startdate }).toArray(function (err, data) {
         // entire meet:
-        for (i = 0; i < data.length; i++) { 
+        for (i = 0; i < data.length; i++) {
           // meetEvents:
           for (j = 0; j < data[i].meetEvents.length; j++) {
             for (k = 0; k < data[i].meetEvents[j][1].length; k++) {     // j === event[0][1] array (meet results array)
@@ -276,7 +289,7 @@ app.get("/specific_swimmer/:name", async (req, res) => {
         });
       })
     });
-    
+
   } catch (error) {
     return console.log(error);
   }
@@ -389,7 +402,29 @@ app.post("/add_user", async (req, res) => {
   });
 });
 
-//
+//---------------------------------------------------MESSAGING FUNCTIONS---------------------------------------------------
+app.post("/chats", async (req, res) => {
+  console.log(req.body.user);
+  connection.db.collection("chats", function (err, collection) {
+    collection.countDocuments({ "users": req.body.user }, function (err, count) {
+      try {
+        if (count > 0) {
+          collection.find({ "users": req.body.user }).toArray(function (err, data) {
+            return res.send(data.map((lister) => {
+              return {chatName: lister.chatName, chatID: lister.chatID, chatIMG: "https://rpiathletics.com/images/2021/10/5/Youngbar_Matthew.jpg", lastMessage: lister.messages[0]}
+            }));
+          })
+        }
+        else {
+          return res.send({ "Result": false });
+        }
+      }
+      catch (err) {
+        console.log(err);
+      }
+    });
+  });
+});
 
 
 //---------------------------------------------------MISC FUNCTIONS---------------------------------------------------
