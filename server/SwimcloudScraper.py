@@ -10,7 +10,7 @@ dbName = os.getenv('DBNAME')
 client = MongoClient('mongodb+srv://' + mongoPass + '@cluster0.eeewg.mongodb.net/' + dbName)
 
 db = client['swimdotme']
-meetCollection = db['meet-info']
+meetCollection = db['meet-info2']
 swimmerCollection = db['swimmer-info']
 
 meet_list = []
@@ -58,64 +58,89 @@ for meet in meet_list:
             print(event)
             # the 'F' parameter is ignored:
             event_times = []
-            try:
-                for time in ss.getCollegeMeetResults(meet['meet_ID'], '', 'F', event_ID = event['event_ID'], event_href = event['event_href']):
-                    teams.add(time['team_name'])
+            # try:
+            for time in ss.getCollegeMeetResults(meet['meet_ID'], '', 'F', event_ID = event['event_ID'], event_href = event['event_href']):
+                teams.add(time['team_name'])
 
-                    if 'Relay' in event['event_name']:
-                        event_times.append([time['team_name'], time['time']])
-                    else:
-                        event_times.append([time['swimmer_name'], time['time']])
-                        first, last = time['swimmer_name'].split(' ', 1)
-                        nameQuery = { "firstName": first, "lastName": last }
+                if 'Relay' in event['event_name']:
+                    event_times.append([time['team_name'], time['time']])
+                else:
+                    event_times.append([time['swimmer_name'], time['time']])
+                    first, last = time['swimmer_name'].split(' ', 1)
+                    nameQuery = { "firstName": first, "lastName": last }
 
-                        if time['team_ID'] == '45': # hard coded for RPI
-                            swimmer = swimmerCollection.find_one(nameQuery)
-                            eventName = event['event_name'].lower().strip("men").strip("women").strip().title()
-                            if swimmer == None:
-                                nameQuery.update({ 'eventsSwam': [eventName], 'bestTimes': [[eventName, time['time'], meet['meet_name'], meetDate]], 'meetsSwam': [[meet['meet_name'], meetDate]],'seasonsSwam':[meet['season']]})
-                                swimmerCollection.insert_one(nameQuery)
-                            else:
-                                if meet['season'] not in swimmer['seasonsSwam']:
-                                    newvalues = { "$set": { 'seasonsSwam': swimmer['seasonsSwam'] + [meet['season']] }}
+                    if time['team_ID'] == '45': # hard coded for RPI
+                        swimmer = swimmerCollection.find_one(nameQuery)
+                        eventName = event['event_name'].lower().strip("men").strip("women").strip().title()
+                        if swimmer == None:
+                            nameQuery.update({ 'eventsSwam': [[eventName, [[time['time'], meet['meet_name'], meetDate]]]], 'bestTimes': [[eventName, time['time'], meet['meet_name'], meetDate]], 'meetsSwam': [[meet['meet_name'], meetDate]],'seasonsSwam':[meet['season']]})
+                            swimmerCollection.insert_one(nameQuery)
+                        else:
+                            if meet['season'] not in swimmer['seasonsSwam']:
+                                newvalues = { "$set": { 'seasonsSwam': swimmer['seasonsSwam'] + [meet['season']] }}
+                                swimmerCollection.update_one(swimmer, newvalues)
+                            if [meet['meet_name'], meetDate] not in swimmer['meetsSwam']:
+                                newvalues = { "$set": {'meetsSwam': swimmer['meetsSwam'] + [[meet['meet_name'], meetDate]]}}
+                                swimmerCollection.update_one(swimmer,newvalues)
+
+                            if time['time'] != 'DQ' and time['time'] != 'NS' and time['time'] != 'DFS':
+                                # if eventName not in swimmer['eventsSwam']:
+                                #     newvalues = { "$set": { 'eventsSwam': swimmer['eventsSwam'] + [eventName], 'bestTimes': swimmer['bestTimes'] + [[eventName, time['time'], meet['meet_name'], meetDate]]} }
+                                #     swimmerCollection.update_one(swimmer, newvalues)
+                                # else:
+                                found = False
+                                #this should just be temporary:
+                                if type(swimmer['eventsSwam'][0]) != list:
+                                    print(type(swimmer['eventsSwam'][0]))
+                                    newvalues = { "$set": { 'eventsSwam': [[eventName, [[time['time'], meet['meet_name'], meetDate]]]], 'bestTimes': swimmer['bestTimes'] + [[eventName, time['time'], meet['meet_name'], meetDate]]} }
                                     swimmerCollection.update_one(swimmer, newvalues)
-                                if [meet['meet_name'], meetDate] not in swimmer['meetsSwam']:
-                                    newvalues = { "$set": {'meetsSwam': swimmer['meetsSwam'] + [[meet['meet_name'], meetDate]]}}
-                                    swimmerCollection.update_one(swimmer,newvalues)
-
-                                if time['time'] != 'DQ' and time['time'] != 'NS' and time['time'] != 'DFS':
-                                    if eventName not in swimmer['eventsSwam']:
-                                        newvalues = { "$set": { 'eventsSwam': swimmer['eventsSwam'] + [eventName], 'bestTimes': swimmer['bestTimes'] + [[eventName, time['time'], meet['meet_name'], meetDate]]} }
-                                        swimmerCollection.update_one(swimmer, newvalues)
-                                    else:
-                                        for i in range(len(swimmer['bestTimes'])):
-                                            e, t, m, d = swimmer['bestTimes'][i]
-                                            if e == eventName:
-                                                update = False
-                                                if "Diving" in eventName:
-                                                    if float(time['time']) > float(t):
-                                                        update = True
-                                                else:
-                                                    if ':' in t:
-                                                        time1 = datetime.strptime(t, '%M:%S.%f')
-                                                    else:
-                                                        time1 = datetime.strptime(t,'%S.%f')
-                                                    if ':' in time['time']:
-                                                        time2 = datetime.strptime(time['time'], '%M:%S.%f')
-                                                    else:
-                                                        time2 = datetime.strptime(time['time'], '%S.%f')
-                                                    if time2 < time1:
-                                                        update = True
-                                                if update:
-                                                    newBestTimes = swimmer['bestTimes']
-                                                    newBestTimes[i] = [eventName, time['time'], meet['meet_name'], meetDate]
-                                                    newvalues = { "$set": {'bestTimes': newBestTimes}}
-                                                    swimmerCollection.update_one(nameQuery, newvalues)
+                                else:
+                                    for e in range(len(swimmer['eventsSwam'])):
+                                        if swimmer['eventsSwam'][e][0] == eventName:
+                                            found = True
+                                            found2 = False
+                                            for t in swimmer['eventsSwam'][e][1]:
+                                                if t[0] == time['time'] and t[1] == meet['meet_name'] and t[2] == meetDate:
+                                                    found2 = True
+                                                    break
+                                            if not found2:
+                                                newEventsSwam = swimmer['eventsSwam'].copy()
+                                                newEventsSwam[e][1] += [[time['time'], meet['meet_name'], meetDate]]
+                                                newvalues = { "$set": { 'eventsSwam': newEventsSwam }}
+                                                swimmerCollection.update_one(nameQuery, newvalues)
                                                 break
+                                if not found:
+                                    newvalues = { "$set": { 'eventsSwam': swimmer['eventsSwam'] + [[eventName, [[time['time'], meet['meet_name'], meetDate]]]], 'bestTimes': swimmer['bestTimes'] + [[eventName, time['time'], meet['meet_name'], meetDate]]} }
+                                    swimmerCollection.update_one(swimmer, newvalues)
+                                else:
+                                    for i in range(len(swimmer['bestTimes'])):
+                                        e, t, m, d = swimmer['bestTimes'][i]
+                                        if e == eventName:
+                                            update = False
+                                            if "Diving" in eventName:
+                                                if float(time['time']) > float(t):
+                                                    update = True
+                                            else:
+                                                if ':' in t:
+                                                    time1 = datetime.strptime(t, '%M:%S.%f')
+                                                else:
+                                                    time1 = datetime.strptime(t,'%S.%f')
+                                                if ':' in time['time']:
+                                                    time2 = datetime.strptime(time['time'], '%M:%S.%f')
+                                                else:
+                                                    time2 = datetime.strptime(time['time'], '%S.%f')
+                                                if time2 < time1:
+                                                    update = True
+                                            if update:
+                                                newBestTimes = swimmer['bestTimes']
+                                                newBestTimes[i] = [eventName, time['time'], meet['meet_name'], meetDate]
+                                                newvalues = { "$set": {'bestTimes': newBestTimes}}
+                                                swimmerCollection.update_one(nameQuery, newvalues)
+                                            break
 
 
-            except:
-                print("Error in event", event['event_name'])
+            # except:
+            #     print("Error in event", event['event_name'])
 
 
             events.append([event['event_name'], event_times])
