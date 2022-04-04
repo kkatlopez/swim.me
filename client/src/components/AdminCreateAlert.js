@@ -20,6 +20,7 @@ class AdminCreateAlert extends Component {
       this.changeType = this.changeType.bind(this);
       this.changeDate = this.changeDate.bind(this);
       this.confirmForm = this.confirmForm.bind(this);
+      this.checkSubmittable = this.checkSubmittable.bind(this);
       // if(this.props.location.state == undefined){
       //   this.props.history.push("/", { logged: false });
       // }

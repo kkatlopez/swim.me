@@ -250,6 +250,28 @@ app.post('/edit_user_info', async (req, res) => {
   })
 });
 
+//Delete user
+app.post('/delete_user', async (req, res) => {
+  // var user = req.body.username;
+  // var pass = req.body.password;
+  // var ad = req.body.type_bool;
+  var id = req.body.userid;
+
+  // const saltRounds = 10;
+  // var hashedPassword = await bcrypt.hash(pass, saltRounds);
+  // console.log(user + " " + pass + " " + ad + " " + id + " " + hashedPassword);
+  await user_info.deleteOne({ userID: id }).then(function (err) {
+    if (err) {
+      console.log(err);
+      return res.send({ "Result": false });
+    }
+    else {
+      // console.log('info successfully updated');
+      return res.send({ "Result": true });
+    }
+  })
+});
+
 //Create Alert
 app.post("/create_alert", async (req, res) => {
   connection.db.collection("alerts", function (err, collection) {
@@ -291,50 +313,35 @@ app.post("/create_alert", async (req, res) => {
 
 //Add new user
 app.post("/add_user", async (req, res) => {
-  console.log(req.body.user);
-  connection.db.collection("credentials", function (err, collection) {
-    collection.countDocuments({ "username": req.body.user }, function (err, count) {
-      try {
-        if (count > 0) {
-          return res.send({ "Result": false });
-        }
-        else {
-          const saltRounds = 10; // data processing time
+  try {
+    count = await user_info.countDocuments({ username: req.body.username });
+    if(count > 0) {
+      return res.send({"Result": false});
+    }
 
-          var username = req.body.user;
-          var password = req.body.pass;
+    else {
+      const saltRounds = 10; // data processing time
 
-          // salt, hash, and store
-          bcrypt.hash(password, saltRounds, function(err, hash) {
+      var user = req.body.username;
+      var pass = req.body.password;
+      var ad = req.body.type_bool;
+      var id = req.body.userid;
 
-            var UserSchema = mongoose.Schema({
-              username: String,
-              password: String,
-              admin: Boolean
-              // admin: req.body.admin
-            });
+      var hashedPassword = await bcrypt.hash(pass, saltRounds);
 
-            // compile schema to model
-            var User = mongoose.model('User', UserSchema, 'credentials');
+      console.log(user + " " + pass + " " + ad + " " + id + " " + hashedPassword);
 
-            // a document instance
-            var user = new User({ username: username, password: hash, admin: false });
+      // a document instance
+      user_info.create({ username: user, password: hashedPassword, admin: ad, userID: id }, function(err, new_user) {
+        if (err) return console.error(err);
+        console.log("Created new user");
+      });
 
-            // save model to database
-            user.save(function (err, book) {
-              if (err) return console.error(err);
-              console.log("Created new user");
-            });
-          });
-          // console.log(count);
-          return res.send({ "Result": true });
-        }
-      }
-      catch (err) {
-        console.log(err);
-      }
-    });
-  });
+      return res.send({ "Result": true });
+    }
+  } catch (err) {
+    console.log(err);
+  }
 });
 
 

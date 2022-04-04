@@ -13,10 +13,13 @@ class AdminModifyUser extends Component {
       placeholderBody: "Please select a user",
       username: "Please select a user",
       password: "Please select a user",
-      type: "Please select a user",
-      type_bool: false,
+      type: "Select user type",
+      type_bool: null,
       currentSelect: -1,
-      userid: null
+      userid: null,
+      submittable: false,
+      isubmittable: true,
+      createsubmit: false
     }
 
     this.changeUser = this.changeUser.bind(this);
@@ -24,6 +27,9 @@ class AdminModifyUser extends Component {
     this.changePassword = this.changePassword.bind(this);
     this.changeType = this.changeType.bind(this);
     this.updateUser = this.updateUser.bind(this);
+    this.deleteUser = this.deleteUser.bind(this);
+    this.createUser = this.createUser.bind(this);
+    this.checkSubmittable = this.checkSubmittable.bind(this);
 
     //BELOW IS THE CODE TO BLOCK OFF WHEN NOT LOGGED IN
     // if(this.props.location.state == undefined){
@@ -36,6 +42,27 @@ class AdminModifyUser extends Component {
     //   this.props.history.push("/admin", { logged: false });
     // }
   }
+
+  checkSubmittable = function(){
+    // console.log(this.state.users[this.state.users.length-1].userID + 1);
+    if (this.state.userid == null &&
+      this.state.currentSelect == "CREATE A NEW USER" &&
+      this.state.username != "Please select a user" &&
+        this.state.password != "Please select a user" &&
+        this.state.type != "Select user type") {
+          this.setState({createsubmit: true, userid: this.state.users[this.state.users.length-1].userID + 1});
+    }
+    else if (this.state.username == "Please select a user" ||
+        this.state.password == "Please select a user" ||
+        this.state.type == "Select user type" ||
+        this.state.userid == null ||
+        this.state.currentSelect == -1) {
+      this.setState({submittable: false, createsubmit: false});
+    }
+    else{
+      this.setState({submittable: true});
+    }
+  }
   
   changeUser = (event) =>{	
     if(event.target.value == "Please select a user"){
@@ -45,47 +72,143 @@ class AdminModifyUser extends Component {
           username: temp,
           password: temp,
           type: temp,
-          type_bool: false,
-          userid: null
+          type_bool: temp,
+          userid: null,
+          createsubmit: false,
+          submittable: false,
         });
       } else{
         var selected = event.target.value;
-        var temp = this.state.users.findIndex(record => record.username == selected);
-        var new_type;
-        if(this.state.users[temp].admin == true) {
-          new_type = "Admin"
-        } else {
-          new_type = "Swimmer"
+        if(selected == "CREATE A NEW USER") {
+          this.setState ({
+            currentSelect: event.target.value,
+            username: "Please select a user",
+            password: "Please select a user",
+            type: "Select user type",
+            type_bool: "Please select a user",
+            userid: null,
+            isubmittable: true,
+            submittable: false,
+            createsubmit: false
+          });
         }
-        
-        this.setState ({
-          currentSelect: event.target.value,
-          username: this.state.users[temp].username,
-          password: this.state.users[temp].password,
-          type: new_type,
-          type_bool: this.state.users[temp].admin,
-          userid: this.state.users[temp].userID
-        });
+
+        else {
+          var temp = this.state.users.findIndex(record => record.username == selected);
+          var new_type;
+          if(this.state.users[temp].admin == true) {
+            new_type = "Admin"
+          } else {
+            new_type = "Swimmer"
+          }
+          
+          this.setState ({
+            currentSelect: event.target.value,
+            username: this.state.users[temp].username,
+            password: this.state.users[temp].password,
+            type: new_type,
+            type_bool: this.state.users[temp].admin,
+            userid: this.state.users[temp].userID,
+            isubmittable: true,
+            submittable: true,
+            createsubmit: false
+          });
+        }
+
       }
 	}
   
   changeUsername = (event) => {
-    if (this.state.currentSelect != -1) {this.setState({username: event.target.value})};
+    // if (this.state.currentSelect != -1) {
+    //   this.setState({username: event.target.value})
+    // };
+
+    // if (this.state.currentSelect != -1) {
+    this.setState({username: event.target.value});
+    // };
+    this.checkSubmittable();
   }
 
   changePassword = (event) => {
-    if(this.state.currentSelect != -1){this.setState({password: event.target.value})};
+    // if(this.state.currentSelect != -1){this.setState({password: event.target.value})};
+    this.setState({password: event.target.value});
+    // };
+    this.checkSubmittable();
   }
   
   changeType = (event) => {
-    if(this.state.currentSelect != -1){
-      if(event.target.value == "Admin") {
-        this.setState({type: "Admin", type_bool: true});
-      }
-      else {
-        this.setState({type: "Swimmer", type_bool: false});
-      }
+    // if(this.state.currentSelect != -1){
+    //   if(event.target.value == "Admin") {
+    //     this.setState({type: "Admin", type_bool: true});
+    //   }
+    //   else {
+    //     this.setState({type: "Swimmer", type_bool: false});
+    //   }
+    // }
+
+    if(event.target.value == "Admin") {
+      this.setState({type: "Admin", type_bool: true});
     }
+    else {
+      this.setState({type: "Swimmer", type_bool: false});
+    }
+    this.checkSubmittable();
+  }
+
+  deleteUser = function () {
+    fetch("http://localhost:3001/delete_user", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(this.state)
+    })
+      .then(
+        (result) => {
+          if (result.status == 200) {
+            this.props.history.push("/admin/", { logged: true });
+          }
+          else {
+            alert("error");
+          }
+        },
+        (error) => {
+          this.setState({
+            isLoaded: true,
+            error
+          });
+        }
+      )
+  }
+
+  createUser = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    this.setState({userID: this.state.users[this.state.users.length-1].userID + 1});
+    fetch("http://localhost:3001/add_user", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(this.state)
+    })
+      .then(
+        (result) => {
+          if (result.status == 200) {
+            this.props.history.push("/admin/", { logged: true });
+          }
+          else {
+            this.setState({submittable: false});
+            alert("error");
+          }
+        },
+        (error) => {
+          this.setState({
+            isLoaded: true,
+            error
+          });
+        }
+      )
   }
   
   updateUser = (event) => {
@@ -121,6 +244,7 @@ class AdminModifyUser extends Component {
       .then(res => res.json())
       .then(
         (result) => {
+          result.unshift({username: "CREATE A NEW USER"});
           this.setState({
             users: result
           });
@@ -158,6 +282,7 @@ class AdminModifyUser extends Component {
               value={this.state.currentSelect}
               onChange={this.changeUser}
               className="me-2"
+              isInvalid={!this.state.isubmittable}
             >
               <option value="Select a user">Select a user</option>
               {
@@ -176,6 +301,7 @@ class AdminModifyUser extends Component {
                 value={this.state.username}
                 onChange={this.changeUsername}
                 className="me-2"
+                isInvalid={!this.state.isubmittable}
               />
             </div>
           </Form.Group>
@@ -188,6 +314,7 @@ class AdminModifyUser extends Component {
                 value={this.state.password}
                 onChange={this.changePassword}
                 className="me-2"
+                isInvalid={!this.state.isubmittable}
               />
             </div>
           </Form.Group>
@@ -201,6 +328,7 @@ class AdminModifyUser extends Component {
                 value={this.state.type}
                 onChange={this.changeType}
                 className="me-2"
+                isInvalid={!this.state.isubmittable}
               >
                 <option>Select user type</option>
                 <option value="Admin">Admin</option>
@@ -216,8 +344,9 @@ class AdminModifyUser extends Component {
               className="gray-button">
                 Cancel
             </Button>
-            {/* <Button className="green-button admin-submit-btn">Delete</Button> */}
-            <Button type="submit" className="green-button admin-submit-btn">Submit</Button>
+            <Button onClick={this.createUser} className={"green-button " + (this.state.createsubmit ? "" : "disabled")} disabled={!this.state.createsubmit}>Create</Button>
+            <Button onClick={this.deleteUser} className={"green-button " + (this.state.submittable ? "" : "disabled")} disabled={!this.state.submittable}>Delete</Button>
+            <Button type="submit" className={"green-button " + (this.state.submittable ? "" : "disabled")} disabled={!this.state.submittable}>Edit</Button>
           </div>
         </Form>
         
