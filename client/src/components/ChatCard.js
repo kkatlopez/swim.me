@@ -36,12 +36,19 @@ class ChatCard extends Component {
   render() {
     return(
       <Container fluid className="page-container">
-        <Card className="chat-card">
-          <Card.Body className="mt-2" meetname={this.state.name} startdate={this.state.date} onClick={() => this.sendProps()} >
-              <img src={this.state.chatIMG} className="chat-img" />
+        <Card className="chat-card py-2">
+          <div className="row no-gutters d-flex align-items-center">
+            <div className="col-3 ml-5">
+              <img src={this.state.chatIMG} className="card-img chat-img my-auto" />
+            </div>
+            <div className="col">
+              <Card.Body className="mt-2" meetname={this.state.name} startdate={this.state.date} onClick={() => this.sendProps()} >
               <Card.Title>{this.state.name}</Card.Title>
               <Card.Subtitle className="text-muted">{this.state.lastMessage}</Card.Subtitle>
           </Card.Body>
+            </div>
+          </div>
+          
         </Card>
       </Container>
     );

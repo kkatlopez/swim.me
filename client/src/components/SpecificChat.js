@@ -130,7 +130,7 @@ class SpecificChat extends Component {
         </Container>
         <div class="navbar fixed-bottom">
           <Form style={{width:"95%"}}>
-            <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
+            <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1" style={{padding:"0 0 0 1.5vh"}}>
               <Form.Control as="textarea" rows={3} />
             </Form.Group>
           </Form>
