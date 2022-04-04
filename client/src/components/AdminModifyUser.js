@@ -47,9 +47,9 @@ class AdminModifyUser extends Component {
     // console.log(this.state.users[this.state.users.length-1].userID + 1);
     if (this.state.userid == null &&
       this.state.currentSelect == "CREATE A NEW USER" &&
-      this.state.username != "Please select a user" &&
-        this.state.password != "Please select a user" &&
-        this.state.type != "Select user type") {
+      this.state.username != "Enter a username" &&
+        this.state.password != "Enter a password" &&
+        this.state.type != "Select user type" && this.state.submittable == true) {
           this.setState({createsubmit: true, userid: this.state.users[this.state.users.length-1].userID + 1});
     }
     else if (this.state.username == "Please select a user" ||
@@ -82,10 +82,10 @@ class AdminModifyUser extends Component {
         if(selected == "CREATE A NEW USER") {
           this.setState ({
             currentSelect: event.target.value,
-            username: "Please select a user",
-            password: "Please select a user",
+            username: "Enter a username",
+            password: "Enter a password",
             type: "Select user type",
-            type_bool: "Please select a user",
+            type_bool: "Select user type",
             userid: null,
             isubmittable: true,
             submittable: false,
@@ -124,8 +124,16 @@ class AdminModifyUser extends Component {
     // };
 
     // if (this.state.currentSelect != -1) {
+    // console.log(this.state.users.find({username: event.target.value}))
+    var usernames = this.state.users.map(function(value,index) { return value.username; });
+    // console.log(usernames);
     this.setState({username: event.target.value});
-    // };
+    if(usernames.includes(event.target.value)) {
+      this.setState({isubmittable: false});
+    }
+    else {
+      this.setState({submittable: true});
+    }
     this.checkSubmittable();
   }
 
@@ -303,6 +311,10 @@ class AdminModifyUser extends Component {
                 className="me-2"
                 isInvalid={!this.state.isubmittable}
               />
+
+              <Form.Control.Feedback id="username_form" type="invalid">
+                This username already exists.
+              </Form.Control.Feedback>
             </div>
           </Form.Group>
           
