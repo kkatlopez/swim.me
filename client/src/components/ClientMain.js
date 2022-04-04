@@ -11,8 +11,8 @@ import RosterProfile from './RosterProfile.js'
 import UserLanding from './UserLogin.js';
 import Admin from './Admin.js';
 import AdminCreateAlert from './AdminCreateAlert';
+import AdminUsers from './AdminUsers.js';
 import AdminModifyUser from './AdminModifyUser.js';
-import AdminEditSwimmer from './AdminEditSwimmer.js';
 import AdminEditForm from './AdminEditForm.js';
 
 // localhost:3000
@@ -53,11 +53,11 @@ const Main = (props) => {
         () => <div><AdminCreateAlert/></div>
       }></Route>
       <Route exact path='/admin/edit-swimmer' render={
-        () => <div><AdminEditSwimmer/></div>
-      }></Route>
-      <Route exact path='/admin/edit-swimmer-form' render={
         () => <div><AdminEditForm/></div>
       }></Route>
+      {/* <Route exact path='/admin/users' render={
+        () => <div><AdminUsers/></div>
+      }></Route> */}
       <Route exact path='/admin/modify-user' render={
         () => <div><AdminModifyUser/></div>
       }></Route>

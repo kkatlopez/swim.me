@@ -25,21 +25,31 @@ mongoose.set('useFindAndModify', false);
 connection.once('open', () => {
   console.log('MongoDB database connection established successfully!');
 
-  connection.db.collection("meet-info", function (err, collection) {
-    collection.find({}).toArray(function (err, data) {
-      console.log(data); // it will print your collection data
-    })
+  // connection.db.collection("meet-info", function (err, collection) {
+  //   collection.find({}).toArray(function (err, data) {
+  //     console.log(data); // it will print your collection data
+  //   })
   });
 
   // mongoose.connection.db.listCollections().toArray(function (err, names) {
   //   console.log(names); // [{ name: 'dbname.myCollection' }]
   //   module.exports.Collection = names;
   // });
-});
+// });
 
 connection.catch(err => console.log(err));
 
 //---------------------------------------------------MongoDB SCHEMAS---------------------------------------------------
+
+//User Info
+var user_info_schema = new Schema({
+  username: { type: String },
+  pass_word: { type: String },
+  user_type: { type: Boolean },
+  pic: {type: String},
+  user_id: {type: Number}
+}, { versionKey: false }, {collection: 'credentials'});
+const user_info = mongoose.model('credentials', user_info_schema, 'credentials');
 
 //Meet Info
 var meet_info_schema = new Schema({
@@ -48,8 +58,8 @@ var meet_info_schema = new Schema({
   meet_end_date: { type: Date },
   meet_location: { type: String },
   meet_events: [ String]
-}, { versionKey: false });
-const meet_info = mongoose.model('meet-info', meet_info_schema);
+}, { versionKey: false }, {collection: 'meet-info'});
+const meet_info = mongoose.model('meet-info', meet_info_schema, 'meet-info');
 
 //Swimmer Info
 var swimmer_info_schema = new Schema({
@@ -59,12 +69,12 @@ var swimmer_info_schema = new Schema({
   best_times: [[String, String, String, String, Date]],
   meets_swam: [[String, Date]],
   seasons_swam: [String],
-  position: String,
-  class_year: String,
-  hometown: String,
-  high_school: String
-}, { versionKey: false });
-const swimmer_info = mongoose.model('swimmer-info', swimmer_info_schema);
+  position: { type: String },
+  class_year: { type: String },
+  hometown: { type: String },
+  high_school: { type: String }
+}, { versionKey: false }, {collection: 'swimmer-info'});
+const swimmer_info = mongoose.model('swimmer-info', swimmer_info_schema, 'swimmer-info');
 
 //Top 10
 
@@ -73,8 +83,8 @@ var alert_schema = new Schema({
   alert_text: { type: String },
   alert_type: { type: String },
   alert_end_date: { type: Date },
-}, { versionKey: false });
-const alert_info = mongoose.model('alerts', alert_schema);
+}, { versionKey: false }, {collection: 'alerts'});
+const alert_info = mongoose.model('alerts', alert_schema, 'alerts');
 
 
 //---------------------------------------------------WEB APP FUNCTIONS---------------------------------------------------
@@ -103,7 +113,6 @@ app.get("/swimmer_info", async (req, res) => {
       if(this_month >= 9) {
         var season = this_year.toString() + "-" + (this_year+1).toString();
       }
-      
       collection.find({seasonsSwam: season}).toArray(function (err, data) {
         // console.log(data);
         res.send(data);
@@ -117,13 +126,25 @@ app.get("/swimmer_info", async (req, res) => {
 //GET Top 10
 
 //GET Credentials
+app.get("/user_info", async (req, res) => {
+  try {
+    connection.db.collection("credentials", function (err, collection) {
+      collection.find({}).toArray(function (err, data) {
+        // console.log(data);
+        res.send(data);
+      })
+    });
+  } catch (error) {
+    return console.log(error);
+  }
+});
 
 //GET Alert Info
 app.get("/alert_info", async (req, res) => {
   try {
     connection.db.collection("alerts", function (err, collection) {
       collection.find({}).toArray(function (err, data) {
-        console.log(data); // it will print your collection data
+        // console.log(data); // it will print your collection data
         return data;
       })
     });
@@ -170,18 +191,63 @@ app.post("/verify_credentials", async (req, res) => {
   // });
 });
 
-//Edit Swimmer
-app.post("/edit_swimmer_info", async (req, res) => {
-  connection.db.collection("swimmer-info", function (err, collection) {
-    collection.countDocuments({ "first_name": req.body.first }, function (err, count) {
-      try{
-        return res.send({ "Result": true });
-      }
-      catch (err) {
-        console.log(err);
-      }
-    });
-  });
+//Edit Swimmer Information
+app.post('/edit_swimmer_info', async (req, res) => {
+  var fullname = req.body.name;
+  var check_last = fullname.split(',')[0];
+  var check_first = fullname.split(',')[1].trim();
+  var firstname = req.body.firsttext;
+  var lastname = req.body.lasttext;
+  var positi = req.body.postext;
+  var classyear = req.body.classtext;
+  var homet = req.body.hometext;
+  var school = req.body.hightext;
+
+  await swimmer_info.findOneAndUpdate({ firstName: check_first, lastName: check_last },
+    { "$set": {
+      firstName: firstname,
+      lastName: lastname,
+      position: positi,
+      classYear: classyear,
+      hometown: homet,
+      highSchool: school }
+    }).then(function (err) {
+    if (err) {
+      console.log(err);
+      return res.send({ "Result": false });
+    }
+    else {
+      // console.log('info successfully updated');
+      return res.send({ "Result": true });
+    }
+  })
+});
+
+//Edit user information
+app.post('/edit_user_info', async (req, res) => {
+  var user = req.body.username;
+  var pass = req.body.password;
+  var ad = req.body.type_bool;
+  var id = req.body.userid;
+
+  const saltRounds = 10;
+  var hashedPassword = await bcrypt.hash(pass, saltRounds);
+  console.log(user + " " + pass + " " + ad + " " + id + " " + hashedPassword);
+  await user_info.findOneAndUpdate({ userID: id },
+    { "$set": {
+      username: user,
+      password: hashedPassword,
+      admin: ad}
+    }).then(function (err) {
+    if (err) {
+      console.log(err);
+      return res.send({ "Result": false });
+    }
+    else {
+      // console.log('info successfully updated');
+      return res.send({ "Result": true });
+    }
+  })
 });
 
 //Create Alert
@@ -223,6 +289,7 @@ app.post("/create_alert", async (req, res) => {
   });
 });
 
+//Add new user
 app.post("/add_user", async (req, res) => {
   console.log(req.body.user);
   connection.db.collection("credentials", function (err, collection) {
@@ -270,7 +337,6 @@ app.post("/add_user", async (req, res) => {
   });
 });
 
-//
 
 
 //---------------------------------------------------MISC FUNCTIONS---------------------------------------------------
