@@ -336,7 +336,7 @@ app.post("/verify_credentials", async (req, res) => {
                 console.log("Invalid Login Attempt");
                 return res.send({ "Result": false });
               } else {
-                return res.send({ "Result": true, "Admin": data[0].admin });
+                return res.send({ "Result": true, "Admin": data[0].admin, "User": data[0].userID });
               }
             });
           })
@@ -426,6 +426,45 @@ app.post("/chats", async (req, res) => {
   });
 });
 
+app.post("/get_messages", async (req, res) => {
+  // console.log(req.body.user);
+  connection.db.collection("chats", function (err, collection) {
+    collection.countDocuments({ "users": req.body.chatID }, function (err, count) {
+      try {
+        if (count > 0) {
+          collection.find({ "users": req.body.chatID }).toArray(function (err, data) {
+            return res.send(data[0]['messages'].map((lister) => {
+              connection.db.collection("credentials", function (err, collection2) {
+                collection2.countDocuments({"userID": lister[0]}, function (err, count2) {
+                  try {
+                    if (count > 0) {
+                      console.log(lister[0]);
+                      collection2.find({"userID": lister[0]}).toArray(function (err, data2) {
+                        // console.log(data2);
+                        // console.log({sender: data2[0].firstName + " " + data2[0].lastName, senderIMG: data2[0].picture, messageBody: lister[1], timestamp: lister[2]});
+                        return {sender: data2[0].firstName + " " + data2[0].lastName, senderIMG: data2[0].picture, messageBody: lister[1], timestamp: lister[2]}
+                      })
+                    }
+                  }
+                  catch (err) {
+                    console.log(err);
+                  }
+
+                })
+              })
+            }));
+          })
+        }
+        else {
+          return res.send({ "Result": false });
+        }
+      }
+      catch (err) {
+        console.log(err);
+      }
+    });
+  });
+});
 
 //---------------------------------------------------MISC FUNCTIONS---------------------------------------------------
 
