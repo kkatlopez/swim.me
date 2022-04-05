@@ -105,7 +105,18 @@ class UserLanding extends Component {
               <Form.Group as={Row} className="mb-3">
                 <Form.Label column sm={2}>Password</Form.Label>
                 <Col sm={10}>
-                  <Form.Control type="password" placeholder="Password" value={this.state.pass} onChange={this.changePass} isInvalid={!this.state.isubmittable}/>
+                  <Form.Control
+                    type="password"
+                    placeholder="Password"
+                    value={this.state.pass}
+                    onChange={this.changePass}
+                    isInvalid={!this.state.isubmittable}
+                    onKeyPress={event => {
+                      if (event.key === "Enter") {
+                        this.confirmCreds();
+                      }
+                    }}
+                  />
                   <Form.Control.Feedback type="invalid">
                     Either your username or password is incorrect.
                   </Form.Control.Feedback>
