@@ -1,17 +1,13 @@
 import React, { Component } from 'react';
-// import ReactDOM from 'react-dom';
-//import { Link, withRouter } from 'react-router-dom';
-import { Container, DropdownButton, Dropdown, Tabs, Tab, Table } from 'react-bootstrap';
+import { Container, Tabs, Tab, } from 'react-bootstrap';
 import '../css/rosterprofile.css';
-import { Link, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import RosterProfileLatest from './RosterProfileLatest';
 import RosterProfileFastest from './RosterProfileFastest.js';
 import RosterProfileEvent from './RosterProfileEvent.js';
 import Navigation from "./Navigation.js";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft} from '@fortawesome/free-solid-svg-icons';
-import moment from 'moment';
-// import { get } from 'express/lib/response';
 
 class RosterProfile extends Component {
 
@@ -34,21 +30,9 @@ class RosterProfile extends Component {
       hometown: "",
       strokes: "",
       event: "",
-      latestmeet: [],
-      latestresults: [],
       fullname: "",
-      fastest: [],
-      meetlink: "",
-      eventsswam: [],
-      showLatest: false,
-      show: false,
       imageurl: this.props.url
-      // showFastest: false,
-      // showEvent: false,
     };
-    this.getLatestMeet = this.getLatestMeet.bind(this);
-    // this.showFastest = this.showFastest.bind(this);
-    // this.showEvent = this.showEvent.bind(this);
   }
 
   getSwimmerInfo() {
@@ -56,9 +40,7 @@ class RosterProfile extends Component {
       .then(res => res.json())
       .then(
         (result) => {
-          // console.log(result);
           var specific_result = result.find(x => (x.firstName === this.state.firstname && x.lastName === this.state.lastname));
-          console.log(this.state.lastname);
           this.setState({
             year: specific_result.classYear,
             hs: specific_result.highSchool,
@@ -70,60 +52,7 @@ class RosterProfile extends Component {
         }
       )
   }
-
-  getLatestMeet(latestmeet, fullname) {
-    fetch("http://localhost:3001/meet_info")
-      .then(res => res.json())
-      .then(
-        (result) => {
-          console.log(result);
-          var specific_result = result.find(x => (x.meetName === this.state.latestmeet[0] && x.meetStartDate === this.state.latestmeet[1]));
-          console.log(specific_result);
-          var i, j, k, l;
-          var latest = [];
-          for (i = 0; i < specific_result.meetEvents.length; i++) {
-            for (j = 0; j < specific_result.meetEvents[i].length; j++) {
-              for (k = 0; k < specific_result.meetEvents[i][j].length; k++) {
-                if (specific_result.meetEvents[i][j][k][0] === this.state.fullname) {                  
-                  latest.push( [specific_result.meetEvents[i][0], specific_result.meetEvents[i][j][k][1], (k+1)] );
-                }
-              }
-            }
-          }
-          this.setState({
-            latestresults: latest
-          });
-        }
-      )
-  }
-
-  getFastest() {
-    fetch("http://localhost:3001/swimmers")
-      .then(res => res.json())
-      .then(
-        (result) => {
-          var specific_result = result.find(x => (x.firstName === this.state.firstname && x.lastName === this.state.lastname));
-          this.setState({
-            fastest: specific_result.bestTimes,
-          });
-        }
-      )
-  }
-
-
-  getEventsSwam() {
-    fetch("http://localhost:3001/swimmers")
-      .then(res => res.json())
-      .then(
-        (result) => {
-          var specific_result = result.find(x => (x.firstName === this.state.firstname && x.lastName === this.state.lastname));
-          this.setState({
-            eventsswam: specific_result.eventsSwam
-          });
-          console.log(this.state.eventsswam);
-        }
-      )
-  }
+  
 
   sendProps() {
     var logged = this.props.location.state.logged;
@@ -134,10 +63,8 @@ class RosterProfile extends Component {
 
   componentDidMount() {
     this.getSwimmerInfo();
-    this.getLatestMeet(this.state.latestmeet, this.state.fullname);
-    this.getFastest();
-    this.getEventsSwam();
   }
+
 
   sendProps() {
     var logged = this.props.location.state.logged;
@@ -147,10 +74,6 @@ class RosterProfile extends Component {
   }
 
   render() {
-    // const { getLatestMeet } = this.state;
-    // const { showFastest } = this.state;
-    // const { showEvent } = this.state;
-
     return(
       <Container fluid className="page-container">
         <Container fluid className="siteHeader d-flex align-items-end">
@@ -173,73 +96,18 @@ class RosterProfile extends Component {
               </div>
           </div>
         </Container>
-        {/* <hr align="center"></hr> */}
         <Container className="px-4">
         <Tabs defaultActiveKey="latest" id="uncontrolled-tab-example" className="my-3 justify-content-center">
             <Tab eventKey="latest" title="Latest">
-                <h2 className="sectionTitle">{this.state.latestmeet[0]}</h2>
-                <p class="text-muted">{moment(this.state.latestmeet[1]).format('ll')}</p>
-                <Table bordered>
-                  <thead>
-                    <tr>
-                      <th>Event</th>
-                      <th>Time</th>
-                      <th>Place</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                  {
-                      this.state.latestresults.map( (lister) => {
-                        return(
-                          <tr>
-                            <td>{lister[0]}</td>
-                            <td>{lister[1]}</td>
-                            <td>{lister[2]}</td>
-                          </tr>
-                        )
-                      })
-                    }
-                  </tbody>
-                </Table>
+              <RosterProfileLatest latesttimes={this.state.latestresults} latestmeet={this.state.latestmeet}/>
             </Tab>
             <Tab eventKey="fastest" title="Fastest">
               <div className="dynamic-height">
-                <Table bordered>
-                  <thead>
-                    <tr>
-                      <th>Event</th>
-                      <th>Time</th>
-                      <th>Meet</th>
-                      <th>Date</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <a href></a>
-                  {
-                      this.state.fastest.map( (lister) => {
-                        return(
-                          <tr>
-                            <td>{lister[0]}</td>
-                            <td>{lister[1]}</td>
-                            <td>{lister[2]}</td>
-                            <td>{moment(lister[3]).format('l')}</td>
-                          </tr>
-                        )
-                      })
-                    }
-                  </tbody>
-                </Table>
+                <RosterProfileFastest/>
               </div>
             </Tab>
             <Tab eventKey="event" title="By Event">
-              <label className="pt-3">Event</label>
-              <DropdownButton className="dropdown pb-3" title="Select an event">
-                {
-                  this.state.eventsswam.map( (lister) => {
-                    return(<Dropdown.Item>{lister}</Dropdown.Item>)
-                  })
-                }
-              </DropdownButton>
+              <RosterProfileEvent/>
             </Tab>
         </Tabs>
           {/* {(getLatestMeet && <RosterProfileLatest/>) ||

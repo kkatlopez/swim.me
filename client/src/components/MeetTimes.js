@@ -83,12 +83,12 @@ class MeetTimes extends Component {
       //     this.setState({ showMeet: true });
       //     break;
       default:
-          this.setState({ 
-            showMeet: true, 
-            meetname: meetinfo[0], 
-            startdate: meetinfo[1] 
-          });
-          break;
+        this.setState({ 
+          showMeet: true, 
+          meetname: meetinfo[0], 
+          startdate: meetinfo[1] 
+        });
+        break;
     }
   }
 

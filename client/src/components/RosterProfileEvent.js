@@ -1,42 +1,137 @@
 import React, { Component } from 'react';
-// import ReactDOM from 'react-dom';
-import { Container } from 'react-bootstrap';
-import EventTimes from './EventTimes.js';
+import { Container, DropdownButton, Dropdown, Table } from 'react-bootstrap';
+import { Link, withRouter } from 'react-router-dom';
+import moment from 'moment';
 
 class RosterProfileLatest extends Component {
-    constructor(props) {
-      super(props);
-      this.state = {
-          event: "",
-          showTable: false
-      };
-      this.showTable = this.showTable.bind(this);
-    }
+  constructor(props) {
+    super(props);
+    this.state = {
+      firstname: this.props.match.params.firstName,
+      lastname: this.props.match.params.lastName,
+      showTimes: false,
+      eventsswam: [],
+      eventtimes: [],
+      event: ""
+    };
+  }
 
-    showTable(event) {
-        console.log(event);
-        switch (event) {
-          case "50 Y Free":
-            this.setState({ showTable: true });
-            break;
-          case "":
-            this.setState({ showTable: false });
-            break;
-          default:
-            break;
+  getSwimmerInfo() {
+    fetch("http://localhost:3001/swimmers")
+      .then(res => res.json())
+      .then(
+        (result) => {
+          var specific_result = result.find(x => (x.firstName === this.state.firstname && x.lastName === this.state.lastname));
+          this.setState({
+            year: specific_result.classYear,
+            hs: specific_result.highSchool,
+            hometown: specific_result.hometown,
+            strokes: specific_result.position,
+            latestmeet: specific_result.meetsSwam.at(-1),
+            fullname: this.state.firstname + " " + this.state.lastname
+          })
         }
-      }
+      )
+  }
 
-    render() {
-        const { showTable } = this.state;
-      return(
-        <Container fluid className="page-container">
-            <EventTimes/>
-            {showTable && <EventTimes/>}
-        </Container>      
-      );
-    }
+  getEventsSwam() {
+    fetch("http://localhost:3001/swimmers")
+      .then(res => res.json())
+      .then(
+        (result) => {
+          var specific_result = result.find(x => (x.firstName === this.state.firstname && x.lastName === this.state.lastname));
+          var i, j;
+          var eventlist = []
+          for (i = 0; i < specific_result.eventsSwam.length; i++) {
+            eventlist.push(specific_result.eventsSwam[i][0]);
+          }
+          this.setState({
+            eventsswam: eventlist
+          });
+        }
+      )
   }
   
-  export default(RosterProfileLatest);
+
+  timesTable(eventname) {
+    var link = "http://localhost:3001/swimmers/" + this.state.firstname + " " + this.state.lastname + "/event/" + eventname;
+    fetch(link)
+      .then(res => res.json())
+      .then(
+        (result) => {
+          var times = [];
+          var i;
+          for (i = 1; i < result[0].length; i++) {
+            times.push(result[0][i]);
+          }
+          this.setState({
+            eventtimes: times[0],
+            event: result[0]
+          });
+        }
+      )
+  }
+
+  showTimes(info) {
+    this.timesTable(info);
+    switch(info) {
+      default:
+        this.setState({
+          showTimes: true,
+          event: info
+        });
+        break;
+    }
+  }
+
+  componentDidMount() {
+    this.getEventsSwam();
+    this.getSwimmerInfo();
+  }
+
+  render() {
+    return(
+      <Container fluid className="page-container">
+          <label>Event</label>
+          <DropdownButton className="dropdown pb-3" title="Select an event">
+              {
+                this.state.eventsswam.map( (lister) => {
+                  return(<Dropdown.Item onClick={() => this.showTimes(lister)} event={lister}>{lister}</Dropdown.Item>)
+                })
+              }
+            </DropdownButton>
+            {this.state.showTimes &&
+              <div className="event dynamic-height">
+                <h2 className="sectionTitle">{this.state.event[0]}</h2>
+                <Table borderd>
+                  <thead>
+                    <tr>
+                      <th>Time</th>
+                      <th>Meet</th>
+                      <th>Date</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {
+                      this.state.eventtimes.reverse().map( (lister, index) => {
+                        var index = index + 1;
+                        return(
+                          <tr>
+                            <td>{lister[0]}</td>
+                            <td>{lister[1]}</td>
+                            <td>{moment(lister[2]).format('l')}</td>
+                          </tr>
+                        )
+                      })
+                    }
+                  </tbody>
+                </Table>
+              </div>
+            }
+      </Container>      
+    );
+  }
+}
+  
+  export default withRouter(RosterProfileLatest);
   

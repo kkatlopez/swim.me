@@ -61,9 +61,9 @@ class Roster extends Component {
     var name = a.textContent.split(" ");
     console.log(name);
     if (name.length === 2) {
-      var redirect = "/roster/" + name[0] + "/" + name[1];
+      var redirect = "/roster/" + name[0] + "-" + name[1];
     } else {
-      var redirect = "/roster/" + name[0] + "/" + name[1] + " " + name[2];
+      var redirect = "/roster/" + name[0] + "-" + name[1] + " " + name[2];
     }
     var logged = this.props.location.state.logged;
     var admin = this.props.location.state.adin
@@ -81,7 +81,7 @@ class Roster extends Component {
         <Container fluid className="siteHeader d-flex align-items-end">
           <h1 className="siteHeaderTitle px-3 mb-3">Roster</h1>
         </Container>
-        <Container className="px-4">
+        <Container>
           <Container className="d-flex justify-content-around my-3 px-0">
             
             <RosterSearch swimmernames={this.state.currentswimmers}/>
@@ -89,7 +89,7 @@ class Roster extends Component {
             <br/>
           </Container>
         </Container>
-        <Container fluid className="d-flex flex-wrap justify-content-center mx-0">
+        <Container fluid className="d-flex flex-wrap justify-content-center dynamic-height mx-0">
           {
             this.state.currentswimmers.map( (lister) => {
               return(<RosterCard first={lister.firstName} last={lister.lastName} year={lister.classYear} hs={lister.highSchool} hometown={lister.hometown} strokes={lister.position} />)

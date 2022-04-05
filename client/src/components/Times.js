@@ -89,7 +89,7 @@ class Times extends Component {
                 <FastestTimes name={this.props.match.params.swimmerName}/>
             </Tab>
             <Tab eventKey="event" title="By Event">
-                <EventTimes name={this.props.match.params.swimmerName}/>
+                {/* <EventTimes name={this.props.match.params.swimmerName}/> */}
             </Tab>
         </Tabs>
         </Container>
