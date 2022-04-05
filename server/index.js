@@ -44,35 +44,38 @@ connection.catch(err => console.log(err));
 //User Info
 var user_info_schema = new Schema({
   username: { type: String },
-  pass_word: { type: String },
-  user_type: { type: Boolean },
-  pic: {type: String},
-  user_id: {type: Number}
+  password: { type: String },
+  admin: { type: Boolean },
+  picture: {type: String},
+  userID: {type: Number},
+  firstName: {type: String},
+  lastName: {type: String}
 }, { versionKey: false }, {collection: 'credentials'});
 const user_info = mongoose.model('credentials', user_info_schema, 'credentials');
 
 //Meet Info
 var meet_info_schema = new Schema({
-  meet_name: { type: String },
-  meet_start_date: { type: Date },
-  meet_end_date: { type: Date },
-  meet_location: { type: String },
-  meet_events: [ String]
+  meetName: { type: String },
+  meetStartDate: { type: Date },
+  meetEndDate: { type: Date },
+  meetLocation: { type: String },
+  meetEvents: [ String],
+  meetTeam: [String]
 }, { versionKey: false }, {collection: 'meet-info'});
 const meet_info = mongoose.model('meet-info', meet_info_schema, 'meet-info');
 
 //Swimmer Info
 var swimmer_info_schema = new Schema({
-  first_name: { type: String },
-  last_name: { type: String },
-  events_swam: [String],
-  best_times: [[String, String, String, String, Date]],
-  meets_swam: [[String, Date]],
-  seasons_swam: [String],
+  firstName: { type: String },
+  lastName: { type: String },
+  eventsSwam: [String],
+  bestTimes: [[String, String, String, String, Date]],
+  meetsSwam: [[String, Date]],
+  seasonsSwam: [String],
   position: { type: String },
-  class_year: { type: String },
+  classYear: { type: String },
   hometown: { type: String },
-  high_school: { type: String }
+  highSchool: { type: String }
 }, { versionKey: false }, {collection: 'swimmer-info'});
 const swimmer_info = mongoose.model('swimmer-info', swimmer_info_schema, 'swimmer-info');
 
@@ -152,7 +155,6 @@ app.get("/alert_info", async (req, res) => {
     return console.log(error);
   }
 });
-
 
 //Admin Login
 app.post("/verify_credentials", async (req, res) => {
@@ -237,7 +239,8 @@ app.post('/edit_user_info', async (req, res) => {
     { "$set": {
       username: user,
       password: hashedPassword,
-      admin: ad}
+      admin: ad
+    }
     }).then(function (err) {
     if (err) {
       console.log(err);
@@ -329,7 +332,7 @@ app.post("/add_user", async (req, res) => {
 
       var hashedPassword = await bcrypt.hash(pass, saltRounds);
 
-      console.log(user + " " + pass + " " + ad + " " + id + " " + hashedPassword);
+      // console.log(user + " " + pass + " " + ad + " " + id + " " + hashedPassword);
 
       // a document instance
       user_info.create({ username: user, password: hashedPassword, admin: ad, userID: id }, function(err, new_user) {
