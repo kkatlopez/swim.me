@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 // import ReactDOM from 'react-dom';
-import { Container, Card, DropdownButton, Dropdown, Table } from 'react-bootstrap';
+import { DropdownButton, Dropdown, Table } from 'react-bootstrap';
 import '../css/eventtimes.css';
 
 class EventTimes extends Component {
@@ -21,7 +21,9 @@ class EventTimes extends Component {
         this.setState({ showEvent: true });
         break;
       case "":
-        this.setState({ showEvent: false });
+        this.setState({ showEvent: true });
+        break;
+      default:
         break;
     }
   }
@@ -43,7 +45,7 @@ class EventTimes extends Component {
             </DropdownButton>
             {this.state.showEvent && 
               <div>
-                <h2>500 Y Free</h2>
+                <h2 className="sectionTitle">500 Y Free</h2>
                 <Table bordered>
                   <thead>
                       <tr>

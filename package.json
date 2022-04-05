@@ -32,6 +32,8 @@
     "font-awesome": "^4.7.0",
     "mongodb": "^3.5.5",
     "mongoose": "^5.9.2",
-    "node": "^13.8.0"
+    "node": "^13.8.0",
+    "semantic-ui-css": "^2.4.1",
+    "semantic-ui-react": "^2.1.2"
   }
 }

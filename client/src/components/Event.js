@@ -4,88 +4,131 @@ import { Container, DropdownButton, Dropdown, Table } from 'react-bootstrap';
 import { Link, withRouter } from 'react-router-dom';
 import '../css/event.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronRight, faChevronLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import { faChevronLeft} from '@fortawesome/free-solid-svg-icons';
+import Navigation from "./Navigation.js";
 
-class FrontPage extends Component {
+class Event extends Component {
 
   constructor(props) {
-		super(props);
-		if(this.props.location.state == undefined){
-			this.props.history.push("/", { logged: false });
-		}
-		else if (!('logged' in this.props.location.state)){
-			this.props.history.push("/", { logged: false });
-		}
-		else if(this.props.location.state.logged == false){
-			this.props.history.push("/", { logged: false });
-		}
+	super(props);
+    // if(this.props.location.state == undefined){
+    //   this.props.history.push("/", { logged: false });
+    // }
+    // else if (!('logged' in this.props.location.state)){
+    //   this.props.history.push("/", { logged: false });
+    // }
+    // else if(this.props.location.state.logged == false){
+    //   this.props.history.push("/", { logged: false });
+    // }
+    this.state = {
+      name: this.props.match.params.eventName,
+      meetname: "",
+      meetdate: "",
+      results: []
+    }
+  }
+
+  // use populateEvents() from SpecificMeet.js
+  showResultTable() {
+    fetch("http://localhost:3001/meet_info")
+      .then(res => res.json())
+      .then(
+        (result) => {
+          console.log(result);
+          var split = this.props.match.params.meetName.split('_');
+          console.log(split); // ok
+          console.log(this.state.name);
+          var meet = split[0];
+          var date = split[1];
+          var specific_result = result.find(x => (x.meetName === meet && x.meetStartDate === date));
+          console.log(specific_result);
+          var i;
+          var eventresults = [];
+          console.log(specific_result);
+          for (i = 0; i < specific_result.meetEvents.length; i++) {
+            if (specific_result.meetEvents[i][0] == this.state.name) {
+              eventresults = specific_result.meetEvents[i];
+            }
+          }
+          this.setState({
+            results: eventresults[1],
+            meetname: meet,
+            meetdate: date
+          });
+        },
+        (error) => {
+          this.setState({
+            isLoaded: true,
+            error
+          });
+        }
+      )
+  }
+
+  componentDidMount(){
+    // var event = this.props.match.params.eventName;
+    // console.log(event);
+    // var split = this.props.match.params.meetName.split('_');
+    // var meetName = this.props.match.params.meetname;
+    // var meetDate = this.props.match.params.meetdate;
+    // console.log(split);
+    // this.setState({
+    //   meetname: split[0],
+    //   meetdate: split[1]
+    // })
+    // console.log(this.state.name);
+    // console.log(this.state.meetname);
+    // console.log(this.state.meetdate);
+    this.showResultTable();
+  }
+
+  sendProps() {
+    var logged = this.props.location.state.logged;
+    var admin = this.props.location.state.adin
+    var user = this.props.location.state.user;
+    this.props.history.push("/meet/"+ this.state.meetname + "_" + this.state.meetdate, { logged: logged, admin: admin, user: user} );
   }
 
   render() {
     return(
       <Container fluid className="page-container">
         <Container fluid className="siteHeader d-flex align-items-end">
-          <h1 className="siteHeaderTitle px-3 mb-3">Meet Results</h1>
+          <h1 className="siteHeaderTitle px-3 mb-3">Event Results</h1>
         </Container>
         <Container className="px-4">
-            <a href="/meet" className="standalone">
+        {/* href={"/meet/" + this.props.match.params.meetName} */}
+            <a onClick={() => this.sendProps()} className="standalone meet-link">
                 <p><FontAwesomeIcon icon={faChevronLeft} className="px-0"/> Back to meet</p>
             </a>
-            <h2>RPI @ Skidmore</h2>
-            <p class="text-muted">January 22, 2022</p>
-            <label>Event</label>
-            <DropdownButton className="dropdown pb-3" title="Select an event">
-                <Dropdown.Item href="#/action-1">W 200 Medley Relay</Dropdown.Item>
-                <Dropdown.Item href="#/action-2">M 200 Medley Relay</Dropdown.Item>
-                <Dropdown.Item href="#/action-3">W 1000 Free</Dropdown.Item>
-                <Dropdown.Item href="#/action-3">M 1000 Free</Dropdown.Item>
-            </DropdownButton>
+            <h2 className="sectionTitle">{this.state.name}</h2>
             <div className="event">
-                <h4>W 200 Medley Relay</h4>
                 <Table bordered>
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Time</th>
-                                <th>Score</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Rensselaer</td>
-                                <td>1:54.53</td>
-                                <td>11.00</td>
-                            </tr>
-                            <tr>
-                                <td>Rensselaer</td>
-                                <td>1:56.95</td>
-                                <td>4.00</td>
-                            </tr>
-                            <tr>
-                                <td>Skidmore</td>
-                                <td>2:01.94</td>
-                                <td>2.00</td>
-                            </tr>
-                            <tr>
-                                <td>Rensselaer</td>
-                                <td>2:03.40</td>
-                                <td>–</td>
-                            </tr>
-                            <tr>
-                                <td>Skidmore</td>
-                                <td>2:07.65</td>
-                                <td>–</td>
-                            </tr>
-                        </tbody>
-                    </Table>
+                  <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Time</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  {
+                    this.state.results.map( (lister) => {
+                      return(
+                        <tr>
+                          <td>{lister[0]}</td>
+                          <td>{lister[1]}</td>
+                        </tr>
+                      )
+                    })
+                  }
+                  </tbody>
+                </Table>
             </div>
-            <a href="/" className="standalone text-end">
-                <p className="text-right">View next event: M 200 Medley Relay <FontAwesomeIcon icon={faChevronRight} className="px-0"/></p>
-            </a>
+
         </Container>
+				<Navigation logged = {this.props.location.state.logged} admin = {this.props.location.state.admin} user = {this.props.location.state.user}/>
       </Container>
     );
   }
 }
 
-export default withRouter(FrontPage);
+export default withRouter(Event);

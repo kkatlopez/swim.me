@@ -9,3 +9,8 @@ svg {
 .standalone.view-all > p {
     padding-bottom: 0.75rem;
 }
+
+.profile-image {
+  width: 10%;
+  height: auto;
+}

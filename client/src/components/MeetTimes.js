@@ -1,28 +1,99 @@
 import React, { Component } from 'react';
 // import ReactDOM from 'react-dom';
-import { Container, Card, DropdownButton, Dropdown, Table } from 'react-bootstrap';
+import { DropdownButton, Dropdown, Table } from 'react-bootstrap';
+import { Link, withRouter } from 'react-router-dom';
 
 class MeetTimes extends Component {
 	
   constructor(props) {
     super(props);
     this.state = {
-      event: "",
-      showLatest: false
+      meetlist: [],
+      times: [],
+      events: [],
+      first: "",
+      last: "",
+      meetname: "",
+      date: "",
+      showMeet: false
     };
-    this.showLatest = this.showLatest.bind(this);
+    if(this.props.location.state == undefined){
+      this.props.history.push("/", { logged: false });
+    }
+    else if (!('logged' in this.props.location.state)){
+      this.props.history.push("/", { logged: false });
+    }
+    else if(this.props.location.state.logged == false){
+      this.props.history.push("/", { logged: false });
+    }
   }
 
-  showLatest(event) {
-    console.log(event);
-    switch (event) {
-      case "RPI @ Skidmore":
-        this.setState({ showLatest: true });
-        break;
-      case "":
-        this.setState({ showLatest: false });
-        break;
+  // finding swimmer:
+  getSwimmer() {
+    fetch("http://localhost:3001/swimmers")
+      .then(res => res.json())
+      .then(
+        (result) => {
+          console.log(result);
+          var specific_result = result.find(x => (x.firstName === this.state.firstname && x.lastName === this.state.lastname));
+          console.log(specific_result);
+          this.setState({
+            times: specific_result.meetsSwam,
+            first: this.state.firstname,
+            last: this.state.lastname
+          });
+          console.log(specific_result.meetsSwam);
+        },
+        (error) => {
+          this.setState({
+            isLoaded: true,
+            error
+          });
+        }
+      )
+
+  }
+
+  // get times for table:
+  timesTable(info) {
+    //console.log(info);
+    var link = "http://localhost:3001/meet_info/" + this.state.first + "~" + this.state.last + "~" + info[0] + "~" + info[1];
+    //console.log(link);
+    fetch(link)
+      .then(res => res.json())
+      .then(
+        (result) => {
+          console.log(result);
+          this.setState({
+            events: result
+          });
+          console.log(result);
+        }
+    )
+  }
+
+  // show meet table:
+  showMeet(meetinfo) {
+    this.timesTable(meetinfo)
+    //console.log(meetinfo);
+    switch(meetinfo) {
+      // case (meetinfo != ''):
+      //     this.setState({ showMeet: true });
+      //     break;
+      default:
+          this.setState({ showMeet: true, meetname: meetinfo[0] });
+          break;
     }
+  }
+
+  componentDidMount(){
+    var split = this.props.name.split(' ');
+    this.setState({
+        firstname: split[0],
+        lastname: split[1]
+    });
+    this.getSwimmer();
+    // this.timesTable();
   }
 	
   render() {
@@ -30,36 +101,35 @@ class MeetTimes extends Component {
           <div className="meet">
             <label className="pt-3">Meet</label>
             <DropdownButton className="dropdown pb-3" title="Select a meet">
-              <Dropdown.Item onClick={() => this.showLatest("")}>-</Dropdown.Item>
-              <Dropdown.Item href="#" onClick={() => this.showLatest("RPI @ Skidmore")}>RPI @ Skidmore</Dropdown.Item>
-              <Dropdown.Item href="#">MIT Invitational</Dropdown.Item>
-              <Dropdown.Item href="#">RPI vs. Vassar College</Dropdown.Item>
+              {
+                this.state.times.map( (lister) => {
+                    return(<Dropdown.Item meetname={lister} meetstart={lister[1]} onClick={() => this.showMeet(lister)}>{lister[0]} </Dropdown.Item>)
+                })
+              }
             </DropdownButton>
-            {this.state.showLatest && 
+            {this.state.showMeet && 
               <div>
-                <h2>RPI @ Skidmore</h2>
+                <h2 className="py-2">{this.state.meetname}</h2>
                 <Table bordered>
                   <thead>
                       <tr>
                       <th>Event</th>
                       <th>Time</th>
                       <th>Place</th>
-                      <th>Imp.</th>
                       </tr>
                   </thead>
                   <tbody>
-                      <tr>
-                      <td>1000 Y Free</td>
-                      <td>10:06.50</td>
-                      <td>3rd</td>
-                      <td>-1.9%</td>
-                      </tr>
-                      <tr>
-                      <td>500 Y Free</td>
-                      <td>4:55.52</td>
-                      <td>1st</td>
-                      <td>-0.2%</td>
-                      </tr>
+                    {
+                      this.state.events.map( (lister) => {
+                        return(
+                          <tr>
+                            <td>{lister[0]}</td>
+                            <td>{lister[1]}</td>
+                            <td>{lister[2]}</td>
+                          </tr>
+                        )
+                      })
+                    }
                   </tbody>
                 </Table> 
                 </div> }
@@ -68,4 +138,4 @@ class MeetTimes extends Component {
   }
 }
 
-export default(MeetTimes);
+export default withRouter(MeetTimes);
