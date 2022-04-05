@@ -144,13 +144,24 @@ app.get("/meet_info_specific", async (req, res) => {
   }
 });
 
+function customSort(events) {
+  // order of events:
+  const sortOrder = [ '50 Free', '100 Free', '200 Free', '500 Free', '1000 Free', '1650 Free', '100 Back', '200 Back', '100 Breast', '200 Breast', '100 Fly', '200 Fly', '200 IM', '400 IM' ];
+  events.sort(function(a, b) {
+    return sortOrder.indexOf(a) - sortOrder.indexOf(b);
+  });
+  console.log(events);
+}
+var ex = ['200 IM', '100 Fly', '200 Free', '50 Free', '100 Breast'];
+customSort(ex)
+
 //GET Swimmer Info
 app.get("/swimmers", async (req, res) => {
   try {
     var mysort = { "lastName": 1 };
     connection.db.collection("swimmer-info", function (err, collection) {
       collection.find({}).sort(mysort).toArray(function (err, data) {
-        // console.log(data); // it will print your collection data
+        console.log(data); // it will print your collection data
         res.send(data);
       })
     });

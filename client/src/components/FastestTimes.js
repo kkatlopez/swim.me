@@ -8,7 +8,8 @@ class FastestTimes extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      times: []
+      times: [],
+      timesordered: []
     };
   }
 
@@ -22,7 +23,7 @@ class FastestTimes extends Component {
             times: specific_result.bestTimes
           });
           console.log(this.state.times);
-          console.log(specific_result);
+          // console.log(specific_result);
         },
         (error) => {
           this.setState({
