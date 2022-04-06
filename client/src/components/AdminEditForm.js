@@ -4,6 +4,7 @@ import { Container, Form, Button, Row } from 'react-bootstrap';
 import { Link, withRouter } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
+import Navigation from "./Navigation.js";
 
 class AdminEditForm extends Component {
   constructor(props) {
@@ -32,15 +33,18 @@ class AdminEditForm extends Component {
     this.updateSwimmer = this.updateSwimmer.bind(this);
 
     //BELOW IS THE CODE TO BLOCK OFF WHEN NOT LOGGED IN
-    // if(this.props.location.state == undefined){
-    //   this.props.history.push("/admin", { logged: false });
-    // }
-    // else if (!('logged' in this.props.location.state)){
-    //   this.props.history.push("/admin", { logged: false });
-    // }
-    // else if(this.props.location.state.logged == false){
-    //   this.props.history.push("/admin", { logged: false });
-    // }
+    if(this.props.location.state == undefined){
+      this.props.history.push("/admin", { logged: false });
+    }
+    else if (!('logged' in this.props.location.state)){
+      this.props.history.push("/admin", { logged: false });
+    }
+    else if(this.props.location.state.logged == false){
+      this.props.history.push("/admin", { logged: false });
+    }
+    else if(this.props.location.state.admin == false){
+      this.props.history.push("/", { logged: true });
+    }
   }
   
   changeSwimmer = (event) =>{	
@@ -146,6 +150,13 @@ class AdminEditForm extends Component {
     this.populatePage();
   }
 
+  sendProps() {
+    var logged = this.props.location.state.logged;
+    var admin = this.props.location.state.admin;
+    var user = this.props.location.state.user;
+    this.props.history.push("/admin", { logged: logged, admin: admin, user: user} );
+  }
+
   render() {
     return(
       <Container fluid className="page-container">
@@ -155,119 +166,121 @@ class AdminEditForm extends Component {
         <Row className="px-3">
           <h2>Edit Swimmer</h2>
         </Row>
-        <a href="/admin" className="standalone">
+        <a onClick={() => this.sendProps()} className="standalone">
           <p><FontAwesomeIcon icon={faChevronLeft} className="px-0"/> Back to Admin Dashboard</p>
         </a>
-        <Form className="pb-3" onSubmit={this.updateSwimmer}>
-          <Form.Group  as={Row} className="mb-3">
-            <Form.Label><h4>Select a Swimmer</h4></Form.Label>
-            <Form.Select
-              aria-label="Select which swimmer to edit"
-              value={this.state.currentSelect}
-              onChange={this.changeSwimmer}
-              className="me-2"
-            >
-              <option value="placeholder">Select a swimmer</option>
-              {
-                this.state.swimmers.map( (item) => {
-                  var name = item.lastName + ", " + item.firstName;
-                  return(<option value={name}>{name}</option>)
-                })
-              }
-            </Form.Select>
-          </Form.Group>
-
-          <Form.Group as={Row} className="mb-3" controlId="form.Text">
-            <Form.Label>First Name</Form.Label>
-            <div className="d-flex">
-              <Form.Control
-                type="text"
-                value={this.state.firsttext}
-                onChange={this.changeFirst}
-                className="me-2"
-              />
-            </div>
-          </Form.Group>
-          
-          <Form.Group as={Row} className="mb-3" controlId="form.Text">
-            <Form.Label>Last Name</Form.Label>
-            <div className="d-flex">
-              <Form.Control
-                type="text"
-                value={this.state.lasttext}
-                onChange={this.changeLast}
-                className="me-2"
-              />
-            </div>
-          </Form.Group>
-          
-          <Form.Group as={Row} className="mb-3" controlId="form.Text">
-            <Form.Label>Position</Form.Label>
-            <div className="d-flex">
-              <Form.Control
-                type="text"
-                value={this.state.postext}
-                onChange={this.changePos}
-                className="me-2"
-              />
-            </div>
-          </Form.Group>
-          
-          <Form.Group as={Row} className="mb-3" controlId="form.Text">
-            <Form.Label>Class Year</Form.Label>
-            <div className="d-flex">
+        <Container className="px-4">
+          <Form className="pb-3" onSubmit={this.updateSwimmer}>
+            <Form.Group  as={Row} className="mb-3">
+              <Form.Label><h4>Select a Swimmer</h4></Form.Label>
               <Form.Select
-                aria-label="Select a swimmer"
-                placeholder="Select a swimmer"
-                value={this.state.classtext}
-                onChange={this.changeClass}
+                aria-label="Select which swimmer to edit"
+                value={this.state.currentSelect}
+                onChange={this.changeSwimmer}
                 className="me-2"
               >
-                <option>Select class year</option>
-                <option value="Freshman">Freshman</option>
-                <option value="Sophomore">Sophomore</option>
-                <option value="Junior">Junior</option>
-                <option value="Senior">Senior</option>
-                <option value="Grad">Grad</option>
+                <option value="placeholder">Select a swimmer</option>
+                {
+                  this.state.swimmers.map( (item) => {
+                    var name = item.lastName + ", " + item.firstName;
+                    return(<option value={name}>{name}</option>)
+                  })
+                }
               </Form.Select>
+            </Form.Group>
+
+            <Form.Group as={Row} className="mb-3" controlId="form.Text">
+              <Form.Label>First Name</Form.Label>
+              <div className="d-flex">
+                <Form.Control
+                  type="text"
+                  value={this.state.firsttext}
+                  onChange={this.changeFirst}
+                  className="me-2"
+                />
+              </div>
+            </Form.Group>
+            
+            <Form.Group as={Row} className="mb-3" controlId="form.Text">
+              <Form.Label>Last Name</Form.Label>
+              <div className="d-flex">
+                <Form.Control
+                  type="text"
+                  value={this.state.lasttext}
+                  onChange={this.changeLast}
+                  className="me-2"
+                />
+              </div>
+            </Form.Group>
+            
+            <Form.Group as={Row} className="mb-3" controlId="form.Text">
+              <Form.Label>Position</Form.Label>
+              <div className="d-flex">
+                <Form.Control
+                  type="text"
+                  value={this.state.postext}
+                  onChange={this.changePos}
+                  className="me-2"
+                />
+              </div>
+            </Form.Group>
+            
+            <Form.Group as={Row} className="mb-3" controlId="form.Text">
+              <Form.Label>Class Year</Form.Label>
+              <div className="d-flex">
+                <Form.Select
+                  aria-label="Select a swimmer"
+                  placeholder="Select a swimmer"
+                  value={this.state.classtext}
+                  onChange={this.changeClass}
+                  className="me-2"
+                >
+                  <option>Select class year</option>
+                  <option value="Freshman">Freshman</option>
+                  <option value="Sophomore">Sophomore</option>
+                  <option value="Junior">Junior</option>
+                  <option value="Senior">Senior</option>
+                  <option value="Grad">Grad</option>
+                </Form.Select>
+              </div>
+            </Form.Group>
+            
+            <Form.Group as={Row} className="mb-3" controlId="form.Text">
+              <Form.Label>Hometown</Form.Label>
+              <div className="d-flex">
+                <Form.Control
+                  type="text"
+                  value={this.state.hometext}
+                  onChange={this.changeHome}
+                  className="me-2"
+                />
+              </div>
+            </Form.Group>
+            
+            <Form.Group as={Row} className="mb-3" controlId="form.Text">
+              <Form.Label>High School</Form.Label>
+              <div className="d-flex">
+                <Form.Control
+                  type="text"
+                  value={this.state.hightext}
+                  onChange={this.changeHigh}
+                  className="me-2"
+                />
+              </div>
+            </Form.Group>
+            
+            <div className="admin-submit-btn-panel">
+              <Button
+                as={Link}
+                to={{pathname: "/admin", state: {logged: true}}}
+                className="gray-button">
+                  Cancel
+              </Button>
+              <Button type="submit" className="green-button admin-submit-btn">Submit</Button>
             </div>
-          </Form.Group>
-          
-          <Form.Group as={Row} className="mb-3" controlId="form.Text">
-            <Form.Label>Hometown</Form.Label>
-            <div className="d-flex">
-              <Form.Control
-                type="text"
-                value={this.state.hometext}
-                onChange={this.changeHome}
-                className="me-2"
-              />
-            </div>
-          </Form.Group>
-          
-          <Form.Group as={Row} className="mb-3" controlId="form.Text">
-            <Form.Label>High School</Form.Label>
-            <div className="d-flex">
-              <Form.Control
-                type="text"
-                value={this.state.hightext}
-                onChange={this.changeHigh}
-                className="me-2"
-              />
-            </div>
-          </Form.Group>
-          
-          <div className="admin-submit-btn-panel">
-            <Button
-              as={Link}
-              to={{pathname: "/admin", state: {logged: true}}}
-              className="gray-button">
-                Cancel
-            </Button>
-            <Button type="submit" className="green-button admin-submit-btn">Submit</Button>
-          </div>
-        </Form>
-        
+          </Form>
+        </Container>
+        <Navigation logged = {this.props.location.state.logged} admin = {this.props.location.state.admin} user = {this.props.location.state.user}/>
       </Container>
     );
   }

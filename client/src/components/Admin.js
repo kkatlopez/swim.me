@@ -5,6 +5,9 @@ import { Container, DropdownButton, Dropdown, Col, Button, Row } from 'react-boo
 // import AdminModifyUser from './AdminModifyUser.js';
 // import AdminEditForm from './AdminEditForm.js';
 import { Link, withRouter } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
+import Navigation from "./Navigation.js";
 
 class Admin extends Component {
   constructor(props) {
@@ -12,17 +15,26 @@ class Admin extends Component {
     this.state = {
       // event: ""
     };
-    // if(this.props.location.state == undefined){
-    //   this.props.history.push("/", { logged: false });
-		// }
-		// else if (!('logged' in this.props.location.state)){
-		// 	this.props.history.push("/", { logged: false });
-		// }
-		// else if(this.props.location.state.logged == false){
-		// 	this.props.history.push("/", { logged: false });
-		// }
+    if(this.props.location.state == undefined){
+      this.props.history.push("/", { logged: false });
+		}
+		else if (!('logged' in this.props.location.state)){
+			this.props.history.push("/", { logged: false });
+		}
+		else if(this.props.location.state.logged == false){
+			this.props.history.push("/", { logged: false });
+		}
+    else if(this.props.location.state.admin == false){
+			this.props.history.push("/", { logged: true });
+		}
   }
 
+  sendProps(url) {
+    var logged = this.props.location.state.logged;
+    var admin = this.props.location.state.admin;
+    var user = this.props.location.state.user;
+    this.props.history.push(url, { logged: logged, admin: admin, user: user} );
+  }
 
   render() {
     return(
@@ -30,45 +42,58 @@ class Admin extends Component {
         <Container fluid className="siteHeader d-flex align-items-end">
           <h1 className="siteHeaderTitle px-3 mb-3">Admin</h1>
         </Container>
-        <Row className="px-3">
-          <h2>Admin Dashboard</h2>
-        </Row>
-        <Row className="px-3">
-          <Col>
-            <Button
-              as={Link}
-              to={{pathname: "/admin/create-alert", state: {logged: true}}}
-              className="green-button">Create Alert
-            </Button>
-          </Col>
-        </Row>
-        
-        <Row className="px-3">
-          <Col>
-            <Button
-              as={Link}
-              to={{pathname: "/admin/edit-swimmer", state: {logged: true}}}
-              className="green-button">
-                Edit Swimmer
-            </Button>
-          </Col>
-        </Row>
-
-        <Row className="px-3">
-          <Col>
-            <Button
-              as={Link}
-              to={{pathname: "/admin/modify-user", state: {logged: true}}}
-              className="green-button">
-                Modify User
+        <Container className="px-4">
+          <Row className="px-3">
+            <h2>Admin Dashboard</h2>
+          </Row>
+          <Row className="px-3">
+            <Col>
+              <a onClick={() => this.sendProps("/")} className="standalone">
+                <p><FontAwesomeIcon icon={faChevronLeft} className="px-0"/> Back to Home</p>
+              </a>
+              <Button
+                // as={Link}
+                // to={{pathname: "/admin/create-alert", state: {logged: true}}}
+                className="green-button"
+                onClick={() => this.sendProps("/admin/create-alert")}
+              >
+                  Create Alert
               </Button>
-          </Col>
-        </Row>
-        {/* <Row className="px-3">
-          <Col>
-            <Button as={Link} to="/admin" logged={false} className="gray-button">Sign Out</Button>
-          </Col>
-        </Row> */}
+            </Col>
+          </Row>
+          
+          <Row className="px-3">
+            <Col>
+              <Button
+                // as={Link}
+                // to={{pathname: "/admin/edit-swimmer", state: {logged: true}}}
+                className="green-button"
+                onClick={() => this.sendProps("/admin/edit-swimmer")}
+              >
+                  Edit Swimmer
+              </Button>
+            </Col>
+          </Row>
+
+          <Row className="px-3">
+            <Col>
+              <Button
+                // as={Link}
+                // to={{pathname: "/admin/modify-user", state: {logged: true}}}
+                className="green-button"
+                onClick={() => this.sendProps("/admin/modify-user")}
+              >
+                  Modify User
+                </Button>
+            </Col>
+          </Row>
+          {/* <Row className="px-3">
+            <Col>
+              <Button as={Link} to="/admin" logged={false} className="gray-button">Sign Out</Button>
+            </Col>
+          </Row> */}
+        </Container>
+        <Navigation logged = {this.props.location.state.logged} admin = {this.props.location.state.admin} user = {this.props.location.state.user}/>
       </Container>
     );
   }

@@ -4,6 +4,7 @@ import { Container, Form, Button, Row } from 'react-bootstrap';
 import { withRouter } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
+import Navigation from "./Navigation.js";
 
 class AdminCreateAlert extends Component {
   constructor(props) {
@@ -21,15 +22,18 @@ class AdminCreateAlert extends Component {
       this.changeDate = this.changeDate.bind(this);
       this.confirmForm = this.confirmForm.bind(this);
       this.checkSubmittable = this.checkSubmittable.bind(this);
-      // if(this.props.location.state == undefined){
-      //   this.props.history.push("/", { logged: false });
-      // }
-      // else if (!('logged' in this.props.location.state)){
-      //   this.props.history.push("/", { logged: false });
-      // }
-      // else if(this.props.location.state.logged == false){
-      //   this.props.history.push("/", { logged: false });
-      // }
+      if(this.props.location.state == undefined){
+        this.props.history.push("/", { logged: false });
+      }
+      else if (!('logged' in this.props.location.state)){
+        this.props.history.push("/", { logged: false });
+      }
+      else if(this.props.location.state.logged == false){
+        this.props.history.push("/", { logged: false });
+      }
+      else if(this.props.location.state.admin == false){
+        this.props.history.push("/", { logged: true });
+      }
   }
 
   checkSubmittable = function(){
@@ -39,6 +43,13 @@ class AdminCreateAlert extends Component {
     }else{
       this.setState({submittable: true});
     }
+  }
+
+  sendProps() {
+    var logged = this.props.location.state.logged;
+    var admin = this.props.location.state.admin;
+    var user = this.props.location.state.user;
+    this.props.history.push("/admin", { logged: logged, admin: admin, user: user} );
   }
 
   confirmForm = function () {
@@ -52,7 +63,8 @@ class AdminCreateAlert extends Component {
       .then(
         (result) => {
           if (result.Result == true) {
-            this.props.history.push("/admin", { text: result.text, type: result.type, endDate: result.endDate});
+            // this.props.history.push("/admin", { text: result.text, type: result.type, endDate: result.endDate});
+            this.sendProps();
           }
           else{
             this.setState({
@@ -98,7 +110,7 @@ class AdminCreateAlert extends Component {
           <h2>Create Alert</h2>
         </Row>
         <Container className="px-4">
-        <a href="/admin" className="standalone">
+        <a onClick={() => this.sendProps()} className="standalone">
           <p><FontAwesomeIcon icon={faChevronLeft} className="px-0"/> Back to Admin Dashboard</p>
         </a>
         <Form className="pb-3">
@@ -162,6 +174,7 @@ class AdminCreateAlert extends Component {
             </Form.Group>
           </Form>
         </Container>
+        <Navigation logged = {this.props.location.state.logged} admin = {this.props.location.state.admin} user = {this.props.location.state.user}/>
       </Container>
     );
   }

@@ -4,6 +4,7 @@ import { Container, Form, Button, Row } from 'react-bootstrap';
 import { Link, withRouter } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
+import Navigation from "./Navigation.js";
 
 class AdminModifyUser extends Component {
   constructor(props) {
@@ -32,15 +33,18 @@ class AdminModifyUser extends Component {
     this.checkSubmittable = this.checkSubmittable.bind(this);
 
     //BELOW IS THE CODE TO BLOCK OFF WHEN NOT LOGGED IN
-    // if(this.props.location.state == undefined){
-    //   this.props.history.push("/admin", { logged: false });
-    // }
-    // else if (!('logged' in this.props.location.state)){
-    //   this.props.history.push("/admin", { logged: false });
-    // }
-    // else if(this.props.location.state.logged == false){
-    //   this.props.history.push("/admin", { logged: false });
-    // }
+    if(this.props.location.state == undefined){
+      this.props.history.push("/admin", { logged: false });
+    }
+    else if (!('logged' in this.props.location.state)){
+      this.props.history.push("/admin", { logged: false });
+    }
+    else if(this.props.location.state.logged == false){
+      this.props.history.push("/admin", { logged: false });
+    }
+    else if(this.props.location.state.admin == false){
+      this.props.history.push("/", { logged: true });
+    }
   }
 
   checkSubmittable = function(){
@@ -282,86 +286,88 @@ class AdminModifyUser extends Component {
         <a href="/admin" className="standalone">
           <p><FontAwesomeIcon icon={faChevronLeft} className="px-0"/> Back to Admin Dashboard</p>
         </a>
-        <Form className="pb-3" onSubmit={this.updateUser}>
-          <Form.Group  as={Row} className="mb-3">
-            <Form.Label><h4>Select a User</h4></Form.Label>
-            <Form.Select
-              aria-label="Select which user to modify"
-              value={this.state.currentSelect}
-              onChange={this.changeUser}
-              className="me-2"
-              isInvalid={!this.state.isubmittable}
-            >
-              <option value="Select a user">Select a user</option>
-              {
-                this.state.users.map( (item) => {
-                  return(<option value={item.username}>{item.username}</option>)
-                })
-              }
-            </Form.Select>
-          </Form.Group>
-
-          <Form.Group as={Row} className="mb-3" controlId="form.Text">
-            <Form.Label>Username</Form.Label>
-            <div className="d-flex">
-              <Form.Control
-                type="text"
-                value={this.state.username}
-                onChange={this.changeUsername}
-                className="me-2"
-                isInvalid={!this.state.isubmittable}
-              />
-
-              <Form.Control.Feedback id="username_form" type="invalid">
-                This username already exists.
-              </Form.Control.Feedback>
-            </div>
-          </Form.Group>
-          
-          <Form.Group as={Row} className="mb-3" controlId="form.Text">
-            <Form.Label>Password</Form.Label>
-            <div className="d-flex">
-              <Form.Control
-                type="password"
-                value={this.state.password}
-                onChange={this.changePassword}
-                className="me-2"
-                isInvalid={!this.state.isubmittable}
-              />
-            </div>
-          </Form.Group>
-          
-          <Form.Group as={Row} className="mb-3" controlId="form.Text">
-            <Form.Label>User Type</Form.Label>
-            <div className="d-flex">
+        <Container className="px-4">
+          <Form className="pb-3" onSubmit={this.updateUser}>
+            <Form.Group  as={Row} className="mb-3">
+              <Form.Label><h4>Select a User</h4></Form.Label>
               <Form.Select
-                aria-label="Select a user type"
-                placeholder="Select a user type"
-                value={this.state.type}
-                onChange={this.changeType}
+                aria-label="Select which user to modify"
+                value={this.state.currentSelect}
+                onChange={this.changeUser}
                 className="me-2"
                 isInvalid={!this.state.isubmittable}
               >
-                <option>Select user type</option>
-                <option value="Admin">Admin</option>
-                <option value="Swimmer">Swimmer</option>
+                <option value="Select a user">Select a user</option>
+                {
+                  this.state.users.map( (item) => {
+                    return(<option value={item.username}>{item.username}</option>)
+                  })
+                }
               </Form.Select>
+            </Form.Group>
+
+            <Form.Group as={Row} className="mb-3" controlId="form.Text">
+              <Form.Label>Username</Form.Label>
+              <div className="d-flex">
+                <Form.Control
+                  type="text"
+                  value={this.state.username}
+                  onChange={this.changeUsername}
+                  className="me-2"
+                  isInvalid={!this.state.isubmittable}
+                />
+
+                <Form.Control.Feedback id="username_form" type="invalid">
+                  This username already exists.
+                </Form.Control.Feedback>
+              </div>
+            </Form.Group>
+            
+            <Form.Group as={Row} className="mb-3" controlId="form.Text">
+              <Form.Label>Password</Form.Label>
+              <div className="d-flex">
+                <Form.Control
+                  type="password"
+                  value={this.state.password}
+                  onChange={this.changePassword}
+                  className="me-2"
+                  isInvalid={!this.state.isubmittable}
+                />
+              </div>
+            </Form.Group>
+            
+            <Form.Group as={Row} className="mb-3" controlId="form.Text">
+              <Form.Label>User Type</Form.Label>
+              <div className="d-flex">
+                <Form.Select
+                  aria-label="Select a user type"
+                  placeholder="Select a user type"
+                  value={this.state.type}
+                  onChange={this.changeType}
+                  className="me-2"
+                  isInvalid={!this.state.isubmittable}
+                >
+                  <option>Select user type</option>
+                  <option value="Admin">Admin</option>
+                  <option value="Swimmer">Swimmer</option>
+                </Form.Select>
+              </div>
+            </Form.Group>
+            
+            <div className="admin-submit-btn-panel">
+              <Button
+                as={Link}
+                to={{pathname: "/admin", state: {logged: true}}}
+                className="gray-button">
+                  Cancel
+              </Button>
+              <Button onClick={this.createUser} className={"green-button " + (this.state.createsubmit ? "" : "disabled")} disabled={!this.state.createsubmit}>Create</Button>
+              <Button onClick={this.deleteUser} className={"green-button " + (this.state.submittable ? "" : "disabled")} disabled={!this.state.submittable}>Delete</Button>
+              <Button type="submit" className={"green-button " + (this.state.submittable ? "" : "disabled")} disabled={!this.state.submittable}>Edit</Button>
             </div>
-          </Form.Group>
-          
-          <div className="admin-submit-btn-panel">
-            <Button
-              as={Link}
-              to={{pathname: "/admin", state: {logged: true}}}
-              className="gray-button">
-                Cancel
-            </Button>
-            <Button onClick={this.createUser} className={"green-button " + (this.state.createsubmit ? "" : "disabled")} disabled={!this.state.createsubmit}>Create</Button>
-            <Button onClick={this.deleteUser} className={"green-button " + (this.state.submittable ? "" : "disabled")} disabled={!this.state.submittable}>Delete</Button>
-            <Button type="submit" className={"green-button " + (this.state.submittable ? "" : "disabled")} disabled={!this.state.submittable}>Edit</Button>
-          </div>
-        </Form>
-        
+          </Form>
+        </Container>
+        <Navigation logged = {this.props.location.state.logged} admin = {this.props.location.state.admin} user = {this.props.location.state.user}/>
       </Container>
     );
   }
