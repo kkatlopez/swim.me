@@ -41,12 +41,37 @@ class AlertsAndCalendar extends Component {
       .then(res => res.json())
       .then(
         (result) => {
-          // console.log(result);
-          // sort result here
+          result.sort(function(x, y) {
+            if(x.alert_end_date > y.alert_end_date) {
+              return 1;
+            }
+            else if (y.alert_type == "High") {
+              return 1;
+            }
+            else if(x.alert_type == "High") {
+              return -1;
+            }
+            else if(y.alert_type == "Medium") {
+              return 1;
+            }
+            else if(x.alert_type == "Medium") {
+              return -1;
+            }
+            else if(y.alert_type == "Low") {
+              return 1;
+            }
+            else if(x.alert_type == "Low") {
+              return -1;
+            }
+            else if(y.alert_type == "Info") {
+              return 1;
+            }
+            return -1;
+          });
+
+          console.log(result);
           this.setState({
             alertList: result
-          //   meetlist: result,
-          //   dropdownlist: [result[0], result[1],result[2],result[3],result[4],result[5],result[6],result[7],result[8],result[9],result[10]]
           });
         },
         (error) => {
@@ -85,11 +110,9 @@ class AlertsAndCalendar extends Component {
   }
 
   getBackground = function(atype) {
-    if(atype == "Immediate") {
+    // may need to change colors
+    if(atype == "High") {
       return "danger";
-    }
-    else if(atype == "High") {
-      return "success";
     }
     else if(atype == "Medium") {
       return "warning";
@@ -109,8 +132,8 @@ class AlertsAndCalendar extends Component {
           <h1 className="siteHeaderTitle px-3 mb-3">Alerts</h1>
         </Container>
         <Container className="px-4">
-          <Accordion flush>
-            <Accordion.Item>
+          <Accordion flush defaultActiveKey="0">
+            <Accordion.Item eventKey="0">
               <Accordion.Header>
                 <h2>Upcoming</h2>
               </Accordion.Header>
@@ -128,7 +151,7 @@ class AlertsAndCalendar extends Component {
                 })}
               </Accordion.Body>
             </Accordion.Item>
-            <Accordion.Item>
+            <Accordion.Item eventKey="1">
               <Accordion.Header>
                 <h2>Calendar</h2>
               </Accordion.Header>
