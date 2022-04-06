@@ -146,6 +146,7 @@ class AdminCreateAlert extends Component {
                   <option value="High">High</option>
                   <option value="Medium">Medium</option>
                   <option value="Low">Low</option>
+                  <option value="Info">Info</option>
                 </Form.Select>
                 <Form.Control.Feedback type="invalid">
                   Select a priority.
