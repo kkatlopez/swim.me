@@ -66,6 +66,14 @@ var swimmer_info_schema = new Schema ({
 }, { versionKey: false });
 const swimmer_info = mongoose.model('swimmer-info', swimmer_info_schema);
 
+//Alert Info
+var alert_schema = new Schema({
+  alert_text: { type: String },
+  alert_type: { type: String },
+  alert_end_date: { type: Date },
+}, { versionKey: false }, {collection: 'alerts'});
+const alert_info = mongoose.model('alerts', alert_schema, 'alerts');
+
 //Top 10
 var top_10_schema = new Schema({
   event: [String]
@@ -86,6 +94,21 @@ app.get("/meet_info", async (req, res) => {
     });
   } catch (error) {
       return console.log(error);
+  }
+});
+
+//GET Alert Info
+app.get("/alert_info", async (req, res) => {
+  try {
+    // alert_info.find({}).toArray(function (err, data) {
+    connection.db.collection("alerts", function (err, collection) {
+      collection.find({}).toArray(function (err, data) {
+        // console.log(data); // it will print your collection data
+        res.send(data);
+      })
+    });
+  } catch (error) {
+    return console.log(error);
   }
 });
 
