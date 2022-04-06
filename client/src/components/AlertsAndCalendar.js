@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 // import ReactDOM from 'react-dom';
-import { Container, DropdownButton, Dropdown, Card, Accordion } from 'react-bootstrap';
+import { Container, DropdownButton, Dropdown, Card, Accordion, Alert } from 'react-bootstrap';
 import { Link, withRouter } from 'react-router-dom';
-// import '../css/meetresults.css';
+import '../css/alerts.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight, faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import Navigation from "./Navigation.js";
@@ -42,6 +42,7 @@ class AlertsAndCalendar extends Component {
       .then(
         (result) => {
           // console.log(result);
+          // sort result here
           this.setState({
             alertList: result
           //   meetlist: result,
@@ -116,33 +117,23 @@ class AlertsAndCalendar extends Component {
               <Accordion.Body>
                 {this.state.alertList.map( (lister) => {
                     return(
-                      <Card
+                      <Alert
                         className="mb-3"
-                        bg={this.getBackground(lister.alert_type)}
+                        variant={this.getBackground(lister.alert_type)}
+                        // variant={"success"}
                         text={this.getBackground(lister.alert_type) === 'light' ? 'dark' : 'white'}
                       >
-                      <Card.Body >
                       {this.textString(lister)}
-                      </Card.Body>
-                      </Card>)
+                      </Alert>)
                 })}
-                {/* <Card className="mb-3">
-                  <Card.Body>This is some text within a card body.</Card.Body>
-                </Card>
-                <Card className="mb-3">
-                  <Card.Body>This is some text within a card body.</Card.Body>
-                </Card>
-                <Card className="mb-3">
-                  <Card.Body>This is some text within a card body.</Card.Body>
-                </Card>
-                <Card className="mb-3">
-                  <Card.Body>This is some text within a card body.</Card.Body>
-                </Card> */}
               </Accordion.Body>
             </Accordion.Item>
+            <Accordion.Item>
+              <Accordion.Header>
+                <h2>Calendar</h2>
+              </Accordion.Header>
+            </Accordion.Item>
           </Accordion>
-
-          <h2>Calendar</h2>
         </Container>
         <Navigation logged = {this.props.location.state.logged} admin = {this.props.location.state.admin} user = {this.props.location.state.user}/>
       </Container>
@@ -152,3 +143,5 @@ class AlertsAndCalendar extends Component {
 }
 
 export default withRouter(AlertsAndCalendar);
+
+// if the calendar is collapsed - show scroll bar with 5(?) alerts shown
