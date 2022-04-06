@@ -88,10 +88,13 @@ class AlertsAndCalendar extends Component {
       return "danger";
     }
     else if(atype == "High") {
-      return "secondary";
+      return "success";
     }
     else if(atype == "Medium") {
       return "warning";
+    }
+    else if(atype == "Low") {
+      return "secondary";
     }
     else if(atype == "Info") {
       return "primary";
