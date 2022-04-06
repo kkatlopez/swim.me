@@ -142,7 +142,6 @@ class AdminCreateAlert extends Component {
                   isInvalid={!this.state.isubmittable}
                 >
                   <option>Select alert priority</option>
-                  <option value="Immediate">Immediate</option>
                   <option value="High">High</option>
                   <option value="Medium">Medium</option>
                   <option value="Low">Low</option>
