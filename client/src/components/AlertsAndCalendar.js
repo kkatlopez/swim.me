@@ -69,9 +69,10 @@ class AlertsAndCalendar extends Component {
             return -1;
           });
 
-          console.log(result);
+          const today = new Date().toISOString().split('T')[0];
+          result = result.filter(item => !(item.alert_end_date.split('T')[0] < today));
           this.setState({
-            alertList: result
+            alertList: result.slice(0, 3)
           });
         },
         (error) => {
