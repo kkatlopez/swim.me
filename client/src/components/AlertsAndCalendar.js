@@ -7,6 +7,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight, faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import Navigation from "./Navigation.js";
 import moment from 'moment';
+import FullCalendar from '@fullcalendar/react';
+// import { Calendar } from '@fullcalendar/core';
+import dayGridPlugin from '@fullcalendar/daygrid';
+import iCalendarPlugin from '@fullcalendar/icalendar';
+import timeGridPlugin from '@fullcalendar/timegrid';
+import listPlugin from '@fullcalendar/list';
 
 class AlertsAndCalendar extends Component {
 
@@ -32,7 +38,30 @@ class AlertsAndCalendar extends Component {
 
     this.getBackground = this.getBackground.bind(this);
     this.textString = this.textString.bind(this);
+    // this.renderCal = this.renderCal.bind(this);
   }
+
+  // populateCalendar() {
+  //   let calendar = new Calendar(calendarEl, {
+  //     plugins: [ dayGridPlugin, timeGridPlugin, listPlugin ],
+  //     initialView: 'dayGridMonth',
+  //     headerToolbar: {
+  //       left: 'prev,next today',
+  //       center: 'title',
+  //       right: 'dayGridMonth,timeGridWeek,listWeek'
+  //     }
+  //   });
+    // var calendarEl = document.getElementById('calendar');
+    // var calendar = new Calendar(calendarEl, {
+    //   plugins: [dayGridPlugin, iCalendarPlugin],
+    //   events: {
+    //     url: 'https://calendar.google.com/calendar/ical/swimmeapp%40gmail.com/public/basic.ics',
+    //     format: 'ics'
+    //   }
+    // })
+    
+    // calendar.render();
+  // }
 
   //AJAX Calls
   populateAlerts() {
@@ -85,8 +114,8 @@ class AlertsAndCalendar extends Component {
   }
 
   componentDidMount(){
-    console.log("component mount");
     this.populateAlerts();
+    // this.populateCalendar();
   }
 
   // sendProps(lister) {
@@ -127,6 +156,7 @@ class AlertsAndCalendar extends Component {
   }
 
   render() {
+    const events = [{ title: "today's event", date: new Date() }];
     return(
       <Container fluid className="page-container">
         <Container fluid className="siteHeader d-flex align-items-end">
@@ -156,6 +186,22 @@ class AlertsAndCalendar extends Component {
               <Accordion.Header>
                 <h2>Calendar</h2>
               </Accordion.Header>
+              <Accordion.Body>
+                <div id='calendar'></div>
+                <FullCalendar
+                  plugins={[ dayGridPlugin, timeGridPlugin, listPlugin, iCalendarPlugin ]}
+                  defaultView="dayGridMonth"
+                  events={{
+                    url: 'https://calendar.google.com/calendar/ical/swimmeapp%40gmail.com/public/basic.ics',
+                    format: 'ics'
+                  }}
+                  headerToolbar={{
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,listWeek'
+                  }}
+                />
+              </Accordion.Body>
             </Accordion.Item>
           </Accordion>
         </Container>
