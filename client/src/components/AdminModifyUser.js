@@ -83,11 +83,11 @@ class AdminModifyUser extends Component {
         });
       } else{
         var selected = event.target.value;
-        if(selected == "CREATE A NEW USER") {
+        if(selected == "Create a new user") {
           this.setState ({
             currentSelect: event.target.value,
-            username: "Enter a username",
-            password: "Enter a password",
+            username: "",
+            password: "",
             type: "Select user type",
             type_bool: "Select user type",
             userid: null,
@@ -251,12 +251,19 @@ class AdminModifyUser extends Component {
       )
   }
 
+  sendProps() {
+    var logged = this.props.location.state.logged;
+    var admin = this.props.location.state.admin;
+    var user = this.props.location.state.user;
+    this.props.history.push("/admin", { logged: logged, admin: admin, user: user} );
+  }
+
   populatePage() {
     fetch("http://localhost:3001/user_info")
       .then(res => res.json())
       .then(
         (result) => {
-          result.unshift({username: "CREATE A NEW USER"});
+          result.unshift({username: "Create a new user"});
           this.setState({
             users: result
           });
@@ -279,17 +286,17 @@ class AdminModifyUser extends Component {
       <Container fluid className="page-container">
         <Container fluid className="siteHeader d-flex align-items-end">
           <h1 className="siteHeaderTitle px-3 mb-3">Admin</h1>
+        </Container>        
+        <Container className="px-3">
+          <a onClick={() => this.sendProps()} className="standalone">
+            <p><FontAwesomeIcon icon={faChevronLeft} className="px-0"/> Back to Admin Dashboard</p>
+          </a>
+          <h2 className="sectionTitle">Modify User</h2>
         </Container>
-        <Row className="px-3">
-          <h2>Modify User</h2>
-        </Row>
-        <a href="/admin" className="standalone">
-          <p><FontAwesomeIcon icon={faChevronLeft} className="px-0"/> Back to Admin Dashboard</p>
-        </a>
         <Container className="px-4">
-          <Form className="pb-3" onSubmit={this.updateUser}>
-            <Form.Group  as={Row} className="mb-3">
-              <Form.Label><h4>Select a User</h4></Form.Label>
+          <Form className="py-3" onSubmit={this.updateUser}>
+            <Form.Group className="mb-3">
+              <Form.Label><h4 className="sectionTitle">Select a User</h4></Form.Label>
               <Form.Select
                 aria-label="Select which user to modify"
                 value={this.state.currentSelect}
@@ -306,7 +313,7 @@ class AdminModifyUser extends Component {
               </Form.Select>
             </Form.Group>
 
-            <Form.Group as={Row} className="mb-3" controlId="form.Text">
+            <Form.Group as={Row} className="mb-3"mx-2>
               <Form.Label>Username</Form.Label>
               <div className="d-flex">
                 <Form.Control
@@ -323,7 +330,7 @@ class AdminModifyUser extends Component {
               </div>
             </Form.Group>
             
-            <Form.Group as={Row} className="mb-3" controlId="form.Text">
+            <Form.Group as={Row} className="mb-3">
               <Form.Label>Password</Form.Label>
               <div className="d-flex">
                 <Form.Control
@@ -336,7 +343,7 @@ class AdminModifyUser extends Component {
               </div>
             </Form.Group>
             
-            <Form.Group as={Row} className="mb-3" controlId="form.Text">
+            <Form.Group as={Row} className="mb-3"mx-2>
               <Form.Label>User Type</Form.Label>
               <div className="d-flex">
                 <Form.Select
@@ -358,7 +365,7 @@ class AdminModifyUser extends Component {
               <Button
                 as={Link}
                 to={{pathname: "/admin", state: {logged: true}}}
-                className="gray-button">
+                variant="secondary">
                   Cancel
               </Button>
               <Button onClick={this.createUser} className={"green-button " + (this.state.createsubmit ? "" : "disabled")} disabled={!this.state.createsubmit}>Create</Button>

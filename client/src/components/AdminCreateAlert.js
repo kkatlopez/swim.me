@@ -106,73 +106,74 @@ class AdminCreateAlert extends Component {
         <Container fluid className="siteHeader d-flex align-items-end">
           <h1 className="siteHeaderTitle px-3 mb-3">Admin</h1>
         </Container>
-        <Row className="px-3">
-          <h2>Create Alert</h2>
-        </Row>
         <Container className="px-4">
-        <a onClick={() => this.sendProps()} className="standalone">
-          <p><FontAwesomeIcon icon={faChevronLeft} className="px-0"/> Back to Admin Dashboard</p>
-        </a>
-        <Form className="pb-3">
-          <Form.Group as={Row} className="mb-3" controlId="form.Text">
-            <Form.Label>Alert Description</Form.Label>
-              <div className="d-flex">
-                <Form.Control
-                  type="text"
-                  placeholder="Enter short alert description"
-                  className="me-2"
-                  aria-label="Alert Description"
-                  value={this.state.text}
-                  onChange={this.changeText}
-                  isInvalid={!this.state.isubmittable}
-                />
-                <Form.Control.Feedback type="invalid">
-                  Enter a description.
-                </Form.Control.Feedback>
-              </div>
-          </Form.Group>
-            <Form.Group as={Row} className="mb-3" controlId="form.Priority">
-              <Form.Label>Alert Type</Form.Label>
-              <div className="d-flex">
-                <Form.Select 
-                  aria-label="Select alert priority"
-                  placeholder="Select alert priority"
-                  value={this.state.type}
-                  onChange={this.changeType}
-                  isInvalid={!this.state.isubmittable}
-                >
-                  <option>Select alert priority</option>
-                  <option value="High">High</option>
-                  <option value="Medium">Medium</option>
-                  <option value="Low">Low</option>
-                  <option value="Info">Info</option>
-                </Form.Select>
-                <Form.Control.Feedback type="invalid">
-                  Select a priority.
-                </Form.Control.Feedback>
-              </div>
-          </Form.Group>
-            <Form.Group as={Row} className="mb-3" controlId="form.Date">
-              <Form.Label>Alert End Date</Form.Label>
-              <div className="d-flex">
-                <Form.Control
-                  type="date"
-                  className="me-2"
-                  value={this.state.endDate}
-                  onChange={this.changeDate}
-                  isInvalid={!this.state.isubmittable}
-                />
-                <Form.Control.Feedback type="invalid">
-                  Select a date in the future.
-                </Form.Control.Feedback>
-              </div>
-          </Form.Group>
-            <Form.Group as={Row} className="mb-3" controlId="form.Submit">
-              <div>
-                <Button onClick={this.confirmForm} className={"green-button " + (this.state.submittable ? "" : "disabled")} disabled={!this.state.submittable}>Submit</Button>
-              </div>
+          <a onClick={() => this.sendProps()} className="standalone">
+            <p><FontAwesomeIcon icon={faChevronLeft} className="px-0"/> Back to Admin Dashboard</p>
+          </a>
+          <h2 className="sectionTitle">Create Alert</h2>
+        </Container>
+        <Container className="px-4">
+       
+          <Form className="py-3">
+            <Form.Group className="mb-3" controlId="form.Text">
+              <Form.Label>Alert Description</Form.Label>
+                <div className="d-flex">
+                  <Form.Control
+                    type="text"
+                    placeholder="Enter short alert description"
+                    className="me-2"
+                    aria-label="Alert Description"
+                    value={this.state.text}
+                    onChange={this.changeText}
+                    isInvalid={!this.state.isubmittable}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    Enter a description.
+                  </Form.Control.Feedback>
+                </div>
             </Form.Group>
-          </Form>
+              <Form.Group as={Row} className="mb-3" controlId="form.Priority">
+                <Form.Label>Alert Type</Form.Label>
+                <div className="d-flex">
+                  <Form.Select 
+                    aria-label="Select alert priority"
+                    placeholder="Select alert priority"
+                    value={this.state.type}
+                    onChange={this.changeType}
+                    isInvalid={!this.state.isubmittable}
+                  >
+                    <option>Select alert priority</option>
+                    <option value="High">High</option>
+                    <option value="Medium">Medium</option>
+                    <option value="Low">Low</option>
+                    <option value="Info">Info</option>
+                  </Form.Select>
+                  <Form.Control.Feedback type="invalid">
+                    Select a priority.
+                  </Form.Control.Feedback>
+                </div>
+            </Form.Group>
+              <Form.Group as={Row} className="mb-3" controlId="form.Date">
+                <Form.Label>Alert End Date</Form.Label>
+                <div className="d-flex">
+                  <Form.Control
+                    type="date"
+                    className="me-2"
+                    value={this.state.endDate}
+                    onChange={this.changeDate}
+                    isInvalid={!this.state.isubmittable}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    Select a date in the future.
+                  </Form.Control.Feedback>
+                </div>
+            </Form.Group>
+              <Form.Group as={Row} className="mb-3" controlId="form.Submit">
+                <div>
+                  <Button onClick={this.confirmForm} className={"green-button " + (this.state.submittable ? "" : "disabled")} disabled={!this.state.submittable}>Submit</Button>
+                </div>
+              </Form.Group>
+            </Form>
         </Container>
         <Navigation logged = {this.props.location.state.logged} admin = {this.props.location.state.admin} user = {this.props.location.state.user}/>
       </Container>

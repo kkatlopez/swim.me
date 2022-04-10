@@ -1,20 +1,22 @@
 // server/index.js
 require('dotenv').config();
 const express = require("express");
+const cors = require("cors");
 const bcrypt = require("bcryptjs");
 const { info } = require("console");
 const mongoose = require('mongoose'),
   Schema = mongoose.Schema,
   salt_factor = 10;
 const PORT = process.env.PORT || 3001;
-
 const app = express();
-
 app.use(express.json());
+// app.use(cors());
 
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "http://localhost:3000"); // update to match the domain you will make the request from
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
   next();
 });
 

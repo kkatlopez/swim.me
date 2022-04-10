@@ -73,11 +73,14 @@ class MeetResults extends Component {
   render() {
     return(
       <Container fluid className="page-container">
-        <Container fluid className="siteHeader d-flex align-items-end">
+        <Container fluid className="siteHeader d-flex align-items-end justify-content-between">
           <h1 className="siteHeaderTitle px-3 mb-3">Meet Results</h1>
-          {this.props.location.state.admin && <Button onClick={() => this.sendPropsAdmin()}>
-           <FontAwesomeIcon icon={faUserGear} className="fa-2x"/>
-          </Button>}
+          {this.props.location.state.admin &&
+            <Button className="mb-3" onClick={() => this.sendPropsAdmin()}>
+            <FontAwesomeIcon icon={faUserGear} className="admin fa-xl"/>
+            Admin
+            </Button>
+          }
         </Container>
         <Container className="px-4">
           <label>Meet</label>

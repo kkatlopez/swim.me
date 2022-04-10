@@ -43,51 +43,38 @@ class Admin extends Component {
           <h1 className="siteHeaderTitle px-3 mb-3">Admin</h1>
         </Container>
         <Container className="px-4">
-          <Row className="px-3">
-            <h2>Admin Dashboard</h2>
-          </Row>
-          <Row className="px-3">
-            <Col>
-              <a onClick={() => this.sendProps("/")} className="standalone">
-                <p><FontAwesomeIcon icon={faChevronLeft} className="px-0"/> Back to Home</p>
-              </a>
-              <Button
-                // as={Link}
-                // to={{pathname: "/admin/create-alert", state: {logged: true}}}
-                className="green-button"
-                onClick={() => this.sendProps("/admin/create-alert")}
-              >
+          <a onClick={() => this.sendProps("/")} className="standalone">
+            <p><FontAwesomeIcon icon={faChevronLeft} className="px-0"/> Back to Meet Results</p>
+          </a>
+          <h2 className="sectionTitle">Admin Dashboard</h2>
+          <h3 className="sectionTitle text-center pt-3 pb-2">What would you like to do?</h3>
+          <div className="d-flex justify-content-center">
+            <Button
+                  // as={Link}
+                  // to={{pathname: "/admin/create-alert", state: {logged: true}}}
+                  className="mx-2"
+                  onClick={() => this.sendProps("/admin/create-alert")}
+                >
                   Create Alert
-              </Button>
-            </Col>
-          </Row>
-          
-          <Row className="px-3">
-            <Col>
-              <Button
+            </Button>
+            <Button
                 // as={Link}
                 // to={{pathname: "/admin/edit-swimmer", state: {logged: true}}}
-                className="green-button"
+                className="mx-2"
                 onClick={() => this.sendProps("/admin/edit-swimmer")}
               >
-                  Edit Swimmer
+                Edit Swimmer
               </Button>
-            </Col>
-          </Row>
-
-          <Row className="px-3">
-            <Col>
               <Button
                 // as={Link}
                 // to={{pathname: "/admin/modify-user", state: {logged: true}}}
-                className="green-button"
+                className="mx-2"
                 onClick={() => this.sendProps("/admin/modify-user")}
               >
-                  Modify User
-                </Button>
-            </Col>
-          </Row>
-          {/* <Row className="px-3">
+                Modify User
+              </Button>
+          </div>
+          {/* <Row>
             <Col>
               <Button as={Link} to="/admin" logged={false} className="gray-button">Sign Out</Button>
             </Col>

@@ -133,8 +133,9 @@ class AdminEditForm extends Component {
       .then(res => res.json())
       .then(
         (result) => {
+          var sorted = result.sort((a, b) => (a.lastName + ", " + a.firstName) > (b.lastName + ", " + b.firstName) ? 1 : -1);
           this.setState({
-            swimmers: result
+            swimmers: sorted
           });
         },
         (error) => {
@@ -163,16 +164,16 @@ class AdminEditForm extends Component {
         <Container fluid className="siteHeader d-flex align-items-end">
           <h1 className="siteHeaderTitle px-3 mb-3">Admin</h1>
         </Container>
-        <Row className="px-3">
-          <h2>Edit Swimmer</h2>
-        </Row>
-        <a onClick={() => this.sendProps()} className="standalone">
-          <p><FontAwesomeIcon icon={faChevronLeft} className="px-0"/> Back to Admin Dashboard</p>
-        </a>
         <Container className="px-4">
-          <Form className="pb-3" onSubmit={this.updateSwimmer}>
-            <Form.Group  as={Row} className="mb-3">
-              <Form.Label><h4>Select a Swimmer</h4></Form.Label>
+          <a onClick={() => this.sendProps()} className="standalone">
+            <p><FontAwesomeIcon icon={faChevronLeft} className="px-0"/> Back to Admin Dashboard</p>
+          </a>
+          <h2 className="sectionTitle">Edit Swimmer</h2>
+        </Container>
+        <Container className="px-4">
+          <Form className="py-3" onSubmit={this.updateSwimmer}>
+            <Form.Group className="mb-3">
+              <Form.Label><h4 className="sectionTitle">Select a Swimmer</h4></Form.Label>
               <Form.Select
                 aria-label="Select which swimmer to edit"
                 value={this.state.currentSelect}
