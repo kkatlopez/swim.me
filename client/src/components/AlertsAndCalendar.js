@@ -75,32 +75,32 @@ class AlertsAndCalendar extends Component {
             if(x.alert_end_date > y.alert_end_date) {
               return 1;
             }
-            // if (y.alert_type == "High") {
-            //   return 1;
-            // }
-            // if(x.alert_type == "High") {
-            //   return -1;
-            // }
-            // if(y.alert_type == "Medium") {
-            //   return 1;
-            // }
-            // if(x.alert_type == "Medium") {
-            //   return -1;
-            // }
-            // if(y.alert_type == "Low") {
-            //   return 1;
-            // }
-            // if(x.alert_type == "Low") {
-            //   return -1;
-            // }
-            // if(y.alert_type == "Info") {
-            //   return 1;
-            // }
+            if (y.alert_type == "High") {
+              return 1;
+            }
+            if(x.alert_type == "High") {
+              return -1;
+            }
+            if(y.alert_type == "Medium") {
+              return 1;
+            }
+            if(x.alert_type == "Medium") {
+              return -1;
+            }
+            if(y.alert_type == "Low") {
+              return 1;
+            }
+            if(x.alert_type == "Low") {
+              return -1;
+            }
+            if(y.alert_type == "Info") {
+              return 1;
+            }
             return -1;
           });
 
           const today = new Date().toISOString().split('T')[0];
-          result = result.filter(item => item.alert_end_date.split('T')[0] == today);
+          result = result.filter(item => item.alert_end_date.split('T')[0] >= today);
           this.setState({
             alertList: result.slice(0, 3)
           });
