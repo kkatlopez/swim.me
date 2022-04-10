@@ -10,9 +10,10 @@ import moment from 'moment';
 import FullCalendar from '@fullcalendar/react';
 // import { Calendar } from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
-import iCalendarPlugin from '@fullcalendar/icalendar';
+// import iCalendarPlugin from '@fullcalendar/icalendar';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
+import googleCalendarPlugin from '@fullcalendar/google-calendar';
 
 class AlertsAndCalendar extends Component {
 
@@ -163,7 +164,8 @@ class AlertsAndCalendar extends Component {
           <h1 className="siteHeaderTitle px-3 mb-3">Alerts</h1>
         </Container>
         <Container className="px-4">
-          <Accordion flush defaultActiveKey="0">
+
+          <Accordion flush defaultActiveKey='1' alwaysOpen>
             <Accordion.Item eventKey="0">
               <Accordion.Header>
                 <h2>Upcoming</h2>
@@ -187,18 +189,17 @@ class AlertsAndCalendar extends Component {
                 <h2>Calendar</h2>
               </Accordion.Header>
               <Accordion.Body>
-                <div id='calendar'></div>
-                <FullCalendar
-                  plugins={[ dayGridPlugin, timeGridPlugin, listPlugin, iCalendarPlugin ]}
-                  defaultView="dayGridMonth"
-                  events={{
-                    url: 'https://calendar.google.com/calendar/ical/swimmeapp%40gmail.com/public/basic.ics',
-                    format: 'ics'
+              <FullCalendar
+                  // plugins={[ dayGridPlugin, timeGridPlugin, listPlugin, iCalendarPlugin ]}
+                  plugins={[ dayGridPlugin, googleCalendarPlugin, timeGridPlugin, listPlugin ]}
+                  initialView="dayGridMonth"
+                  events= {{
+                    googleCalendarId: 'swimmeapp@gmail.com'
                   }}
                   headerToolbar={{
-                    left: 'prev,next today',
-                    center: 'title',
-                    right: 'dayGridMonth,timeGridWeek,listWeek'
+                    right: 'prev,next today',
+                    left: 'title',
+                    center: 'dayGridMonth,timeGridWeek,listWeek'
                   }}
                 />
               </Accordion.Body>

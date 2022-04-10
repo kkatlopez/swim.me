@@ -25,6 +25,7 @@
     "@fortawesome/react-fontawesome": "^0.1.17",
     "@fullcalendar/core": "^5.11.0",
     "@fullcalendar/daygrid": "^5.11.0",
+    "@fullcalendar/google-calendar": "^5.11.0",
     "@fullcalendar/icalendar": "^5.11.0",
     "@fullcalendar/list": "^5.11.0",
     "@fullcalendar/react": "^5.11.0",
