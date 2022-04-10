@@ -20,6 +20,7 @@ class AdminEditForm extends Component {
       hightext: "Please select a swimmer",
       currentSelect: -1,
       name: "",
+      show: false
       // blueing: true
     }
 
@@ -72,6 +73,7 @@ class AdminEditForm extends Component {
           classtext: this.state.swimmers[temp].classYear,
           hometext: this.state.swimmers[temp].hometown,
           hightext: this.state.swimmers[temp].highSchool,
+          show: true
         });
       }
 	}
@@ -103,12 +105,21 @@ class AdminEditForm extends Component {
   updateSwimmer = (event) => {
     event.preventDefault();
     event.stopPropagation();
+    // console.log(JSON.stringify(this.state));
     fetch("http://localhost:3001/edit_swimmer_info", {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(this.state)
+      body: JSON.stringify({
+        firsttext: this.state.firsttext, 
+        lasttext: this.state.lasttext, 
+        postext: this.state.postext,
+        classtext: this.state.classtext,
+        hometext: this.state.hometext,
+        hightext: this.state.hightext,
+        name: this.state.name
+      })
     })
       .then(
         (result) => {
@@ -189,98 +200,102 @@ class AdminEditForm extends Component {
                 }
               </Form.Select>
             </Form.Group>
-
-            <Form.Group as={Row} className="mb-3" controlId="form.Text">
-              <Form.Label>First Name</Form.Label>
-              <div className="d-flex">
-                <Form.Control
-                  type="text"
-                  value={this.state.firsttext}
-                  onChange={this.changeFirst}
-                  className="me-2"
-                />
-              </div>
-            </Form.Group>
+           
+            {this.state.show &&
+              <Container fluid>
+                <Form.Group as={Row} className="mb-3" controlId="form.Text">
+                <Form.Label>First Name</Form.Label>
+                <div className="d-flex">
+                  <Form.Control disabled
+                    type="text"
+                    value={this.state.firsttext}
+                    onChange={this.changeFirst}
+                    className="me-2"
+                  />
+                </div>
+                </Form.Group>
             
-            <Form.Group as={Row} className="mb-3" controlId="form.Text">
-              <Form.Label>Last Name</Form.Label>
-              <div className="d-flex">
-                <Form.Control
-                  type="text"
-                  value={this.state.lasttext}
-                  onChange={this.changeLast}
-                  className="me-2"
-                />
-              </div>
-            </Form.Group>
+                <Form.Group as={Row} className="mb-3" controlId="form.Text">
+                  <Form.Label>Last Name</Form.Label>
+                  <div className="d-flex">
+                    <Form.Control
+                      type="text" disabled
+                      value={this.state.lasttext}
+                      onChange={this.changeLast}
+                      className="me-2"
+                    />
+                  </div>
+                </Form.Group>
             
-            <Form.Group as={Row} className="mb-3" controlId="form.Text">
-              <Form.Label>Position</Form.Label>
-              <div className="d-flex">
-                <Form.Control
-                  type="text"
-                  value={this.state.postext}
-                  onChange={this.changePos}
-                  className="me-2"
-                />
-              </div>
-            </Form.Group>
+                <Form.Group as={Row} className="mb-3" controlId="form.Text">
+                  <Form.Label>Position</Form.Label>
+                  <div className="d-flex">
+                    <Form.Control
+                      type="text"
+                      value={this.state.postext}
+                      onChange={this.changePos}
+                      className="me-2"
+                    />
+                  </div>
+                </Form.Group>
             
-            <Form.Group as={Row} className="mb-3" controlId="form.Text">
-              <Form.Label>Class Year</Form.Label>
-              <div className="d-flex">
-                <Form.Select
-                  aria-label="Select a swimmer"
-                  placeholder="Select a swimmer"
-                  value={this.state.classtext}
-                  onChange={this.changeClass}
-                  className="me-2"
-                >
-                  <option>Select class year</option>
-                  <option value="Freshman">Freshman</option>
-                  <option value="Sophomore">Sophomore</option>
-                  <option value="Junior">Junior</option>
-                  <option value="Senior">Senior</option>
-                  <option value="Grad">Grad</option>
-                </Form.Select>
-              </div>
-            </Form.Group>
+                <Form.Group as={Row} className="mb-3" controlId="form.Text">
+                  <Form.Label>Class Year</Form.Label>
+                  <div className="d-flex">
+                    <Form.Select
+                      aria-label="Select a swimmer"
+                      placeholder="Select a swimmer"
+                      value={this.state.classtext}
+                      onChange={this.changeClass}
+                      className="me-2"
+                    >
+                      <option>Select class year</option>
+                      <option value="Freshman">Freshman</option>
+                      <option value="Sophomore">Sophomore</option>
+                      <option value="Junior">Junior</option>
+                      <option value="Senior">Senior</option>
+                      <option value="Grad">Grad</option>
+                    </Form.Select>
+                  </div>
+                </Form.Group>
             
-            <Form.Group as={Row} className="mb-3" controlId="form.Text">
-              <Form.Label>Hometown</Form.Label>
-              <div className="d-flex">
-                <Form.Control
-                  type="text"
-                  value={this.state.hometext}
-                  onChange={this.changeHome}
-                  className="me-2"
-                />
-              </div>
-            </Form.Group>
+                <Form.Group as={Row} className="mb-3" controlId="form.Text">
+                  <Form.Label>Hometown</Form.Label>
+                  <div className="d-flex">
+                    <Form.Control
+                      type="text"
+                      value={this.state.hometext}
+                      onChange={this.changeHome}
+                      className="me-2"
+                    />
+                  </div>
+                </Form.Group>
             
-            <Form.Group as={Row} className="mb-3" controlId="form.Text">
-              <Form.Label>High School</Form.Label>
-              <div className="d-flex">
-                <Form.Control
-                  type="text"
-                  value={this.state.hightext}
-                  onChange={this.changeHigh}
-                  className="me-2"
-                />
-              </div>
-            </Form.Group>
+                <Form.Group as={Row} className="mb-3" controlId="form.Text">
+                  <Form.Label>High School</Form.Label>
+                  <div className="d-flex">
+                    <Form.Control
+                      type="text"
+                      value={this.state.hightext}
+                      onChange={this.changeHigh}
+                      className="me-2"
+                    />
+                  </div>
+                </Form.Group>
             
-            <div className="admin-submit-btn-panel">
-              <Button
-                as={Link}
-                to={{pathname: "/admin", state: {logged: true}}}
-                className="gray-button">
-                  Cancel
-              </Button>
-              <Button type="submit" className="green-button admin-submit-btn">Submit</Button>
-            </div>
-          </Form>
-        </Container>
+                <div className="admin-submit-btn-panel">
+                  <Button
+                    as={Link}
+                    to={{pathname: "/admin", state: {logged: true}}}
+                    className="gray-button">
+                      Cancel
+                  </Button>
+                  <Button type="submit" className="green-button admin-submit-btn">Submit</Button>
+                </div>
+              </Container>
+            }
+            </Form>
+          </Container>
         <Navigation logged = {this.props.location.state.logged} admin = {this.props.location.state.admin} user = {this.props.location.state.user}/>
       </Container>
     );
