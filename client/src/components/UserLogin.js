@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
-import { Link, withRouter } from 'react-router-dom';
-import { Navbar, Nav, Container, Form, Button, Row, Col, FloatingLabel} from 'react-bootstrap';
-import '../css/loginview.css';
+import { withRouter } from 'react-router-dom';
+import { Container, Form, Button, FloatingLabel} from 'react-bootstrap';
 
 class UserLanding extends Component {
 
@@ -117,7 +115,6 @@ class UserLanding extends Component {
           </Container>
 
         </Container>
-      // </div>
     );
   }
 }
