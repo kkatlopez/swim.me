@@ -1,0 +1,21 @@
+.fc .fc-toolbar {
+  flex-wrap: wrap;
+  display: flex;
+}
+
+table > thead {
+  background-color: #1D62A0;
+}
+
+.fc .fc-col-header-cell-cushion {
+  color: #fff !important;
+  text-decoration: none;
+}
+
+.fc-toolbar-chunk{
+  padding-bottom: 0.5rem;
+}
+
+.fc-dayGridMonth-view, .fc-timeGridWeek-view, .fc-timeGridDay-view {
+  height: 65vh;
+}
