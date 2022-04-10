@@ -15,27 +15,31 @@ class RosterProfileLatest extends Component {
       };
     }
 
-    getSwimmerInfo() {
+    async getSwimmerInfo() {
       fetch("http://localhost:3001/swimmers")
         .then(res => res.json())
         .then(
           (result) => {
             var specific_result = result.find(x => (x.firstName === this.state.firstname && x.lastName === this.state.lastname));
+            specific_result.meetsSwam.sort(function(a, b){
+              return new Date(a[1]) - new Date(b[1]);
+            });
             this.setState({
               latestmeet: specific_result.meetsSwam.at(-1),
               fullname: this.state.firstname + " " + this.state.lastname
             });
+            this.getLatestMeet(this.state.latestmeet, this.state.fullname);
           }
         )
     }
 
-    getLatestMeet(latestmeet, fullname) {
-      fetch("http://localhost:3001/meet_info")
+    async getLatestMeet(latestmeet, fullname) {
+      await fetch("http://localhost:3001/meet_info")
         .then(res => res.json())
         .then(
           (result) => {
             var specific_result = result.find(x => (x.meetName === this.state.latestmeet[0] && x.meetStartDate === this.state.latestmeet[1]));
-            var i, j, k, l;
+            var i, j, k;
             var latest = [];
             for (i = 0; i < specific_result.meetEvents.length; i++) {
               for (j = 0; j < specific_result.meetEvents[i].length; j++) {
@@ -55,7 +59,7 @@ class RosterProfileLatest extends Component {
 
     componentDidMount(){
       this.getSwimmerInfo();
-      this.getLatestMeet(this.state.latestmeet, this.state.fullname);
+      // this.getLatestMeet(this.state.latestmeet, this.state.fullname);
     }
 
     render() {

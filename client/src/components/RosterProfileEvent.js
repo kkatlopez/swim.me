@@ -91,7 +91,7 @@ class RosterProfileLatest extends Component {
 
   render() {
     return(
-      <Container fluid className="page-container">
+      <Container fluid className="page-container px-4">
           <label>Event</label>
           <DropdownButton className="dropdown pb-3" title="Select an event">
               {

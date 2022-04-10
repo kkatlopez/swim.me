@@ -23,7 +23,7 @@ class RosterCard extends Component {
       this.setState({
         imageurl: url
       });
-      console.log(this.state.imageurl);
+      // console.log(this.state.imageurl);
     }
 
     redirect() {
