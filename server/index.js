@@ -2,28 +2,37 @@
 require('dotenv').config();
 const express = require("express");
 const bcrypt = require("bcryptjs");
+const socketIo = require("socket.io");
+const http = require("http");
 const { info } = require("console");
 const mongoose = require('mongoose'),
   Schema = mongoose.Schema,
   salt_factor = 10;
 const PORT = process.env.PORT || 3001;
+const PORT2 = process.env.PORT2 || 3002;
 
-var context = require('rabbit.js').createContext('amqps://' + String(process.env.RABBITMQUSER) + ':' + String(process.env.RABBITMQPASS) + '@woodpecker.rmq.cloudamqp.com/' + String(process.env.RABBITMQUSER));
+// var context = require('rabbit.js').createContext('amqps://' + String(process.env.RABBITMQUSER) + ':' + String(process.env.RABBITMQPASS) + '@woodpecker.rmq.cloudamqp.com/' + String(process.env.RABBITMQUSER));
 // var context = require('rabbit.js').createContext('amqps://dyifajdi:dY01hBir0J82rhSbYjBC0TwMH0BxjHSt@woodpecker.rmq.cloudamqp.com/dyifajdi');
-context.on('ready', function() {
-  var pub = context.socket('PUB'), sub = context.socket('SUB');
-  sub.pipe(process.stdout);
-  sub.connect('events', function() {
-    pub.connect('events', function() {
-      pub.write(JSON.stringify({welcome: 'rabbit.js'}), 'utf8');
-    });
-  });
-});
+// context.on('ready', function() {
+//   var pub = context.socket('PUB'), sub = context.socket('SUB');
+//   sub.pipe(process.stdout);
+//   sub.connect('events', function() {
+//     pub.connect('events', function() {
+//       pub.write(JSON.stringify({welcome: 'rabbit.js'}), 'utf8');
+//     });
+//   });
+// });
 
 
 const app = express();
 
 app.use(express.json());
+
+
+
+// const index = require("./routes/index");
+// app.use(index);
+
 
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "http://localhost:3000"); // update to match the domain you will make the request from
@@ -468,9 +477,74 @@ app.post("/get_messages", async (req, res) => {
 
 //---------------------------------------------------MISC FUNCTIONS---------------------------------------------------
 
-app.listen(PORT, () => {
+// const app2 = express();
+const httpServer = http.createServer(app);
+// const io = socketIo(server);
+
+let interval;
+
+const io = require("socket.io")(httpServer, {
+  cors: {
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST"]
+  }
+});
+
+io.on("connection", (socket) => {
+  console.log("New client connected");
+  if (interval) {
+    clearInterval(interval);
+  }
+  interval = setInterval(() => getApiAndEmit(socket), 1000);
+  socket.on("disconnect", () => {
+    console.log("Client disconnected");
+    clearInterval(interval);
+  });
+});
+
+const getApiAndEmit = socket => {
+  // const response = new Date();
+  const response = {sender: "Gwyneth", senderIMG: "https://rpiathletics.com/images/2021/10/5/Yuen_Gwyneth.jpg", messageBody: "wyd?", timestamp: "1:02 PM"}
+  // Emitting a new message. Will be consumed by the client
+  socket.emit("3", response);
+};
+
+app.post("/send_message", async (req, res) => {
+  // console.log(req.body.user);
+  connection.db.collection("chats", function (err, collection) {
+    collection.countDocuments({ "chatID": req.body.chatID }, function (err, count) {
+      try {
+        if (count > 0) {
+          collection.find({ "chatID": req.body.chatID }).toArray(function (err, data) {
+            connection.db.collection("credentials", function (err, collection2) {
+            collection2.find({ "userID": req.body.chatID }).toArray(function (err, data2) {
+              const message = {sender: data2[0].firstName + " " + data2[0].lastName, senderIMG: data2[0].picture, messageBody: req.body.message, timestamp: Date()}
+                for (let i = 0; i < data2[0].users.length; i++) {
+
+                  socket.emit(data2[0].users[i], message);
+                }})
+
+              }
+            }
+          }
+            else {
+              return res.send({ "Result": false });
+            }
+          }
+        catch (err) {
+          console.log(err);
+        }});
+      }
+    });
+  });
+
+httpServer.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);
 });
+
+// server.listen(PORT2, () => {
+//   console.log(`Server listening on ${PORT2}`);
+// });
 
 
 //---------------------------------------------------TEST CODE---------------------------------------------------

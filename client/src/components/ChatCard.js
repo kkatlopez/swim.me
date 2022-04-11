@@ -48,7 +48,7 @@ class ChatCard extends Component {
           </Card.Body>
             </div>
           </div>
-          
+
         </Card>
       </Container>
     );
