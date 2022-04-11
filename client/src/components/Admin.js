@@ -48,39 +48,39 @@ class Admin extends Component {
           </a>
           <h2 className="sectionTitle">Admin Dashboard</h2>
           <h3 className="sectionTitle text-center pt-3 pb-2">What would you like to do?</h3>
-          <div className="d-flex justify-content-center">
+          <div className="d-flex">
             <Button
-                  // as={Link}
-                  // to={{pathname: "/admin/create-alert", state: {logged: true}}}
-                  className="mx-2"
-                  onClick={() => this.sendProps("/admin/create-alert")}
-                >
-                  Create Alert
+              // as={Link}
+              // to={{pathname: "/admin/create-alert", state: {logged: true}}}
+              className="mx-2"
+              onClick={() => this.sendProps("/admin/create-alert")}
+            >
+              Create Alert
             </Button>
             <Button
-                // as={Link}
-                // to={{pathname: "/admin/edit-swimmer", state: {logged: true}}}
-                className="mx-2"
-                onClick={() => this.sendProps("/admin/edit-swimmer")}
-              >
-                Edit Swimmer
-              </Button>
-              <Button
-                // as={Link}
-                // to={{pathname: "/admin/modify-user", state: {logged: true}}}
-                className="mx-2"
-                onClick={() => this.sendProps("/admin/modify-user")}
-              >
-                Modify / Delete User
-              </Button>
-              <Button
-                // as={Link}
-                // to={{pathname: "/admin/modify-user", state: {logged: true}}}
-                className="mx-2"
-                onClick={() => this.sendProps("/admin/create-user")}
-              >
-                Create User
-              </Button>
+              // as={Link}
+              // to={{pathname: "/admin/edit-swimmer", state: {logged: true}}}
+              className="mx-2"
+              onClick={() => this.sendProps("/admin/edit-swimmer")}
+            >
+              Edit Swimmer
+            </Button>
+            <Button
+              // as={Link}
+              // to={{pathname: "/admin/modify-user", state: {logged: true}}}
+              className="mx-2"
+              onClick={() => this.sendProps("/admin/modify-user")}
+            >
+              Modify / Delete User
+            </Button>
+            <Button
+              // as={Link}
+              // to={{pathname: "/admin/modify-user", state: {logged: true}}}
+              className="mx-2"
+              onClick={() => this.sendProps("/admin/create-user")}
+            >
+              Create User
+            </Button>
           </div>
           {/* <Row>
             <Col>

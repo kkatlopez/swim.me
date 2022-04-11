@@ -257,7 +257,6 @@ class AdminEditForm extends Component {
                       onChange={this.changeClass}
                       className="me-2"
                     >
-                      <option>Select class year</option>
                       <option value="Freshman">Freshman</option>
                       <option value="Sophomore">Sophomore</option>
                       <option value="Junior">Junior</option>
