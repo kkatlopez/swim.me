@@ -535,15 +535,22 @@ app.post("/add_user", async (req, res) => {
       var user = req.body.username;
       var pass = req.body.password;
       var ad = req.body.type_bool;
+
+      var id;
+      await user_info.countDocuments({}, function( err, count){
+        // console.log( "Number of users:", count );
+        id = count;
+      })
       // var id = req.body.userid;
-      var id = user_info.length + 1;
+      // var id = user_info.length + 1;
+      // console.log(user_info.length);
+      // console.log(user_info.countDocuments({}));
+      // console.log(id);
 
       var hashedPassword = await bcrypt.hash(pass, saltRounds);
 
-      // console.log(user + " " + pass + " " + ad + " " + id + " " + hashedPassword);
-
       // a document instance
-      user_info.create({ username: user, password: hashedPassword, admin: ad, userID: id, firstName: first, lastName: last }, function(err, new_user) {
+      user_info.create({ username: user, password: hashedPassword, admin: ad, userID: id+1, firstName: first, lastName: last }, function(err, new_user) {
         if (err) return console.error(err);
         console.log("Created new user");
       });
