@@ -48,7 +48,7 @@ class Admin extends Component {
           </a>
           <h2 className="sectionTitle">Admin Dashboard</h2>
           <h3 className="sectionTitle text-center pt-3 pb-2">What would you like to do?</h3>
-          <div className="d-flex">
+          <div className="d-flex justify-content-center">
             <Button
               // as={Link}
               // to={{pathname: "/admin/create-alert", state: {logged: true}}}
