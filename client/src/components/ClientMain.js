@@ -13,6 +13,7 @@ import UserLanding from './UserLogin.js';
 import Admin from './Admin.js';
 import AdminCreateAlert from './AdminCreateAlert';
 import AdminModifyUser from './AdminModifyUser.js';
+import AdminCreateUser from './AdminCreateUser.js';
 import AdminEditForm from './AdminEditForm.js';
 import Messaging from './Messaging.js';
 import SpecificChat from './SpecificChat.js';
@@ -55,6 +56,9 @@ const Main = (props) => {
       }></Route>
       <Route exact path='/admin/modify-user' render={
         () => <div><AdminModifyUser/></div>
+      }></Route>
+       <Route exact path='/admin/create-user' render={
+        () => <div><AdminCreateUser/></div>
       }></Route>
       <Route exact path='/chat' render={
         () => <div><Messaging/></div>

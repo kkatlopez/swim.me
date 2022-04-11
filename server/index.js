@@ -1,7 +1,6 @@
 // server/index.js
 require('dotenv').config();
 const express = require("express");
-const cors = require("cors");
 const bcrypt = require("bcryptjs");
 const { info } = require("console");
 const mongoose = require('mongoose'),
@@ -10,7 +9,6 @@ const mongoose = require('mongoose'),
 const PORT = process.env.PORT || 3001;
 const app = express();
 app.use(express.json());
-// app.use(cors());
 
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "http://localhost:3000"); // update to match the domain you will make the request from
@@ -441,7 +439,7 @@ app.post('/edit_user_info', async (req, res) => {
 
   const saltRounds = 10;
   var hashedPassword = await bcrypt.hash(pass, saltRounds);
-  console.log(user + " " + pass + " " + ad + " " + id + " " + hashedPassword);
+  // console.log(user + " " + pass + " " + ad + " " + id + " " + hashedPassword);
   await user_info.findOneAndUpdate({ userID: id },
     { "$set": {
       username: user,
@@ -532,17 +530,20 @@ app.post("/add_user", async (req, res) => {
     else {
       const saltRounds = 10; // data processing time
 
+      var first = req.body.first;
+      var last = req.body.last;
       var user = req.body.username;
       var pass = req.body.password;
       var ad = req.body.type_bool;
-      var id = req.body.userid;
+      // var id = req.body.userid;
+      var id = user_info.length + 1;
 
       var hashedPassword = await bcrypt.hash(pass, saltRounds);
 
       // console.log(user + " " + pass + " " + ad + " " + id + " " + hashedPassword);
 
       // a document instance
-      user_info.create({ username: user, password: hashedPassword, admin: ad, userID: id }, function(err, new_user) {
+      user_info.create({ username: user, password: hashedPassword, admin: ad, userID: id, firstName: first, lastName: last }, function(err, new_user) {
         if (err) return console.error(err);
         console.log("Created new user");
       });

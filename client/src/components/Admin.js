@@ -71,7 +71,15 @@ class Admin extends Component {
                 className="mx-2"
                 onClick={() => this.sendProps("/admin/modify-user")}
               >
-                Modify User
+                Modify / Delete User
+              </Button>
+              <Button
+                // as={Link}
+                // to={{pathname: "/admin/modify-user", state: {logged: true}}}
+                className="mx-2"
+                onClick={() => this.sendProps("/admin/create-user")}
+              >
+                Create User
               </Button>
           </div>
           {/* <Row>

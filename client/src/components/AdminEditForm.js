@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 // import ReactDOM from 'react-dom';
-import { Container, Form, Button, Row } from 'react-bootstrap';
+import { Container, Form, Button, Row, Modal } from 'react-bootstrap';
 import { Link, withRouter } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
@@ -20,8 +20,8 @@ class AdminEditForm extends Component {
       hightext: "Please select a swimmer",
       currentSelect: -1,
       name: "",
-      show: false
-      // blueing: true
+      show: false,
+      showModal: false
     }
 
     this.changeSwimmer = this.changeSwimmer.bind(this);
@@ -32,6 +32,7 @@ class AdminEditForm extends Component {
     this.changeHome = this.changeHome.bind(this);
     this.changeHigh = this.changeHigh.bind(this);
     this.updateSwimmer = this.updateSwimmer.bind(this);
+    this.closeModal = this.closeModal.bind(this);
 
     //BELOW IS THE CODE TO BLOCK OFF WHEN NOT LOGGED IN
     if(this.props.location.state == undefined){
@@ -49,33 +50,33 @@ class AdminEditForm extends Component {
   }
   
   changeSwimmer = (event) =>{	
-    if(event.target.value == 'placeholder'){
-        var temp = this.state.placeholderBody;
-        this.setState({
-          currentSelect: -1,
-          name: temp,
-          firsttext: temp,
-          lasttext: temp,
-          postext: temp,
-          classtext: temp,
-          hometext: temp,
-          hightext: temp,
+    if (event.target.value == 'placeholder') {
+      var temp = this.state.placeholderBody;
+      this.setState({
+        currentSelect: -1,
+        name: temp,
+        firsttext: temp,
+        lasttext: temp,
+        postext: temp,
+        classtext: temp,
+        hometext: temp,
+        hightext: temp,
         });
-      }else{
-        var selected = event.target.value;
-        var temp = this.state.swimmers.findIndex(record => (record.lastName + ", " + record.firstName) == selected);
-        this.setState ({
-          name: selected,
-          currentSelect: event.target.value,
-          firsttext: this.state.swimmers[temp].firstName,
-          lasttext: this.state.swimmers[temp].lastName,
-          postext: this.state.swimmers[temp].position,
-          classtext: this.state.swimmers[temp].classYear,
-          hometext: this.state.swimmers[temp].hometown,
-          hightext: this.state.swimmers[temp].highSchool,
-          show: true
-        });
-      }
+    } else {
+      var selected = event.target.value;
+      var temp = this.state.swimmers.findIndex(record => (record.lastName + ", " + record.firstName) == selected);
+      this.setState ({
+        name: selected,
+        currentSelect: event.target.value,
+        firsttext: this.state.swimmers[temp].firstName,
+        lasttext: this.state.swimmers[temp].lastName,
+        postext: this.state.swimmers[temp].position,
+        classtext: this.state.swimmers[temp].classYear,
+        hometext: this.state.swimmers[temp].hometown,
+        hightext: this.state.swimmers[temp].highSchool,
+        show: true
+      });
+    }
 	}
   
   changeFirst = (event) => {
@@ -105,7 +106,6 @@ class AdminEditForm extends Component {
   updateSwimmer = (event) => {
     event.preventDefault();
     event.stopPropagation();
-    // console.log(JSON.stringify(this.state));
     fetch("http://localhost:3001/edit_swimmer_info", {
       method: 'POST',
       headers: {
@@ -123,10 +123,11 @@ class AdminEditForm extends Component {
     })
       .then(
         (result) => {
-          if (result.status == 200) {
-            this.props.history.push("/admin/", { logged: true });
-          }
-          else {
+          this.setState ({
+            showModal: true
+          });
+          if (result.status !== 200) {
+            this.setState({ submittable: false });
             alert("error");
           }
         },
@@ -137,6 +138,13 @@ class AdminEditForm extends Component {
           });
         }
       )
+  }
+
+  closeModal() {
+    this.setState({ 
+      showModal: false
+    });
+    this.props.history.push("/admin/", { logged: true });
   }
 
   populatePage() {
@@ -283,18 +291,31 @@ class AdminEditForm extends Component {
                   </div>
                 </Form.Group>
             
-                <div className="admin-submit-btn-panel">
+                <Container className="d-flex justify-content-center">
                   <Button
                     as={Link}
                     to={{pathname: "/admin", state: {logged: true}}}
-                    className="gray-button">
+                    className="mx-3">
                       Cancel
                   </Button>
-                  <Button type="submit" className="green-button admin-submit-btn">Submit</Button>
-                </div>
+                  <Button className="mx-3" type="submit">Submit</Button>
+                </Container>
               </Container>
             }
             </Form>
+            { this.state.showModal &&
+              <Modal show={this.state.showModal} onHide={this.closeModal} id="contained-modal-title-vcenter">
+                <Modal.Header closeButton>
+                  <Modal.Title>Your changes have been saved!</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>You have modifed a swimmer.</Modal.Body>
+                <Modal.Footer>
+                  <Button variant="primary" onClick={this.closeModal}>
+                    OK
+                  </Button>
+                </Modal.Footer>
+              </Modal>
+            }
           </Container>
         <Navigation logged = {this.props.location.state.logged} admin = {this.props.location.state.admin} user = {this.props.location.state.user}/>
       </Container>
