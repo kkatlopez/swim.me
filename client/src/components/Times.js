@@ -83,13 +83,13 @@ class Times extends Component {
 
         <Tabs defaultActiveKey="meet" id="uncontrolled-tab-example" className="my-3 justify-content-center">
             <Tab eventKey="meet" title="Meet">
-                <MeetTimes name={this.props.match.params.swimmerName}/>
+              <MeetTimes name={this.props.match.params.swimmerName}/>
             </Tab>
             <Tab eventKey="fastest" title="Fastest">
-                <FastestTimes name={this.props.match.params.swimmerName}/>
+              <FastestTimes name={this.props.match.params.swimmerName}/>
             </Tab>
             <Tab eventKey="event" title="By Event">
-                {/* <EventTimes name={this.props.match.params.swimmerName}/> */}
+              <EventTimes name={this.props.match.params.swimmerName}/>
             </Tab>
         </Tabs>
         </Container>
