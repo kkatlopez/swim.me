@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 // import ReactDOM from 'react-dom';
-import { Container, DropdownButton, Dropdown, Card } from 'react-bootstrap';
+import { Container, DropdownButton, Dropdown, Button } from 'react-bootstrap';
 import { Link, withRouter } from 'react-router-dom';
 import '../css/meetresults.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowRight, faChevronLeft } from '@fortawesome/free-solid-svg-icons';
+import { faArrowRight, faChevronLeft, faUserGear } from '@fortawesome/free-solid-svg-icons';
 import MeetCard from "./MeetCard.js";
 import Navigation from "./Navigation.js";
 import moment from 'moment';
@@ -58,16 +58,29 @@ class MeetResults extends Component {
 
   sendProps(lister) {
     var logged = this.props.location.state.logged;
-    var admin = this.props.location.state.adin
+    var admin = this.props.location.state.admin;
     var user = this.props.location.state.user;
     this.props.history.push("/meet/"+ lister.meetName + "_" + lister.meetStartDate, { logged: logged, admin: admin, user: user} );
+  }
+
+  sendPropsAdmin() {
+    var logged = this.props.location.state.logged;
+    var admin = this.props.location.state.admin;
+    var user = this.props.location.state.user;
+    this.props.history.push("/admin", { logged: logged, admin: admin, user: user} );
   }
 
   render() {
     return(
       <Container fluid className="page-container">
-        <Container fluid className="siteHeader d-flex align-items-end">
+        <Container fluid className="siteHeader d-flex align-items-end justify-content-between">
           <h1 className="siteHeaderTitle px-3 mb-3">Meet Results</h1>
+          {this.props.location.state.admin &&
+            <Button className="mb-3" onClick={() => this.sendPropsAdmin()}>
+            <FontAwesomeIcon icon={faUserGear} className="admin fa-xl"/>
+            Admin
+            </Button>
+          }
         </Container>
         <Container className="px-4">
           <label>Meet</label>
