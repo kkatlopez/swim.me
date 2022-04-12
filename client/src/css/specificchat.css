@@ -28,12 +28,31 @@
 }
 
 .message-height {
-  height: auto;
+  /* height: auto; */
+  height: calc(100% - 232px);
+  overflow: auto;
   padding-bottom: 108px;
+  padding-top: 124px;
+  display: flex;
+  flex-direction: column-reverse;
 }
 
 .navbar {
   background-color: #fff;
+}
+
+.sticky {
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
+
+.sticky-link {
+  padding-top: 116px;
+}
+
+.header-font {
+  font-size: 8vw;
 }
 
 /* .message-body {

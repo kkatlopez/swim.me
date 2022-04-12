@@ -85,6 +85,7 @@ class SpecificChat extends Component {
       this.props.history.push("/", { logged: false });
     }
     this.state = {
+      chatName: this.props.location.state.chatName,
       chatID: this.props.location.state.chatID,
       messages: [],
       message: "",
@@ -133,7 +134,6 @@ class SpecificChat extends Component {
     console.log(chat);
     this.populateMessages();
     console.log(process.env.REACT_APP_API_KEY);
-
   }
 
   changeMessage = (event) => {
@@ -182,23 +182,28 @@ class SpecificChat extends Component {
       elem.value = "";
   }
 
+
+
   render() {
     return(
       <Container fluid className="page-container">
-        <Container fluid className="siteHeader d-flex align-items-end">
-          <h1 className="siteHeaderTitle px-3 mb-3">Chat</h1>
+        <Container fluid className="siteHeader d-flex align-items-end sticky">
+          <h1 className="siteHeaderTitle px-3 mb-3 header-font">{this.state.chatName}</h1>
+        </Container>
+        <Container className="sticky-link sticky">
+          <a onClick={() => this.backToAllChats()} className="standalone">
+            <p><FontAwesomeIcon icon={faChevronLeft} className="px-0"/>Back to all chats</p>
+          </a>
         </Container>
         <Container className="px-4">
             {/* <a href="/results" className="standalone">
                 <p><FontAwesomeIcon icon={faChevronLeft} className="px-0"/> Back to all meets</p>
             </a> */}
-            <a onClick={() => this.backToAllChats()} className="standalone">
-              <p><FontAwesomeIcon icon={faChevronLeft} className="px-0"/>Back to all chats</p>
-            </a>
+
             <div
             aria-live="polite"
             aria-atomic="true"
-            className="bg-dark position-relative"
+            className="bg-dark position-relative message-height"
             style={{ minHeight: '240px' }}
             className="chat-bubbles"
             >
@@ -206,6 +211,7 @@ class SpecificChat extends Component {
               <div className="d-flex justify-content-center message-body">
                 <Messages user = {this.state.user} messages = {this.state.messages} chatID = {this.state.chatID}/>
               </div>
+
             </Container>
           </div>
         </Container>
@@ -219,7 +225,9 @@ class SpecificChat extends Component {
             <FontAwesomeIcon icon={faArrowUp} className="fa-solid" />
           </div>
         </div>
+
       </Container>
+
     );
   }
 }
