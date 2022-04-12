@@ -91,8 +91,9 @@ class TimesSearch extends Component {
           <h1 className="siteHeaderTitle px-3 mb-3">Times</h1>
         </Container>
         <Container className="px-4">
-          <br/>
-          <a onClick={() => this.goToTop10()} className="standalone top10-link">View all-time top 10</a>
+          <a onClick={() => this.goToTop10()} className="standalone top10-link">
+            <p className="my-2">View all-time top 10</p>
+          </a>
           <Container className="d-flex justify-content-between mt-3">
             <SwimmerSearch swimmernames={this.state.swimmernames}/>
             <Button onClick={() => this.redirect()}>Show Results</Button>

@@ -6,6 +6,10 @@ svg {
     cursor: pointer;
 }
 
+.event-card {
+    font-family: var(--bs-body-font-family);
+}
+
 .standalone.view-all > p {
   padding-bottom: 0.75rem;
 }

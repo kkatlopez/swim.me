@@ -76,13 +76,12 @@ class Times extends Component {
         <Container fluid className="siteHeader d-flex align-items-end">
           <h1 className="siteHeaderTitle px-3 mb-3">{this.state.firstname} {this.state.lastname}</h1>
         </Container>
-        <Container className="px-4">
-        <br/>
+        <Container className="px-4 dynamic-height">
         <a onClick={() => this.backToAllTimes()} className="standalone times-link">
-          <p><FontAwesomeIcon icon={faChevronLeft} className="px-0"/> Back to search</p>
+          <p className="pb-2"><FontAwesomeIcon icon={faChevronLeft} className="px-0"/> Back to search</p>
         </a>
 
-        <Tabs defaultActiveKey="meet" id="uncontrolled-tab-example" className="mb-3 justify-content-center">
+        <Tabs defaultActiveKey="meet" id="uncontrolled-tab-example" className="my-3 justify-content-center">
             <Tab eventKey="meet" title="Meet">
                 <MeetTimes name={this.props.match.params.swimmerName}/>
             </Tab>
@@ -90,7 +89,7 @@ class Times extends Component {
                 <FastestTimes name={this.props.match.params.swimmerName}/>
             </Tab>
             <Tab eventKey="event" title="By Event">
-                <EventTimes name={this.props.match.params.swimmerName}/>
+                {/* <EventTimes name={this.props.match.params.swimmerName}/> */}
             </Tab>
         </Tabs>
         </Container>

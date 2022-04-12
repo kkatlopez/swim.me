@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 // import ReactDOM from 'react-dom';
 import { DropdownButton, Dropdown, Table } from 'react-bootstrap';
+import { Link, withRouter } from 'react-router-dom';
 import '../css/eventtimes.css';
 
 class EventTimes extends Component {
@@ -8,42 +9,56 @@ class EventTimes extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      event: "",
-      showEvent: false
+      firstname: this.props.match.params.firstName,
+      lastname: this.props.match.params.lastName,
+      event: this.props.event,
+      eventsswam: []
     };
-    this.showEvent = this.showEvent.bind(this);
   }
 
-  showEvent(event) {
-    console.log(event);
-    switch (event) {
-      case "500 Y Free":
-        this.setState({ showEvent: true });
-        break;
-      case "":
-        this.setState({ showEvent: true });
-        break;
-      default:
-        break;
-    }
+  getEventsSwam() {
+    fetch("http://localhost:3001/swimmers")
+      .then(res => res.json())
+      .then(
+        (result) => {
+          var specific_result = result.find(x => (x.firstName === this.state.firstname && x.lastName === this.state.lastname));
+          console.log(specific_result);
+          var i, j;
+          var eventlist = []
+          console.log(specific_result.eventsSwam);
+          for (i = 0; i < specific_result.eventsSwam.length; i++) {
+            eventlist.push(specific_result.eventsSwam[i][0]);
+          }
+          console.log(eventlist)
+          this.setState({
+            eventsswam: eventlist
+          });
+          console.log(this.state.eventsswam);
+        }
+      )
+  }
+
+  showTable(selectedEvent) {
+    
+  }
+
+  componentDidMount() {
+    this.getEventsSwam();
   }
 	
   render() {
     return(
           <div className="event">
-            <label className="pt-3">Event</label>
-            <DropdownButton className="dropdown pb-3" title="Select an event">
-              <Dropdown.Item onClick={() => this.showEvent("")}>-</Dropdown.Item>
-              <Dropdown.Item href="#">50 Y Free</Dropdown.Item>
-              <Dropdown.Item href="#">50 L Free</Dropdown.Item>
-              <Dropdown.Item href="#">100 Y Free</Dropdown.Item>
-              <Dropdown.Item href="#">100 L Free</Dropdown.Item>
-              <Dropdown.Item href="#">200 Y Free</Dropdown.Item>
-              <Dropdown.Item href="#">200 L Free</Dropdown.Item>
-              <Dropdown.Item href="#">400 L Free</Dropdown.Item>
-              <Dropdown.Item href="#" onClick={() => this.showEvent("500 Y Free")}>500 Y Free</Dropdown.Item>
-            </DropdownButton>
-            {this.state.showEvent && 
+            {/* <label className="pt-3">Event</label> */}
+             {/* <DropdownButton className="dropdown pb-3" title="Select an event"> */}
+                {
+                  this.state.eventsswam.map( (lister) => {
+                    return(<Dropdown.Item event={lister}>{lister}</Dropdown.Item>)
+                  })
+                }
+              {/* </DropdownButton> */}
+              {/* <RosterProfileEvent /> */}
+            {/* {this.state.showEvent && 
               <div>
                 <h2 className="sectionTitle">500 Y Free</h2>
                 <Table bordered>
@@ -87,10 +102,10 @@ class EventTimes extends Component {
                       </tr>
                   </tbody>
                 </Table> 
-              </div> }
+              </div> } */}
           </div>    
     );
   }
 }
 
-export default(EventTimes);
+export default withRouter(EventTimes);
