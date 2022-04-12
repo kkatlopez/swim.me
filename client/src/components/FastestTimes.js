@@ -37,8 +37,8 @@ class FastestTimes extends Component {
     var split = this.props.name.split(' ');
     console.log(split);
     this.setState({
-        firstname: split[0],
-        lastname: split[1]
+      firstname: split[0],
+      lastname: split[1]
     });
     this.populateEvents();
   }

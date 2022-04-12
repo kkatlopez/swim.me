@@ -70,7 +70,7 @@ class RosterProfileLatest extends Component {
           });
         }
       )
-  }
+    }
 
   showTimes(info) {
     this.timesTable(info);

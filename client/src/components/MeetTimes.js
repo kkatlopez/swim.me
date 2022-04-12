@@ -39,7 +39,7 @@ class MeetTimes extends Component {
           var specific_result = result.find(x => (x.firstName === this.state.firstname && x.lastName === this.state.lastname));
           console.log(specific_result);
           this.setState({
-            times: specific_result.meetsSwam,
+            times: specific_result.meetsSwam.reverse(),
             first: this.state.firstname,
             last: this.state.lastname
           });
@@ -109,14 +109,14 @@ class MeetTimes extends Component {
         <DropdownButton className="dropdown pb-3" title="Select a meet">
           {
             this.state.times.map( (lister) => {
-                return(<Dropdown.Item meetname={lister} meetstart={lister[1]} onClick={() => this.showMeet(lister)}>{lister[0]} </Dropdown.Item>)
+                return(<Dropdown.Item meetname={lister} meetstart={lister[1]} onClick={() => this.showMeet(lister)}>{lister[0]} ({moment(lister[1]).format('YYYY')})</Dropdown.Item>)
             })
           }
         </DropdownButton>
         {this.state.showMeet && 
           <div>
-            <h2 className="py-2">{this.state.meetname}</h2>
-            <h5>{moment(this.state.startdate).format('ll')}</h5>
+            <h2 className="py-2 sectionTitle">{this.state.meetname}</h2>
+            <h5 className="sectionTitle">{moment(this.state.startdate).format('ll')}</h5>
             <Table bordered>
               <thead>
                   <tr>
