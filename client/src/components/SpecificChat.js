@@ -94,31 +94,34 @@ class SpecificChat extends Component {
   }
 
   populateMessages() {
-    // fetch("http://localhost:3001/get_messages", {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json'
-    //   },
-    //   body: JSON.stringify(this.state)
-    // })
-    //   .then(res => res.json())
-    //   .then(
-    //       (result) => {
-    //         console.log(result);
-    //         this.setState({
-    //           messages: result,
-    //         });
-    //       },
-    //       (error) => {
-    //         this.setState({
-    //           isLoaded: true,
-    //           error
-    //         });
-    //     }
-    //   )
-    this.setState({
-      messages: [{sender: "Matthew", senderIMG: "https://rpiathletics.com/images/2021/10/5/Youngbar_Matthew.jpg", messageBody: "Hey how are you?", timestamp: "1:00 PM"}, {sender: "Gwyneth", senderIMG: "https://rpiathletics.com/images/2021/10/5/Yuen_Gwyneth.jpg", messageBody: "I'm good!", timestamp: "1:01 PM"}]
-    });
+    fetch("http://localhost:3001/get_messages", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(this.state)
+    })
+      .then(res => res.json())
+      .then(
+          (result) => {
+            console.log(result);
+            this.setState({
+              messages: result,
+            });
+          },
+          (error) => {
+            console.log(error);
+            this.setState({
+              isLoaded: true,
+              error
+            });
+        }
+      )
+    // this.setState({
+    //   messages: [{sender: "Matthew", senderIMG: "https://rpiathletics.com/images/2021/10/5/Youngbar_Matthew.jpg",
+    //   messageBody: "Hey how are you?", timestamp: "1:00 PM"}, {sender: "Gwyneth", senderIMG: "https://rpiathletics.com/images/2021/10/5/Yuen_Gwyneth.jpg",
+    //   messageBody: "I'm good!", timestamp: "1:01 PM"}]
+    // });
   }
 
   componentDidMount(){

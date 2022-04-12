@@ -94,6 +94,27 @@ var top_10_schema = new Schema({
 }, { versionKey: false });
 const top_10 = mongoose.model('top-10', top_10_schema);
 
+// Chats
+var chats_schema = new Schema({
+  chatID: Number,
+  messages: [Object],
+  users:[Number],
+  chatName: String
+}, { versionKey: false }, {collection: 'chats'});
+const chats = mongoose.model('chats', chats_schema, 'chats');
+
+//User Info
+var user_info_schema = new Schema({
+  username: { type: String },
+  password: { type: String },
+  admin: { type: Boolean },
+  picture: {type: String},
+  userID: {type: Number},
+  firstName: {type: String},
+  lastName: {type: String}
+}, { versionKey: false }, {collection: 'credentials'});
+const user_info = mongoose.model('credentials', user_info_schema, 'credentials');
+
 //---------------------------------------------------WEB APP FUNCTIONS---------------------------------------------------
 
 //GET All Meet Info
@@ -436,42 +457,15 @@ app.post("/chats", async (req, res) => {
 });
 
 app.post("/get_messages", async (req, res) => {
-  // console.log(req.body.user);
-  connection.db.collection("chats", function (err, collection) {
-    collection.countDocuments({ "users": req.body.chatID }, function (err, count) {
-      try {
-        if (count > 0) {
-          collection.find({ "users": req.body.chatID }).toArray(function (err, data) {
-            return res.send(data[0]['messages'].map((lister) => {
-              connection.db.collection("credentials", function (err, collection2) {
-                collection2.countDocuments({"userID": lister[0]}, function (err, count2) {
-                  try {
-                    if (count > 0) {
-                      console.log(lister[0]);
-                      collection2.find({"userID": lister[0]}).toArray(function (err, data2) {
-                        // console.log(data2);
-                        // console.log({sender: data2[0].firstName + " " + data2[0].lastName, senderIMG: data2[0].picture, messageBody: lister[1], timestamp: lister[2]});
-                        return {sender: data2[0].firstName + " " + data2[0].lastName, senderIMG: data2[0].picture, messageBody: lister[1], timestamp: lister[2]}
-                      })
-                    }
-                  }
-                  catch (err) {
-                    console.log(err);
-                  }
-
-                })
-              })
-            }));
-          })
-        }
-        else {
-          return res.send({ "Result": false });
-        }
-      }
-      catch (err) {
-        console.log(err);
-      }
-    });
+  var chat = await chats.findOne({ "chatID": req.body.chatID });
+  var message = Promise.all(chat.messages.map(async (mess) => {
+    var user = await user_info.findOne({"userID": mess[0]});
+    console.log({sender: user.firstName + " " + user.lastName, senderIMG: user.picture, messageBody: mess[1], timestamp: mess[2]});
+    return({sender: user.firstName + " " + user.lastName, senderIMG: user.picture, messageBody: mess[1], timestamp: mess[2]});
+  }));
+  message.then((result) => {
+    console.log(result);
+    res.send(result);
   });
 });
 
@@ -490,53 +484,74 @@ const io = require("socket.io")(httpServer, {
   }
 });
 
-io.on("connection", (socket) => {
-  console.log("New client connected");
-  if (interval) {
-    clearInterval(interval);
-  }
-  interval = setInterval(() => getApiAndEmit(socket), 1000);
-  socket.on("disconnect", () => {
-    console.log("Client disconnected");
-    clearInterval(interval);
-  });
-});
+// io.on("connection", (socket) => {
+//   console.log("New client connected");
+//   if (interval) {
+//     clearInterval(interval);
+//   }
+//   interval = setInterval(() => getApiAndEmit(socket), 1000);
+//   socket.on("disconnect", () => {
+//     console.log("Client disconnected");
+//     clearInterval(interval);
+//   });
+// });
 
-const getApiAndEmit = socket => {
-  // const response = new Date();
-  const response = {sender: "Gwyneth", senderIMG: "https://rpiathletics.com/images/2021/10/5/Yuen_Gwyneth.jpg", messageBody: "wyd?", timestamp: "1:02 PM"}
-  // Emitting a new message. Will be consumed by the client
-  socket.emit("3", response);
-};
+// const getApiAndEmit = socket => {
+//   // const response = new Date();
+//   const response = {sender: "Gwyneth", senderIMG: "https://rpiathletics.com/images/2021/10/5/Yuen_Gwyneth.jpg", messageBody: "wyd?", timestamp: "1:02 PM"}
+//   // Emitting a new message. Will be consumed by the client
+//   socket.emit("3", response);
+// };
 
 app.post("/send_message", async (req, res) => {
-  // console.log(req.body.user);
-  connection.db.collection("chats", function (err, collection) {
-    collection.countDocuments({ "chatID": req.body.chatID }, function (err, count) {
-      try {
-        if (count > 0) {
-          collection.find({ "chatID": req.body.chatID }).toArray(function (err, data) {
-            connection.db.collection("credentials", function (err, collection2) {
-            collection2.find({ "userID": req.body.chatID }).toArray(function (err, data2) {
-              const message = {sender: data2[0].firstName + " " + data2[0].lastName, senderIMG: data2[0].picture, messageBody: req.body.message, timestamp: Date()}
-                for (let i = 0; i < data2[0].users.length; i++) {
-
-                  socket.emit(data2[0].users[i], message);
-                }})
-
-              }
-            }
-          }
-            else {
-              return res.send({ "Result": false });
-            }
-          }
-        catch (err) {
-          console.log(err);
-        }});
-      }
+  var chat = await chats.findOne({ "chatID": req.body.chatID });
+  var user = await user_info.findOne({"userID": req.body.user});
+  const newMessage = [req.body.user, req.body.message, new Date()];
+  chat.messages = [...chat.messages, newMessage];
+  console.log(chat);
+  await chat.save();
+  for (let i = 0; i < chat.users.length; i++) {
+    console.log(chat.users[i]);
+    io.on("Connection", (socket) => {
+      const response = {sender: user.firstName + " " + user.lastName, senderIMG: user.picture, messageBody: req.body.message, timestamp: new Date()};
+      socket.emit(chat.users[i].toString(), response);
     });
-  });
+  }
+  res.send({"result": true});
+  // message.then((result) => {
+  //   console.log(result);
+  //   res.send(result);
+  // });
+});
+
+// app.post("/send_message", async (req, res) => {
+//   // console.log(req.body.user);
+//   connection.db.collection("chats", function (err, collection) {
+//     collection.countDocuments({ "chatID": req.body.chatID }, function (err, count) {
+//       try {
+//         if (count > 0) {
+//           collection.find({ "chatID": req.body.chatID }).toArray(function (err, data) {
+//             connection.db.collection("credentials", function (err, collection2) {
+//             collection2.find({ "userID": req.body.chatID }).toArray(function (err, data2) {
+//               const message = {sender: data2[0].firstName + " " + data2[0].lastName, senderIMG: data2[0].picture, messageBody: req.body.message, timestamp: Date()}
+//                 for (let i = 0; i < data2[0].users.length; i++) {
+
+//                   socket.emit(data2[0].users[i], message);
+//                 }})
+
+//               }
+//             }
+//           }
+//             else {
+//               return res.send({ "Result": false });
+//             }
+//           }
+//         catch (err) {
+//           console.log(err);
+//         }});
+//       }
+//     });
+  // });
 
 httpServer.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);
