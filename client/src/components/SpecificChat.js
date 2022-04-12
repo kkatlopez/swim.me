@@ -5,8 +5,6 @@ import { Link, withRouter } from 'react-router-dom';
 import '../css/specificchat.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowUp, faChevronLeft } from '@fortawesome/free-solid-svg-icons';
-import SpecificMeetCard from './SpecificMeetCard';
-import Navigation from "./Navigation.js";
 import moment from 'moment';
 import {SocketContext} from '../context/socket';
 
@@ -63,7 +61,7 @@ function Messages(props) {
               alt=""
             />
             <strong className="me-auto">{lister.sender}</strong>
-            <small>{lister.timestamp}</small>
+            <small>{moment(lister.timestamp).format('lll')}</small>
           </Toast.Header>
           <Toast.Body>{lister.messageBody}</Toast.Body>
         </Toast>)
@@ -194,7 +192,7 @@ class SpecificChat extends Component {
             {/* <a href="/results" className="standalone">
                 <p><FontAwesomeIcon icon={faChevronLeft} className="px-0"/> Back to all meets</p>
             </a> */}
-            <a onClick={() => this.backToAllChats()} className="standalone meet-link">
+            <a onClick={() => this.backToAllChats()} className="standalone">
               <p><FontAwesomeIcon icon={faChevronLeft} className="px-0"/>Back to all chats</p>
             </a>
             <div
@@ -204,19 +202,14 @@ class SpecificChat extends Component {
             style={{ minHeight: '240px' }}
             className="chat-bubbles"
             >
-            <Container>
-              <div className="message-body">
+            <Container className="message-height">
+              <div className="d-flex justify-content-center message-body">
                 <Messages user = {this.state.user} messages = {this.state.messages} chatID = {this.state.chatID}/>
               </div>
             </Container>
           </div>
-
-            <div >
-
-            </div>
-
         </Container>
-        <div className="navbar fixed-bottom">
+        <div className="navbar fixed-bottom pt-3 pb-0">
           <Form style={{width:"95%"}}>
             <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1" style={{padding:"0 0 0 1.5vh"}}>
               <Form.Control as="textarea" ref="textarea" rows={3} onChange={this.changeMessage} onKeyPress={event => {if (event.key === "Enter") {this.sendMessage();}}}/>

@@ -38,7 +38,7 @@ class ChatCard extends Component {
       <Container fluid className="page-container">
         <Card className="chat-card py-2">
           <div className="row no-gutters d-flex align-items-center">
-            <div className="col-3 ml-5">
+            <div className="col-xl-1 col-lg-2 col-3 ml-5">
               <img src={this.state.chatIMG} className="card-img chat-img my-auto" />
             </div>
             <div className="col">

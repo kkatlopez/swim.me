@@ -1,13 +1,21 @@
-svg {
-    padding-left: 0.5rem;
+.send-button > svg {
+  padding-right: 1.5vw !important;
+}
+
+.standalone {
+  cursor: pointer;
+}
+
+.standalone > p > svg {
+  padding-right: 0.5rem !important;
 }
 
 .event-card, .meet-link {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .standalone.view-all > p {
-    padding-bottom: 0.75rem;
+  padding-bottom: 0.75rem;
 }
 
 .profile-image {
@@ -17,6 +25,15 @@ svg {
 
 .send-button {
   cursor: pointer;
+}
+
+.message-height {
+  height: auto;
+  padding-bottom: 108px;
+}
+
+.navbar {
+  background-color: #fff;
 }
 
 /* .message-body {
