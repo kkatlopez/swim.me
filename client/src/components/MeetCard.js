@@ -22,7 +22,6 @@ class MeetCard extends Component {
       date: this.props.meetdate,
       ogdate: this.props.meetoriginaldate
     }
-    console.log(this.state.name);
   }
 
   sendProps() {
@@ -36,9 +35,11 @@ class MeetCard extends Component {
     return(
       <Container fluid className="page-container">
         <Card className="meet-card">
-          <Card.Body className="mt-2" meetname={this.state.name} startdate={this.state.date} onClick={() => this.sendProps()} >
-              <Card.Title>{this.state.name}</Card.Title>
-              <Card.Subtitle className="text-muted">{this.state.date}</Card.Subtitle>
+          <Card.Body meetname={this.state.name} startdate={this.state.date} onClick={() => this.sendProps()} >
+              <div className="inner align-items-center">
+                <Card.Title className="meet-name">{this.state.name}</Card.Title>
+                <Card.Subtitle className="text-muted">{this.state.date}</Card.Subtitle>
+              </div>
           </Card.Body>
         </Card>
       </Container>       

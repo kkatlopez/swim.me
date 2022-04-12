@@ -89,14 +89,6 @@ var alert_schema = new Schema({
 }, { versionKey: false }, {collection: 'alerts'});
 const alert_info = mongoose.model('alerts', alert_schema, 'alerts');
 
-//Alert Info
-var alert_schema = new Schema({
-  alert_text: { type: String },
-  alert_type: { type: String },
-  alert_end_date: { type: Date },
-}, { versionKey: false }, {collection: 'alerts'});
-const alert_info = mongoose.model('alerts', alert_schema, 'alerts');
-
 //Top 10
 var top_10_schema = new Schema({
   event: [String]
@@ -224,121 +216,39 @@ app.get("/swimmers", async (req, res) => {
   }
 });
 
-function getEvents(meetsswam, eventsswam, full) {
-  var results = [];
-  console.log("getevents");
-  // console.log(eventsswam);
-  //console.log(meetsswam);
-   //looping through events
-  connection.db.collection("meet-info", function (err, collection) {
-  var i;
-  //console.log(meetsswam);
-  for (i = 0; i < meetsswam.length; i++) {
-    // console.log(meetsswam[i][0]);
-    collection.find({ meetName: meetsswam[i][0] }).toArray(function (err, data) {
-      for (h = 0; h < eventsswam.length; h++) {
-        // console.log(eventsswam[h]);
-        // console.log(data);
-        // console.log('checkpoint');
-        for (i = 0; i < data.length; i++) { // found meets
-          for (j = 0; j < data[i].meetEvents.length; j++) { // looping through meetEvents
-            // console.log(data[i].meetEvents[j][0] + " " + eventsswam[h]);
-            if (data[i].meetEvents[j][0].includes(eventsswam[h])) {
-              for (k = 0; k < data[i].meetEvents[j][1].length; k++) {     // looping through event results array
-                if (data[i].meetEvents[j][1][k][0] === full) {             // k === event participant
-                console.log(data[i].meetEvents[j][1][k][0] + " " + full);
-                // meetEvents[j][0] === event name
-                // meetEvents[j][1] === meet date
-                // meetEvents[j][1][k][1] === time swam
-                // console.log(data[i].meetEvents[j][0] + " " + data[i].meetEvents[j][1] + " " + data[i].meetEvents[j][1][k][1]);
-                results.push([ data[i].meetEvents[j][0], data[i].meetEvents[j][1], data[i].meetEvents[j][1][k][1]]);
-                // console.log(results);
-                }
-              }
+// GET events swam (with times and dates) for a specific swimmer
+app.get("/swimmers/:fullName/event/:eventName", async (req, res) => {
+  var split = req.params.fullName.split(" ");
+  var first = split[0];
+  var last = split[1];
+  var eventname = req.params.eventName;
+  try {
+    var mysort = { "meetStartDate": -1 };
+    connection.db.collection("swimmer-info", function (err, collection) {
+      collection.find({ firstName: first, lastName: last }).toArray(function (err, data) {
+        var i, j, k, l;
+        var allresults = [];
+        var eventresults = [];
+        for (i = 0; i < data.length; i++) {
+          for (j = 0; j < data[i].eventsSwam.length; j++) {
+            allresults.push(data[i].eventsSwam[j]);
+          }
+        }
+        for (k = 0; k < allresults.length; k++) {
+          for (l = 0; l < allresults[k].length; l++) {
+            if (allresults[k][0] === eventname) {
+              eventresults.push(allresults[k]);
+              break;
+            } else {
+              continue;
             }
           }
         }
-      }
+        res.send(eventresults);
+      });
     });
-  }
-  console.log(results);
-  return results;
-  });
-}
-
-app.get("/specific_swimmer/:name", async (req, res) => {
-  try {
-    var split = req.params.name.split(" ");
-    var full = split[0] + " " + split[1];
-    // console.log('hello');
-    var eventsswam = [];
-    var meetsswam = [];
-    // var results = [];
-    connection.db.collection("swimmer-info", function (err, collection) {
-      collection.find({ firstName: split[0], lastName: split[1] }).toArray(function (err, data) {
-        eventsswam = data[0].eventsSwam;
-        meetsswam = data[0].meetsSwam;
-        var results = [];
-        // result = getEvents(meetsswam, eventsswam, full);
-        connection.db.collection("meet-info", function (err, collection) {
-          var h = 0, i = 0, j = 0, k = 0, l = 0;
-          //console.log(meetsswam);
-          //console.log(meetsswam);
-          for (l = 0; l < meetsswam.length - 1; l++) {
-            // console.log(meetsswam[i][0]);
-            collection.find({ meetName: meetsswam[l][0] }).toArray(function (err, data) {
-              for (h = 0; h < eventsswam.length - 1; h++) {
-                // console.log(eventsswam[h]);
-                // console.log(data);
-                console.log('checkpoint');
-                for (i = 0; i < data.length - 1; i++) { // found meets
-                  for (j = 0; j < data[i].meetEvents.length - 1; j++) { // looping through meetEvents
-                    // console.log(data[i].meetEvents[j][0] + " " + eventsswam[h]);
-                    // console.log('found event');
-                    for (k = 0; k < data[i].meetEvents[j][1].length - 1; k++) {     // looping through event results array
-                      if (data[i].meetEvents[j][0].includes(eventsswam[h]) && data[i].meetEvents[j][1][k][0] === full) {             // k === event participant
-                      console.log('found name');
-                      // console.log(data[i].meetEvents[j][1][k][0] + " " + full);
-                      // meetEvents[j][0] === event name
-                      // meetEvents[j][1] === meet date
-                      // meetEvents[j][1][k][1] === time swam
-                      // console.log(data[i].meetEvents[j][0] + " " + data[i].meetStartDate + " " + data[i].meetEvents[j][1][k][1]);
-                      results.push([data[i].meetEvents[j][0], data[i].meetName, data[i].meetStartDate, data[i].meetEvents[j][1][k][1]]);
-                      // console.log(results);
-
-                        if (l == meetsswam.length - 1 && h == eventsswam.length - 1 && i == data.length - 1 && j == data[i].meetEvents.length && k == data[i].meetEvents[j][1].length - 1) {
-                          console.log(results);
-                          console.log('success');
-                          // res.send(results);
-                        }
-                        else {
-                          console.log('fail');
-                          console.log(l);
-                          console.log(meetsswam.length - 1);
-                          console.log(h);
-                          console.log(eventsswam.length - 1);
-                          console.log(i);
-                          console.log(data.length - 1);
-                          console.log(j);
-                          console.log(data[i].meetEvents.length - 1);
-                          console.log(k);
-                          console.log(data[i].meetEvents[j][1].length - 1);
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            });
-          }
-          console.log(results);
-          res.send(results);
-        });
-      })
-    });
-    
   } catch (error) {
-    return console.log(error);
+    console.log(error);
   }
 });
 

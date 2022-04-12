@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 // import ReactDOM from 'react-dom';
 import { DropdownButton, Dropdown, Table } from 'react-bootstrap';
 import { Link, withRouter } from 'react-router-dom';
+import moment from 'moment';
 
 class MeetTimes extends Component {
 	
@@ -74,15 +75,20 @@ class MeetTimes extends Component {
 
   // show meet table:
   showMeet(meetinfo) {
-    this.timesTable(meetinfo)
+    this.timesTable(meetinfo);
+    console.log(meetinfo);
     //console.log(meetinfo);
     switch(meetinfo) {
       // case (meetinfo != ''):
       //     this.setState({ showMeet: true });
       //     break;
       default:
-          this.setState({ showMeet: true, meetname: meetinfo[0] });
-          break;
+        this.setState({ 
+          showMeet: true, 
+          meetname: meetinfo[0], 
+          startdate: meetinfo[1] 
+        });
+        break;
     }
   }
 
@@ -98,42 +104,43 @@ class MeetTimes extends Component {
 	
   render() {
     return(
-          <div className="meet">
-            <label className="pt-3">Meet</label>
-            <DropdownButton className="dropdown pb-3" title="Select a meet">
-              {
-                this.state.times.map( (lister) => {
-                    return(<Dropdown.Item meetname={lister} meetstart={lister[1]} onClick={() => this.showMeet(lister)}>{lister[0]} </Dropdown.Item>)
-                })
-              }
-            </DropdownButton>
-            {this.state.showMeet && 
-              <div>
-                <h2 className="py-2">{this.state.meetname}</h2>
-                <Table bordered>
-                  <thead>
+      <div className="meet">
+        <label className="pt-3">Meet</label>
+        <DropdownButton className="dropdown pb-3" title="Select a meet">
+          {
+            this.state.times.map( (lister) => {
+                return(<Dropdown.Item meetname={lister} meetstart={lister[1]} onClick={() => this.showMeet(lister)}>{lister[0]} </Dropdown.Item>)
+            })
+          }
+        </DropdownButton>
+        {this.state.showMeet && 
+          <div>
+            <h2 className="py-2">{this.state.meetname}</h2>
+            <h5>{moment(this.state.startdate).format('ll')}</h5>
+            <Table bordered>
+              <thead>
+                  <tr>
+                  <th>Event</th>
+                  <th>Time</th>
+                  <th>Place</th>
+                  </tr>
+              </thead>
+              <tbody>
+                {
+                  this.state.events.map( (lister) => {
+                    return(
                       <tr>
-                      <th>Event</th>
-                      <th>Time</th>
-                      <th>Place</th>
+                        <td>{lister[0]}</td>
+                        <td>{lister[1]}</td>
+                        <td>{lister[2]}</td>
                       </tr>
-                  </thead>
-                  <tbody>
-                    {
-                      this.state.events.map( (lister) => {
-                        return(
-                          <tr>
-                            <td>{lister[0]}</td>
-                            <td>{lister[1]}</td>
-                            <td>{lister[2]}</td>
-                          </tr>
-                        )
-                      })
-                    }
-                  </tbody>
-                </Table> 
-                </div> }
-          </div>    
+                    )
+                  })
+                }
+              </tbody>
+            </Table> 
+            </div> }
+      </div>    
     );
   }
 }
