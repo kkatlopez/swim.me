@@ -204,9 +204,11 @@ class SpecificChat extends Component {
             style={{ minHeight: '240px' }}
             className="chat-bubbles"
             >
-
-            <Messages user = {this.state.user} messages = {this.state.messages} chatID = {this.state.chatID}/>
-
+            <Container>
+              <div className="message-body">
+                <Messages user = {this.state.user} messages = {this.state.messages} chatID = {this.state.chatID}/>
+              </div>
+            </Container>
           </div>
 
             <div >
@@ -214,7 +216,7 @@ class SpecificChat extends Component {
             </div>
 
         </Container>
-        <div class="navbar fixed-bottom">
+        <div className="navbar fixed-bottom">
           <Form style={{width:"95%"}}>
             <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1" style={{padding:"0 0 0 1.5vh"}}>
               <Form.Control as="textarea" ref="textarea" rows={3} onChange={this.changeMessage} onKeyPress={event => {if (event.key === "Enter") {this.sendMessage();}}}/>

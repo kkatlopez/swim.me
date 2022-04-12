@@ -18,3 +18,9 @@ svg {
 .send-button {
   cursor: pointer;
 }
+
+/* .message-body {
+  overflow: scroll;
+  height: auto;
+  padding-bottom: 6rem;
+} */
