@@ -52,7 +52,7 @@
 }
 
 .header-font {
-  font-size: 8vw;
+  font-size: min(8vw, 32px);
 }
 
 /* .message-body {
