@@ -123,8 +123,9 @@ class UserLanding extends Component {
               <Button
               onClick={this.confirmCreds}
               style={{cursor: "pointer"}}
-              className={"green-button " + (this.state.submittable ? "" : "disabled")}
-              disabled={!this.state.submittable}>Sign in</Button>
+              // className={"green-button " + (this.state.submittable ? "" : "disabled")}
+              // disabled={!this.state.submittable}
+              >Sign in</Button>
             </Form.Group>
             </Form>
             {/* </div> */}
