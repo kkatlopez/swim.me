@@ -37,9 +37,11 @@ class MeetTimes extends Component {
         (result) => {
           console.log(result);
           var specific_result = result.find(x => (x.firstName === this.state.firstname && x.lastName === this.state.lastname));
-          console.log(specific_result);
+          var sorted = specific_result.meetsSwam.sort(function(a, b) {
+            return new Date(a[1]) - new Date(b[1]);
+          });
           this.setState({
-            times: specific_result.meetsSwam.reverse(),
+            times: sorted.reverse(),
             first: this.state.firstname,
             last: this.state.lastname
           });
