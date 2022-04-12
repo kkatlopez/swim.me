@@ -95,7 +95,7 @@ class AllTimeTop10 extends Component {
 
   backToAllTimes() {
     var logged = this.props.location.state.logged;
-    var admin = this.props.location.state.adin
+    var admin = this.props.location.state.admin;
     var user = this.props.location.state.user;
     this.props.history.push("/times", { logged: logged, admin: admin, user: user} );
   }

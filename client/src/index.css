@@ -24,7 +24,7 @@ code {
   margin-bottom: 1rem;
 }
 
-.siteHeaderTitle {
+.siteHeaderTitle, .fc-toolbar-title {
   font-size: 40px;
   font-family: var(--bs-body-font-family);
 }
