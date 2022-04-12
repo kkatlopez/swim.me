@@ -46,8 +46,8 @@ class UserLanding extends Component {
     }).then(res => res.json())
       .then(
         (result) => {
-          if (result.Result === true) {
-            this.props.history.push("/results", { logged: true, admin: result.Admin, user: this.state.user});
+          if (result.Result == true) {
+            this.props.history.push("/results", { logged: true, admin: result.Admin, user: result.User});
           }
           else{
             this.setState({
@@ -125,7 +125,6 @@ class UserLanding extends Component {
               style={{cursor: "pointer"}}
               className={"green-button " + (this.state.submittable ? "" : "disabled")}
               disabled={!this.state.submittable}>Sign in</Button>
-
             </Form.Group>
             </Form>
             {/* </div> */}

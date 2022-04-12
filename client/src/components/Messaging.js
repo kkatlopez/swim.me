@@ -32,31 +32,31 @@ class Messaging extends Component {
 
   //AJAX Calls
   populateChats() {
-    // fetch("http://localhost:3001/chats", {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json'
-    //   },
-    //   body: JSON.stringify(this.state)
-    // })
-    //   .then(res => res.json())
-    //   .then(
-    //     (result) => {
-    //       console.log(result);
-    //       this.setState({
-    //         chatlist: result,
-    //       });
-    //     },
-    //     (error) => {
-    //       this.setState({
-    //         isLoaded: true,
-    //         error
-    //       });
-    //     }
-    //   )
-    this.setState({
-      chatlist: [{chatName: "Matthew", chatID: 1, chatIMG: "https://rpiathletics.com/images/2021/10/5/Youngbar_Matthew.jpg", lastMessage: "What are you up to?"}, {chatName: "Gwyenth", chatID: 2, chatIMG: "https://rpiathletics.com/images/2021/10/5/Yuen_Gwyneth.jpg", lastMessage:"hmm, idk"}]
-    });
+    fetch("http://localhost:3001/chats", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(this.state)
+    })
+      .then(res => res.json())
+      .then(
+        (result) => {
+          console.log(result);
+          this.setState({
+            chatlist: result,
+          });
+        },
+        (error) => {
+          this.setState({
+            isLoaded: true,
+            error
+          });
+        }
+      )
+    // this.setState({
+    //   chatlist: [{chatName: "Matthew", chatID: 1, chatIMG: "https://rpiathletics.com/images/2021/10/5/Youngbar_Matthew.jpg", lastMessage: "What are you up to?"}, {chatName: "Gwyenth", chatID: 2, chatIMG: "https://rpiathletics.com/images/2021/10/5/Yuen_Gwyneth.jpg", lastMessage:"hmm, idk"}]
+    // });
   }
 
   componentDidMount(){
