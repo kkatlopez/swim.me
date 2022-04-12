@@ -45,8 +45,8 @@ class UserLanding extends Component {
     }).then(res => res.json())
       .then(
         (result) => {
-          if (result.Result === true) {
-            this.props.history.push("/results", { logged: true, admin: result.Admin, user: this.state.user});
+          if (result.Result == true) {
+            this.props.history.push("/results", { logged: true, admin: result.Admin, user: result.User});
           }
           else{
             this.setState({
@@ -97,7 +97,7 @@ class UserLanding extends Component {
                 <Form.Control.Feedback type="invalid"></Form.Control.Feedback>
               </FloatingLabel>
             </Form.Group>
-            
+
             <Form.Group>
               <FloatingLabel controlId="floatingPassword" label="Password">
                 <Form.Control type="password" placeholder="Password"
@@ -108,9 +108,9 @@ class UserLanding extends Component {
                 </Form.Control.Feedback>
               </FloatingLabel>
             </Form.Group>
-            
+
             <Form.Group className="mt-4 d-flex justify-content-center">
-              <Button onClick={this.confirmCreds} className={"green-button " + (this.state.submittable ? "" : "disabled")} disabled={!this.state.submittable}>Sign in</Button>  
+              <Button onClick={this.confirmCreds} className={"green-button " + (this.state.submittable ? "" : "disabled")} disabled={!this.state.submittable}>Sign in</Button>
             </Form.Group>
           </Container>
 

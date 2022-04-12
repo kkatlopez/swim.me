@@ -1,16 +1,62 @@
-svg {
-    padding-left: 0.5rem;
+.send-button > svg {
+  padding-right: 1.5vw !important;
+}
+
+.standalone {
+  cursor: pointer;
+}
+
+.standalone > p > svg {
+  padding-right: 0.5rem !important;
 }
 
 .event-card, .meet-link {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .standalone.view-all > p {
-    padding-bottom: 0.75rem;
+  padding-bottom: 0.75rem;
 }
 
 .profile-image {
   width: 10%;
   height: auto;
 }
+
+.send-button {
+  cursor: pointer;
+}
+
+.message-height {
+  /* height: auto; */
+  height: calc(100% - 232px);
+  overflow: auto;
+  padding-bottom: 108px;
+  padding-top: 124px;
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.navbar {
+  background-color: #fff;
+}
+
+.sticky {
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
+
+.sticky-link {
+  padding-top: 116px;
+}
+
+.header-font {
+  font-size: min(8vw, 32px);
+}
+
+/* .message-body {
+  overflow: scroll;
+  height: auto;
+  padding-bottom: 6rem;
+} */

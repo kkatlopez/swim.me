@@ -2,6 +2,8 @@
 require('dotenv').config();
 const express = require("express");
 const bcrypt = require("bcryptjs");
+const socketIo = require("socket.io");
+const http = require("http");
 const { info } = require("console");
 const mongoose = require('mongoose'),
   Schema = mongoose.Schema,
@@ -9,6 +11,7 @@ const mongoose = require('mongoose'),
 const PORT = process.env.PORT || 3001;
 const app = express();
 app.use(express.json());
+
 
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "http://localhost:3000"); // update to match the domain you will make the request from
@@ -95,6 +98,15 @@ var top_10_schema = new Schema({
 }, { versionKey: false });
 const top_10 = mongoose.model('top-10', top_10_schema);
 
+// Chats
+var chats_schema = new Schema({
+  chatID: Number,
+  messages: [Object],
+  users:[Number],
+  chatName: String
+}, { versionKey: false }, {collection: 'chats'});
+const chats = mongoose.model('chats', chats_schema, 'chats');
+
 //---------------------------------------------------WEB APP FUNCTIONS---------------------------------------------------
 
 //GET All Meet Info
@@ -140,7 +152,7 @@ app.get("/meet_info/:searchterm", async (req, res) => {
     connection.db.collection("meet-info", function (err, collection) {
       collection.find({ meetName: meetname, meetStartDate: startdate }).toArray(function (err, data) {
         // entire meet:
-        for (i = 0; i < data.length; i++) { 
+        for (i = 0; i < data.length; i++) {
           // meetEvents:
           for (j = 0; j < data[i].meetEvents.length; j++) {
             for (k = 0; k < data[i].meetEvents[j][1].length; k++) {     // j === event[0][1] array (meet results array)
@@ -313,7 +325,7 @@ app.post("/verify_credentials", async (req, res) => {
                 console.log("Invalid Login Attempt");
                 return res.send({ "Result": false });
               } else {
-                return res.send({ "Result": true, "Admin": data[0].admin });
+                return res.send({ "Result": true, "Admin": data[0].admin, "User": data[0].userID });
               }
             });
           })
@@ -452,6 +464,48 @@ app.post("/create_alert", async (req, res) => {
   });
 });
 
+//---------------------------------------------------MESSAGING FUNCTIONS---------------------------------------------------
+app.post("/chats", async (req, res) => {
+  // var chat = await chats.findOne({ "chatID": req.body.chatID });
+  // var message = Promise.all(chat.messages.map(async (mess) => {
+  //
+  //   console.log({sender: user.firstName + " " + user.lastName, senderIMG: user.picture, messageBody: mess[1], timestamp: mess[2]});
+  //   return({sender: user.firstName + " " + user.lastName, senderIMG: user.picture, messageBody: mess[1], timestamp: mess[2]});
+  // }));
+  // message.then((result) => {
+  //   console.log(result);
+  //   res.send(result);
+  // });
+  console.log(req.body.user);
+  connection.db.collection("chats", function (err, collection) {
+    collection.countDocuments({ "users": req.body.user }, function (err, count) {
+      try {
+        if (count > 0) {
+          collection.find({ "users": req.body.user }).toArray(function (err, data) {
+            var message = Promise.all(data.map(async (lister) => {
+              var image = lister.groupPicture;
+              if (!image) {
+                var user = await user_info.findOne({"userID": lister.messages[lister.messages.length - 1][0]});
+                image = user.picture;
+              }
+              return {chatName: lister.chatName, chatID: lister.chatID, chatIMG: image, lastMessage: lister.messages[lister.messages.length - 1][1]}
+            }));
+            message.then((result) => {
+              return res.send(result);
+            })
+          })
+        }
+        else {
+          return res.send({ "Result": false });
+        }
+      }
+      catch (err) {
+        console.log(err);
+      }
+    });
+  });
+});
+
 //Add new user
 app.post("/add_user", async (req, res) => {
   try {
@@ -496,12 +550,110 @@ app.post("/add_user", async (req, res) => {
 });
 
 
+app.post("/get_messages", async (req, res) => {
+  var chat = await chats.findOne({ "chatID": req.body.chatID });
+  var message = Promise.all(chat.messages.map(async (mess) => {
+    var user = await user_info.findOne({"userID": mess[0]});
+    console.log({sender: user.firstName + " " + user.lastName, senderIMG: user.picture, messageBody: mess[1], timestamp: mess[2]});
+    return({sender: user.firstName + " " + user.lastName, senderIMG: user.picture, messageBody: mess[1], timestamp: mess[2]});
+  }));
+  message.then((result) => {
+    console.log(result);
+    res.send(result);
+  });
+});
 
 //---------------------------------------------------MISC FUNCTIONS---------------------------------------------------
 
-app.listen(PORT, () => {
+// const app2 = express();
+const httpServer = http.createServer(app);
+// const io = socketIo(server);
+
+let interval;
+
+const io = require("socket.io")(httpServer, {
+  cors: {
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST"]
+  }
+});
+
+// io.on("connection", (socket) => {
+//   console.log("New client connected");
+//   if (interval) {
+//     clearInterval(interval);
+//   }
+//   interval = setInterval(() => getApiAndEmit(socket), 1000);
+//   socket.on("disconnect", () => {
+//     console.log("Client disconnected");
+//     clearInterval(interval);
+//   });
+// });
+
+// const getApiAndEmit = socket => {
+//   // const response = new Date();
+//   const response = {sender: "Gwyneth", senderIMG: "https://rpiathletics.com/images/2021/10/5/Yuen_Gwyneth.jpg", messageBody: "wyd?", timestamp: "1:02 PM"}
+//   // Emitting a new message. Will be consumed by the client
+//   socket.emit("3", response);
+// };
+
+app.post("/send_message", async (req, res) => {
+  var chat = await chats.findOne({ "chatID": req.body.chatID });
+  var user = await user_info.findOne({"userID": req.body.user});
+  const newMessage = [req.body.user, req.body.message, new Date()];
+  chat.messages = [...chat.messages, newMessage];
+  console.log(chat);
+  await chat.save();
+  for (let i = 0; i < chat.users.length; i++) {
+    console.log(chat.users[i]);
+    // io.on("Connection", (socket) => {
+      const response = {chatID: req.body.chatID, sender: user.firstName + " " + user.lastName, senderIMG: user.picture, messageBody: req.body.message, timestamp: new Date()};
+      io.emit(chat.users[i], response);
+    // });
+  }
+  res.send({"result": true});
+  // message.then((result) => {
+  //   console.log(result);
+  //   res.send(result);
+  // });
+});
+
+// app.post("/send_message", async (req, res) => {
+//   // console.log(req.body.user);
+//   connection.db.collection("chats", function (err, collection) {
+//     collection.countDocuments({ "chatID": req.body.chatID }, function (err, count) {
+//       try {
+//         if (count > 0) {
+//           collection.find({ "chatID": req.body.chatID }).toArray(function (err, data) {
+//             connection.db.collection("credentials", function (err, collection2) {
+//             collection2.find({ "userID": req.body.chatID }).toArray(function (err, data2) {
+//               const message = {sender: data2[0].firstName + " " + data2[0].lastName, senderIMG: data2[0].picture, messageBody: req.body.message, timestamp: Date()}
+//                 for (let i = 0; i < data2[0].users.length; i++) {
+
+//                   socket.emit(data2[0].users[i], message);
+//                 }})
+
+//               }
+//             }
+//           }
+//             else {
+//               return res.send({ "Result": false });
+//             }
+//           }
+//         catch (err) {
+//           console.log(err);
+//         }});
+//       }
+//     });
+  // });
+
+httpServer.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);
 });
+
+// server.listen(PORT2, () => {
+//   console.log(`Server listening on ${PORT2}`);
+// });
 
 
 //---------------------------------------------------TEST CODE---------------------------------------------------
