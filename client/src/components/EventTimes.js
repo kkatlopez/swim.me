@@ -28,6 +28,11 @@ class EventTimes extends Component {
           for (i = 0; i < specific_result.eventsSwam.length; i++) {
             eventlist.push(specific_result.eventsSwam[i][0]);
           }
+          const reference = [ '50 Free', '100 Free', '200 Free', '500 Free', '1000 Free', '1650 Free', '100 Back', '200 Back', '100 Breast', '200 Breast', '100 Fly', '200 Fly', '200 IM', '200 Im', '400 IM', '400 Im' ];
+          eventlist.sort(function(a, b) {
+            return reference.indexOf(a) - reference.indexOf(b);
+          });
+          console.log(eventlist);
           this.setState({
             eventsswam: eventlist
           });
