@@ -21,14 +21,14 @@ class UserLanding extends Component {
     this.changePass = this.changePass.bind(this);
     this.confirmCreds = this.confirmCreds.bind(this);
 
-    if (this.props.location.state != undefined && this.props.location.state.logged){
+    if (this.props.location.state !== undefined && this.props.location.state.logged){
       this.props.history.push("/results", this.props.location.state);
     }
 
   }
 
   checkSubmittable = function(){
-    if (this.state.user.trim() == "" || this.state.pass.trim() == ""){
+    if (this.state.user.trim() === "" || this.state.pass.trim() === ""){
       this.setState({submittable: false});
     }else{
       this.setState({submittable: true});
@@ -47,7 +47,7 @@ class UserLanding extends Component {
     }).then(res => res.json())
       .then(
         (result) => {
-          if (result.Result == true) {
+          if (result.Result === true) {
             this.props.history.push("/results", { logged: true, admin: result.Admin, user: this.state.user});
           }
           else{

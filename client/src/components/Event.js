@@ -84,7 +84,7 @@ class Event extends Component {
 
   sendProps() {
     var logged = this.props.location.state.logged;
-    var admin = this.props.location.state.adin
+    var admin = this.props.location.state.admin;
     var user = this.props.location.state.user;
     this.props.history.push("/meet/"+ this.state.meetname + "_" + this.state.meetdate, { logged: logged, admin: admin, user: user} );
   }

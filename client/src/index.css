@@ -24,7 +24,7 @@ code {
   margin-bottom: 1rem;
 }
 
-.siteHeaderTitle {
+.siteHeaderTitle, .fc-toolbar-title {
   font-size: 40px;
   font-family: var(--bs-body-font-family);
 }
@@ -65,4 +65,13 @@ table > thead > tr > th {
 /* Links */
 a.standalone {
   text-decoration: none !important;
+}
+
+a > p {
+  cursor: pointer;
+}
+
+.dynamic-height {
+  height: auto;
+  padding-bottom: 6rem;
 }

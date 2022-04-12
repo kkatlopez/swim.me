@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { Link, withRouter } from 'react-router-dom';
-import { Container, Form, FormControl, Button, Tabs, Tab } from 'react-bootstrap';
+import { Container, Form, FormControl, Tabs, Tab } from 'react-bootstrap';
 import MeetTimes from './MeetTimes.js';
 import FastestTimes from './FastestTimes.js';
 import EventTimes from './EventTimes.js';
@@ -65,7 +65,7 @@ class Times extends Component {
 
   backToAllTimes() {
     var logged = this.props.location.state.logged;
-    var admin = this.props.location.state.adin
+    var admin = this.props.location.state.admin;
     var user = this.props.location.state.user;
     this.props.history.push("/times", { logged: logged, admin: admin, user: user} );
   }
