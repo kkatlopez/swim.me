@@ -89,14 +89,6 @@ var alert_schema = new Schema({
 }, { versionKey: false }, {collection: 'alerts'});
 const alert_info = mongoose.model('alerts', alert_schema, 'alerts');
 
-//Alert Info
-var alert_schema = new Schema({
-  alert_text: { type: String },
-  alert_type: { type: String },
-  alert_end_date: { type: Date },
-}, { versionKey: false }, {collection: 'alerts'});
-const alert_info = mongoose.model('alerts', alert_schema, 'alerts');
-
 //Top 10
 var top_10_schema = new Schema({
   event: [String]
