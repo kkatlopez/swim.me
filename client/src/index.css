@@ -70,3 +70,8 @@ a.standalone {
 a > p {
   cursor: pointer;
 }
+
+.dynamic-height {
+  height: auto;
+  padding-bottom: 6rem;
+}

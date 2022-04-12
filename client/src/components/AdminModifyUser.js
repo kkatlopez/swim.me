@@ -268,7 +268,7 @@ class AdminModifyUser extends Component {
           </a>
           <h2 className="sectionTitle">Modify or Delete a User</h2>
         </Container>
-        <Container className="px-4">
+        <Container className="px-4 dynamic-height">
           <Form className="py-3" onSubmit={this.updateUser}>
             <Form.Group className="mb-3">
               <Form.Label><h4 className="sectionTitle">Select a User</h4></Form.Label>

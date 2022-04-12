@@ -189,7 +189,7 @@ class AdminEditForm extends Component {
           </a>
           <h2 className="sectionTitle">Edit Swimmer</h2>
         </Container>
-        <Container className="px-4">
+        <Container className="px-4 dynamic-height">
           <Form className="py-3" onSubmit={this.updateSwimmer}>
             <Form.Group className="mb-3">
               <Form.Label><h4 className="sectionTitle">Select a Swimmer</h4></Form.Label>
