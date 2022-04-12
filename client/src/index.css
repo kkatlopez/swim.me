@@ -72,6 +72,10 @@ a.standalone > p {
   color: #0d6efd;
 }
 
+.dropdown-menu > a.dropdown-item {
+  color: #000 !important;
+}
+
 .dynamic-height {
   height: auto;
   padding-bottom: 6rem;

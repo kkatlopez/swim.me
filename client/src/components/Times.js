@@ -76,7 +76,7 @@ class Times extends Component {
         <Container fluid className="siteHeader d-flex align-items-end">
           <h1 className="siteHeaderTitle px-3 mb-3">{this.state.firstname} {this.state.lastname}</h1>
         </Container>
-        <Container className="px-4">
+        <Container className="px-4 dynamic-height">
         <a onClick={() => this.backToAllTimes()} className="standalone times-link">
           <p className="pb-2"><FontAwesomeIcon icon={faChevronLeft} className="px-0"/> Back to search</p>
         </a>

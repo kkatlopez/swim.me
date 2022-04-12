@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
 // import ReactDOM from 'react-dom';
 import { Container, DropdownButton, Dropdown, Card } from 'react-bootstrap';
-import { Link, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import '../css/meetresults.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowRight, faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import MeetCard from "./MeetCard.js";
 import Navigation from "./Navigation.js";
 import moment from 'moment';
