@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 // import ReactDOM from 'react-dom';
-import { Container, DropdownButton, Dropdown, Card } from 'react-bootstrap';
+import { Container, DropdownButton, Dropdown, Card, Button } from 'react-bootstrap';
 import { Link, withRouter } from 'react-router-dom';
 import '../css/messaging.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowRight, faChevronLeft } from '@fortawesome/free-solid-svg-icons';
+import { faArrowRight, faChevronLeft, faMessage } from '@fortawesome/free-solid-svg-icons';
 import ChatCard from "./ChatCard.js";
 import Navigation from "./Navigation.js";
 import moment from 'moment';
@@ -63,18 +63,22 @@ class Messaging extends Component {
     this.populateChats();
   }
 
-  // sendProps(lister) {
-  //   var logged = this.props.location.state.logged;
-  //   var admin = this.props.location.state.adin
-  //   var user = this.props.location.state.user;
-  //   // this.props.history.push("/meet/"+ lister.meetName + "_" + lister.meetStartDate, { logged: logged, admin: admin, user: user} );
-  // }
+  sendPropsNewChat() {
+    var logged = this.state.logged;
+    var admin = this.state.admin;
+    var user = this.state.user;
+    this.props.history.push("/newChat", { logged: logged, admin: admin, user: user} );
+  }
 
   render() {
     return(
       <Container fluid className="page-container">
-        <Container fluid className="siteHeader d-flex align-items-end">
+        <Container fluid className="siteHeader d-flex align-items-end justify-content-between">
           <h1 className="siteHeaderTitle px-3 mb-3">Chat</h1>
+          <Button className="mb-3" onClick={() => this.sendPropsNewChat()}>
+          <FontAwesomeIcon icon={faMessage} className="new-group fa-xl"/>
+          New Chat
+          </Button>
         </Container>
         <Container className="px-4">
         <div className="chat-card">

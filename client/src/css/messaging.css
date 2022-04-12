@@ -16,3 +16,7 @@ svg {
   right: 1rem; */
   padding-right: 1rem;
 }
+
+svg.new-group {
+  margin-right: 0.75rem;
+}
