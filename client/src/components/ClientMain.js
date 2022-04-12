@@ -10,8 +10,14 @@ import TimesSearch from './TimesSearch.js';
 import RosterProfile from './RosterProfile.js'
 import Times from './Times.js';
 import UserLanding from './UserLogin.js';
+import Admin from './Admin.js';
+import AdminCreateAlert from './AdminCreateAlert';
+import AdminModifyUser from './AdminModifyUser.js';
+import AdminCreateUser from './AdminCreateUser.js';
+import AdminEditForm from './AdminEditForm.js';
 import Messaging from './Messaging.js';
 import SpecificChat from './SpecificChat.js';
+import AlertsAndCalendar from './AlertsAndCalendar.js';
 
 // localhost:3000
 
@@ -37,8 +43,23 @@ const Main = (props) => {
       <Route exact path='/roster' render={
         () => <div><Roster/></div>
       }></Route>
-      <Route exact path='/roster/profile' render={
+      <Route exact path='/roster/:firstName-:lastName' render={
         () => <div><RosterProfile/></div>
+      }></Route>
+      <Route exact path='/admin' render={
+        () => <div><Admin/></div>
+      }></Route>
+      <Route exact path='/admin/create-alert' render={
+        () => <div><AdminCreateAlert/></div>
+      }></Route>
+      <Route exact path='/admin/edit-swimmer' render={
+        () => <div><AdminEditForm/></div>
+      }></Route>
+      <Route exact path='/admin/modify-user' render={
+        () => <div><AdminModifyUser/></div>
+      }></Route>
+       <Route exact path='/admin/create-user' render={
+        () => <div><AdminCreateUser/></div>
       }></Route>
       <Route exact path='/chat' render={
         () => <div><Messaging/></div>
@@ -46,6 +67,9 @@ const Main = (props) => {
       <Route exact path="/chat/:chatID" component={SpecificChat} />
       <Route exact path='/' render={
         () => <div><UserLanding/></div>
+      }></Route>
+      <Route exact path='/calendar' render={
+        () => <div><AlertsAndCalendar/></div>
       }></Route>
       <Redirect from='*' to='/' />
     </Switch>

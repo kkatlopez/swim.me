@@ -95,7 +95,7 @@ class AllTimeTop10 extends Component {
 
   backToAllTimes() {
     var logged = this.props.location.state.logged;
-    var admin = this.props.location.state.adin
+    var admin = this.props.location.state.admin;
     var user = this.props.location.state.user;
     this.props.history.push("/times", { logged: logged, admin: admin, user: user} );
   }
@@ -109,7 +109,7 @@ class AllTimeTop10 extends Component {
         </Container>
         <Container className="px-4">
           <a onClick={() => this.backToAllTimes()} className="standalone back-link">
-                <p><FontAwesomeIcon icon={faChevronLeft} className="px-0"/> Back to time search</p>
+                <p className="pb-2"><FontAwesomeIcon icon={faChevronLeft} className="px-0"/> Back to time search</p>
             </a>
           <label>Event</label>
           <DropdownButton className="dropdown pb-3" title="Select an event">

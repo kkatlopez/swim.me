@@ -1,11 +1,10 @@
 .meet-card {
-    margin-bottom: 1.25rem;
-    height: 6.25rem;
-    cursor: pointer;
+  margin-bottom: 1.25rem;
+  /* height: 6.25rem; */
+  cursor: pointer;
+  font-family: var(--bs-body-font-family);
 }
 
-/* svg {
-    position: absolute;
-    bottom: 1rem;
-    right: 1rem;
-} */
+svg.admin {
+  margin-right: 0.75rem;
+}

@@ -83,14 +83,14 @@ class SpecificMeet extends Component {
 
   sendProps(eventname) {
     var logged = this.props.location.state.logged;
-    var admin = this.props.location.state.adin
+    var admin = this.props.location.state.admin;
     var user = this.props.location.state.user;
     this.props.history.push("/meet/" + this.state.meetname + "_" + this.state.meetdate + "/event/" + eventname, { logged: logged, admin: admin, user: user} );
   }
 
   backToAllMeets() {
     var logged = this.props.location.state.logged;
-    var admin = this.props.location.state.adin
+    var admin = this.props.location.state.admin;
     var user = this.props.location.state.user;
     this.props.history.push("/results", { logged: logged, admin: admin, user: user} );
   }
@@ -108,7 +108,7 @@ class SpecificMeet extends Component {
             <a onClick={() => this.backToAllMeets()} className="standalone meet-link">
               <p><FontAwesomeIcon icon={faChevronLeft} className="px-0"/> Back to all meets</p>
             </a>
-            <h2 className="sectionTitle">{this.state.meetname}</h2>
+            <h2 className="sectionTitle mt-1 mb-0">{this.state.meetname}</h2>
             <p class="text-muted">{moment(this.state.date).format('ll')}</p>
 
             <label>Event</label>
