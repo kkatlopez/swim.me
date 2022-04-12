@@ -9,7 +9,6 @@ const mongoose = require('mongoose'),
   Schema = mongoose.Schema,
   salt_factor = 10;
 const PORT = process.env.PORT || 3001;
-const PORT2 = process.env.PORT2 || 3002;
 
 // var context = require('rabbit.js').createContext('amqps://' + String(process.env.RABBITMQUSER) + ':' + String(process.env.RABBITMQPASS) + '@woodpecker.rmq.cloudamqp.com/' + String(process.env.RABBITMQUSER));
 // var context = require('rabbit.js').createContext('amqps://dyifajdi:dY01hBir0J82rhSbYjBC0TwMH0BxjHSt@woodpecker.rmq.cloudamqp.com/dyifajdi');
@@ -434,15 +433,33 @@ app.post("/add_user", async (req, res) => {
 
 //---------------------------------------------------MESSAGING FUNCTIONS---------------------------------------------------
 app.post("/chats", async (req, res) => {
+  // var chat = await chats.findOne({ "chatID": req.body.chatID });
+  // var message = Promise.all(chat.messages.map(async (mess) => {
+  //
+  //   console.log({sender: user.firstName + " " + user.lastName, senderIMG: user.picture, messageBody: mess[1], timestamp: mess[2]});
+  //   return({sender: user.firstName + " " + user.lastName, senderIMG: user.picture, messageBody: mess[1], timestamp: mess[2]});
+  // }));
+  // message.then((result) => {
+  //   console.log(result);
+  //   res.send(result);
+  // });
   console.log(req.body.user);
   connection.db.collection("chats", function (err, collection) {
     collection.countDocuments({ "users": req.body.user }, function (err, count) {
       try {
         if (count > 0) {
           collection.find({ "users": req.body.user }).toArray(function (err, data) {
-            return res.send(data.map((lister) => {
-              return {chatName: lister.chatName, chatID: lister.chatID, chatIMG: "https://rpiathletics.com/images/2021/10/5/Youngbar_Matthew.jpg", lastMessage: lister.messages[0]}
+            var message = Promise.all(data.map(async (lister) => {
+              var image = lister.groupPicture;
+              if (!image) {
+                var user = await user_info.findOne({"userID": lister.messages[lister.messages.length - 1][0]});
+                image = user.picture;
+              }
+              return {chatName: lister.chatName, chatID: lister.chatID, chatIMG: image, lastMessage: lister.messages[lister.messages.length - 1][1]}
             }));
+            message.then((result) => {
+              return res.send(result);
+            })
           })
         }
         else {
@@ -512,10 +529,10 @@ app.post("/send_message", async (req, res) => {
   await chat.save();
   for (let i = 0; i < chat.users.length; i++) {
     console.log(chat.users[i]);
-    io.on("Connection", (socket) => {
-      const response = {sender: user.firstName + " " + user.lastName, senderIMG: user.picture, messageBody: req.body.message, timestamp: new Date()};
-      socket.emit(chat.users[i].toString(), response);
-    });
+    // io.on("Connection", (socket) => {
+      const response = {chatID: req.body.chatID, sender: user.firstName + " " + user.lastName, senderIMG: user.picture, messageBody: req.body.message, timestamp: new Date()};
+      io.emit(chat.users[i], response);
+    // });
   }
   res.send({"result": true});
   // message.then((result) => {

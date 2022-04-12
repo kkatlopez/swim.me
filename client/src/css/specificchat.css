@@ -14,3 +14,7 @@ svg {
   width: 10%;
   height: auto;
 }
+
+.send-button {
+  cursor: pointer;
+}

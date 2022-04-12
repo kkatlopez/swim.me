@@ -30,7 +30,7 @@ class ChatCard extends Component {
     var logged = this.props.location.state.logged;
     var admin = this.props.location.state.adin
     var user = this.props.location.state.user;
-    this.props.history.push("/chat/" + this.state.chatID, { logged: logged, admin: admin, user: user} );
+    this.props.history.push("/chat/" + this.state.chatID, { logged: logged, admin: admin, user: user, chatID: this.state.chatID} );
   }
 
   render() {
@@ -42,7 +42,7 @@ class ChatCard extends Component {
               <img src={this.state.chatIMG} className="card-img chat-img my-auto" />
             </div>
             <div className="col">
-              <Card.Body className="mt-2" meetname={this.state.name} startdate={this.state.date} onClick={() => this.sendProps()} >
+              <Card.Body className="mt-2" startdate={this.state.date} onClick={() => this.sendProps()} >
               <Card.Title>{this.state.name}</Card.Title>
               <Card.Subtitle className="text-muted">{this.state.lastMessage}</Card.Subtitle>
           </Card.Body>

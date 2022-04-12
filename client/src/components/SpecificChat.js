@@ -14,6 +14,7 @@ function Messages(props) {
   const socket = useContext(SocketContext);
   const mes = props.messages;
   const user = props.user;
+  const chatID = props.chatID;
   // console.log(mes);
   const [messages, setMessages] = useState([]);
   // console.log(messages);
@@ -25,7 +26,9 @@ function Messages(props) {
       socket.on(user, data => {
         // console.log("hey");
         // const newData = JSON.parse(data);
-        setMessages(oldArray => [...oldArray, data]);
+        if (data.chatID == chatID) {
+          setMessages(oldArray => [...oldArray, data]);
+        }
       })
       return () => {
       // before the component is destroyed
@@ -84,7 +87,7 @@ class SpecificChat extends Component {
       this.props.history.push("/", { logged: false });
     }
     this.state = {
-      chatID: 0,
+      chatID: this.props.location.state.chatID,
       messages: [],
       message: "",
       logged: this.props.location.state.logged,
@@ -132,42 +135,10 @@ class SpecificChat extends Component {
     console.log(chat);
     this.populateMessages();
     console.log(process.env.REACT_APP_API_KEY);
-    // console.log('amqps://' + {process.env.REACT_APP_RABBITMQUSER} + ':' + {process.env.REACT_APP_RABBITMQPASS} + '@woodpecker.rmq.cloudamqp.com/' + {process.env.REACT_APP_RABBITMQUSER});
-    // var context = require('rabbit.js').createContext('amqps://' + String(process.env.REACT_APP_RABBITMQUSER) + ':' + String(process.env.REACT_APP_RABBITMQPASS) + '@woodpecker.rmq.cloudamqp.com/' + String(process.env.RABBITMQUSER));
-    // var amqp = require('amqplib/callback_api');
-    // var sub = context.socket('SUBSCRIBE');
-    // sub.connect(this.state.user);
-    // sub.on('data', this.newMessage);
-    // var amqp = require('amqplib/callback_api');
-    // amqp.connect('amqp://localhost', function(error0, connection) {
-    // if (error0) {
-    //     throw error0;
-    // }
-    // connection.createChannel(function(error1, channel) {
-    //     if (error1) {
-    //         throw error1;
-    //     }
-    //
-    //     var queue = this.state.user;
-    //
-    //     channel.assertQueue(queue, {
-    //         durable: false
-    //     });
-    //
-    //     console.log(" [*] Waiting for messages in %s. To exit press CTRL+C", queue);
-    //
-    //     channel.consume(queue, function(msg) {
-    //         console.log(" [x] Received %s", msg.content.toString());
-    //         this.newMessage(msg.content.toString());
-    //     }, {
-    //         noAck: true
-    //     });
-    // });
-// });
 
   }
 
-  changePassword = (event) => {
+  changeMessage = (event) => {
     this.setState({message: event.target.value}); //, () => this.checkSubmittable()
   }
 
@@ -186,7 +157,31 @@ class SpecificChat extends Component {
   }
 
   sendMessage() {
-
+    fetch("http://localhost:3001/send_message", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(this.state)
+    })
+      .then(res => res.json())
+      .then(
+          (result) => {
+            console.log(result);
+            this.setState({
+              messages: result,
+            });
+          },
+          (error) => {
+            console.log(error);
+            this.setState({
+              isLoaded: true,
+              error
+            });
+        }
+      )
+      var elem = this.refs.textarea;
+      elem.value = "";
   }
 
   render() {
@@ -210,7 +205,7 @@ class SpecificChat extends Component {
             className="chat-bubbles"
             >
 
-            <Messages user = {this.state.user} messages = {this.state.messages}/>
+            <Messages user = {this.state.user} messages = {this.state.messages} chatID = {this.state.chatID}/>
 
           </div>
 
@@ -222,10 +217,12 @@ class SpecificChat extends Component {
         <div class="navbar fixed-bottom">
           <Form style={{width:"95%"}}>
             <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1" style={{padding:"0 0 0 1.5vh"}}>
-              <Form.Control as="textarea" rows={3} onChange={this.changePassword} />
+              <Form.Control as="textarea" ref="textarea" rows={3} onChange={this.changeMessage} onKeyPress={event => {if (event.key === "Enter") {this.sendMessage();}}}/>
             </Form.Group>
           </Form>
-          <FontAwesomeIcon icon={faArrowUp} className="fa-solid" onClick={() => this.sendMessage()}/>
+          <div className="send-button" onClick={() => this.sendMessage()}>
+            <FontAwesomeIcon icon={faArrowUp} className="fa-solid" />
+          </div>
         </div>
       </Container>
     );
