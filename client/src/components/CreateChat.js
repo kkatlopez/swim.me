@@ -157,12 +157,13 @@ class CreateChat extends Component {
         <Container fluid className="siteHeader d-flex align-items-end">
           <h1 className="siteHeaderTitle px-3 mb-3">New Chat</h1>
         </Container>
-        <Container className="px-3 dynamic-height">
+        <Container className="px-3">
           <a onClick={() => this.sendProps()} className="standalone">
             <p><FontAwesomeIcon icon={faChevronLeft} className="px-0"/>Back to Chats</p>
           </a>
-          <h2 className="sectionTitle">New Chat</h2>
+          <h2 className="sectionTitle pb-4">New Chat</h2>
         </Container>
+        <Container className="px-3" style={{ width: '95vw' }}>
         <Autocomplete
         multiple
         id="tags-filled"
@@ -175,15 +176,15 @@ class CreateChat extends Component {
         //   this.changeMembers(value);
         // }}
 
-      renderTags={(value, getTagProps) => {
-        console.log(value);
-        this.changeMembers(value);
-        return value.map((option, index) => (
-          <Chip variant="outlined" label={option.firstName + " " + option.lastName} {...getTagProps({ index })} />
-        ));
+        renderTags={(value, getTagProps) => {
+          console.log(value);
+          this.changeMembers(value);
+          return value.map((option, index) => (
+            <Chip variant="outlined" label={option.firstName + " " + option.lastName} {...getTagProps({ index })} />
+          ));
 
+        }
       }
-    }
 
 
         renderInput={(params) => (
@@ -194,12 +195,10 @@ class CreateChat extends Component {
             placeholder=""
           />
         )}
-      />
+      /></Container>
+
         <Container className="px-4">
           <Form className="py-3" onSubmit={this.createUser}>
-
-
-
             <Form.Group as={Row} className="mb-3"mx-2>
               <Form.Label>Group Name</Form.Label>
               <div className="d-flex">

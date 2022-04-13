@@ -80,7 +80,7 @@ class Messaging extends Component {
           New Chat
           </Button>
         </Container>
-        <Container className="px-4">
+        <Container className="px-4 dynamic-height">
         <div className="chat-card">
           {
             this.state.chatlist.map( (lister) => {
