@@ -12,8 +12,10 @@ import TextField from '@mui/material/TextField';
 class CreateChat extends Component {
   constructor(props) {
 	  super(props);
+    this.members = [];
     this.state = {
       users: [],
+      members: [],
       group: "",
       picture: "",
       userid: null,
@@ -64,6 +66,12 @@ class CreateChat extends Component {
   changeGroup = (event) => {
     this.setState({group: event.target.value}, () => this.checkSubmittable());
   }
+  changeMembers = (value) => {
+    console.log(value);
+    this.members = value.map((person) => person.userID);
+    console.log(this.members);
+    // this.setState({members: value}, () => this.checkSubmittable());
+  }
 
   createChat = (event) => {
     event.preventDefault();
@@ -74,7 +82,7 @@ class CreateChat extends Component {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        members: this.state.first,
+        members: this.members,
         name: this.state.group,
         picture: this.state.picture,
       })
@@ -158,14 +166,26 @@ class CreateChat extends Component {
         <Autocomplete
         multiple
         id="tags-filled"
-        options={this.state.users.map((option) => option.firstName + " " + option.lastName)}
+        options={this.state.users}
+        getOptionLabel={option => option.firstName + " " + option.lastName}
+        getOptionSelected={(option, value) => {console.log(option); return (option.userID === value.userID);}}
         defaultValue={[]}
         freeSolo
-        renderTags={(value, getTagProps) =>
-          value.map((option, index) => (
-            <Chip variant="outlined" label={option} {...getTagProps({ index })} />
-          ))
-        }
+        // onChange={(value) => {
+        //   this.changeMembers(value);
+        // }}
+
+      renderTags={(value, getTagProps) => {
+        console.log(value);
+        this.changeMembers(value);
+        return value.map((option, index) => (
+          <Chip variant="outlined" label={option.firstName + " " + option.lastName} {...getTagProps({ index })} />
+        ));
+
+      }
+    }
+
+
         renderInput={(params) => (
           <TextField
             {...params}
@@ -257,5 +277,7 @@ class CreateChat extends Component {
 //     }
 //   </Form.Select>
 // </Form.Group>
+
+
 
 export default withRouter(CreateChat);
