@@ -3,9 +3,9 @@ ITWS 6700, Spring 2022
 
 Kat Lopez, Lanya Xiang, Matthew Youngbar, Gwyneth Yuen
 
-##API Documentation
+## API Documentation
 
-###GET Requests
+### GET Requests
 
 /meet_info: get meet information
 /alerts: get alerts
@@ -17,7 +17,7 @@ searchterm = firstname~lastname~meetname~startdate
 /top_10: get All Time Top 10 data
 /user_info: get credentials from the database
 
-##POST Requests
+## POST Requests
 
 /verify_credentials: checks username and password upon logging in
 /edit_swimmer_info: edit swimmer information like hometown or strokes
