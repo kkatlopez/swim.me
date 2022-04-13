@@ -495,7 +495,7 @@ app.post("/chats", async (req, res) => {
                 chat_return.lastMessage = lister.messages[lister.messages.length - 1][1];
               }
               else if (!image) {
-                image = "https://www.nicepng.com/png/detail/82-824233_class-group-chat-comments-group-chat-icon-free.png";
+                image = "https://www.pngall.com/wp-content/uploads/10/Message-Silhouette-PNG-Image-File.png";
               }
               chat_return.chatIMG = image;
               return chat_return;
