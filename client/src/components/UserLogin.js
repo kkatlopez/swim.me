@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { Container, Form, Button, FloatingLabel} from 'react-bootstrap';
+import { Container, Form, Button, FloatingLabel, Col, Row} from 'react-bootstrap';
 
 class UserLanding extends Component {
 
@@ -36,6 +36,7 @@ class UserLanding extends Component {
 
 
   confirmCreds = function () {
+    
     fetch("http://localhost:3001/verify_credentials", {
       method: 'POST',
       headers: {
@@ -83,6 +84,7 @@ class UserLanding extends Component {
             <h1 className="siteHeaderTitle px-3 mb-3">Log in</h1>
           </Container>
           <Container className="px-4 pt-3">
+            <Form>
             <Form.Group>
               <FloatingLabel
                 controlId="floatingInput"
@@ -101,7 +103,15 @@ class UserLanding extends Component {
             <Form.Group>
               <FloatingLabel controlId="floatingPassword" label="Password">
                 <Form.Control type="password" placeholder="Password"
-                value={this.state.pass} onChange={this.changePass} isInvalid={!this.state.isubmittable}/>
+                  value={this.state.pass}
+                  onChange={this.changePass}
+                  isInvalid={!this.state.isubmittable}
+                  onKeyPress={event => {
+                    if (event.key === "Enter") {
+                      this.confirmCreds();
+                    }
+                  }}
+                />
 
                 <Form.Control.Feedback type="invalid">
                   Either your username or password is incorrect.
@@ -110,10 +120,16 @@ class UserLanding extends Component {
             </Form.Group>
 
             <Form.Group className="mt-4 d-flex justify-content-center">
-              <Button onClick={this.confirmCreds} className={"green-button " + (this.state.submittable ? "" : "disabled")} disabled={!this.state.submittable}>Sign in</Button>
+              <Button
+              onClick={this.confirmCreds}
+              style={{cursor: "pointer"}}
+              // className={"green-button " + (this.state.submittable ? "" : "disabled")}
+              // disabled={!this.state.submittable}
+              >Sign in</Button>
             </Form.Group>
+            </Form>
+            {/* </div> */}
           </Container>
-
         </Container>
     );
   }

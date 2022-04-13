@@ -124,7 +124,7 @@ class AllTimeTop10 extends Component {
 
           {showTable &&
             <div className="event-time">
-            <h3>Top 10 Times for {this.state.eventresults.event[0]}</h3>
+            <h3 className="sectionTitle">Top 10 Times for {this.state.eventresults.event[0]}</h3>
             <Table bordered>
               <thead>
                   <tr>

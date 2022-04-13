@@ -31,7 +31,7 @@ class RosterProfile extends Component {
       strokes: "",
       event: "",
       fullname: "",
-      imageurl: this.props.url
+      imageurl: ""
     };
   }
 
@@ -47,7 +47,8 @@ class RosterProfile extends Component {
             hometown: specific_result.hometown,
             strokes: specific_result.position,
             latestmeet: specific_result.meetsSwam.at(-1),
-            fullname: this.state.firstname + " " + this.state.lastname
+            fullname: this.state.firstname + " " + this.state.lastname,
+            imageurl: specific_result.picture
           })
         }
       )
@@ -86,7 +87,7 @@ class RosterProfile extends Component {
           <h1 className="sectionTitle">{this.state.firstname} {this.state.lastname}</h1>
           <div className="d-flex row">
               <div className="col-5">
-                  <img src="https://picsum.photos/300" className="img-thumbnail"></img>
+                  <img src={this.state.imageurl} className="img-thumbnail"></img>
               </div>
               <div className="col info px-2">
                   <p><b>Position: </b>{this.state.strokes}</p>

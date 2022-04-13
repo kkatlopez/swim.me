@@ -18,11 +18,13 @@ class FastestTimes extends Component {
       .then(
         (result) => {
           var specific_result = result.find(x => (x.firstName === this.state.firstname && x.lastName === this.state.lastname));
+          const reference = [ '50 Free', '100 Free', '200 Free', '500 Free', '1000 Free', '1650 Free', '100 Back', '200 Back', '100 Breast', '200 Breast', '100 Fly', '200 Fly', '200 IM', '200 Im', '400 IM', '400 Im' ];
+          specific_result.bestTimes.sort(function(a, b) {
+            return reference.indexOf(a[0]) - reference.indexOf(b[0]);
+          });
           this.setState({
             times: specific_result.bestTimes
           });
-          console.log(this.state.times);
-          console.log(specific_result);
         },
         (error) => {
           this.setState({
@@ -37,8 +39,8 @@ class FastestTimes extends Component {
     var split = this.props.name.split(' ');
     console.log(split);
     this.setState({
-        firstname: split[0],
-        lastname: split[1]
+      firstname: split[0],
+      lastname: split[1]
     });
     this.populateEvents();
   }

@@ -176,13 +176,13 @@ class AdminCreateUser extends Component {
         <Container fluid className="siteHeader d-flex align-items-end">
           <h1 className="siteHeaderTitle px-3 mb-3">Admin</h1>
         </Container>        
-        <Container className="px-3 dynamic-height">
+        <Container className="px-3">
           <a onClick={() => this.sendProps()} className="standalone">
             <p><FontAwesomeIcon icon={faChevronLeft} className="px-0"/> Back to Admin Dashboard</p>
           </a>
-          <h2 className="sectionTitle">Modify User</h2>
+          <h2 className="sectionTitle">Create a New User</h2>
         </Container>
-        <Container className="px-4">
+        <Container className="px-4 dynamic-height">
           <Form className="py-3" onSubmit={this.createUser}>
             <Form.Group as={Row} className="mb-3"mx-2>
               <Form.Label>First Name</Form.Label>
