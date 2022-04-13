@@ -1,0 +1,3 @@
+[submodule "SwimScraper"]
+	path = SwimScraper
+	url = https://github.com/matthewyoungbar/SwimScraper

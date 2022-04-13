@@ -33,6 +33,10 @@ class RosterProfileLatest extends Component {
         .then(
           (result) => {
             var specific_result = result.find(x => (x.firstName === this.state.firstname && x.lastName === this.state.lastname));
+            const reference = [ '50 Free', '100 Free', '200 Free', '500 Free', '1000 Free', '1650 Free', '100 Back', '200 Back', '100 Breast', '200 Breast', '100 Fly', '200 Fly', '200 IM', '200 Im', '400 IM', '400 Im' ];
+            specific_result.bestTimes.sort(function(a, b) {
+              return reference.indexOf(a[0]) - reference.indexOf(b[0]);
+            });
             this.setState({
               fastest: specific_result.bestTimes
             });

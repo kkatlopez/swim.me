@@ -246,6 +246,7 @@ app.get("/swimmers/:fullName/event/:eventName", async (req, res) => {
             allresults.push(data[i].eventsSwam[j]);
           }
         }
+
         for (k = 0; k < allresults.length; k++) {
           for (l = 0; l < allresults[k].length; l++) {
             if (allresults[k][0] === eventname) {
