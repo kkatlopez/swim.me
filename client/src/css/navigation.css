@@ -1,11 +1,3 @@
-/* a {
-    color: #6C757D !important;
-} */
-
-.icons > a:first-child {
-    color: #1D62A0 !important;
-}
-
 svg {
     padding: 0 !important;
 }
