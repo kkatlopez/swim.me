@@ -42,8 +42,11 @@ class AlertsAndCalendar extends Component {
       .then(
         (result) => {
           result.sort(function(x, y) {
-            if(x.alert_end_date < y.alert_end_date) {
+            if (x.alert_end_date < y.alert_end_date) {
               return -1;
+            }
+            if (x.alert_end_date > y.alert_end_date) {
+              return 1;
             }
             if (x.alert_type === "High") {
               return -1;
@@ -69,7 +72,6 @@ class AlertsAndCalendar extends Component {
             if (y.alert_type === "Info") {
               return 1;
             }
-            return 1;
           });
 
           const today = new Date().toISOString().split('T')[0];
