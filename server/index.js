@@ -495,7 +495,7 @@ app.post("/chats", async (req, res) => {
               else {
                 image = "https://www.nicepng.com/png/detail/82-824233_class-group-chat-comments-group-chat-icon-free.png";
               }
-              chat_return.image = image;
+              chat_return.chatIMG = image;
               return chat_return;
             }));
             message.then((result) => {
