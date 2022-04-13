@@ -162,7 +162,7 @@ class AlertsAndCalendar extends Component {
               <Accordion.Header>
                 <h2 className="sectionTitle">Calendar</h2>
               </Accordion.Header>
-              <Accordion.Body>
+              <Accordion.Body className="cal">
               <FullCalendar
                   // plugins={[ dayGridPlugin, timeGridPlugin, listPlugin, iCalendarPlugin ]}
                   plugins={[ dayGridPlugin, googleCalendarPlugin, timeGridPlugin, listPlugin ]}

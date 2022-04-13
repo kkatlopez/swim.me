@@ -19,3 +19,9 @@ table > thead {
 .fc-dayGridMonth-view, .fc-timeGridWeek-view, .fc-timeGridDay-view {
   height: 65vh;
 }
+
+.accordion,
+.cal {
+  height: auto;
+  padding-bottom: 20vh !important;
+}
