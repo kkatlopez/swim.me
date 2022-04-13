@@ -59,12 +59,12 @@ class AdminCreateAlert extends Component {
     }).then(res => res.json())
       .then(
         (result) => {
-          this.setState({
-            showModal: true
-          });
           if (result.Result == true) {
             // this.props.history.push("/admin", { text: result.text, type: result.type, endDate: result.endDate});
             // this.sendProps();
+            this.setState({
+              showModal: true
+            });
           } else {
             this.setState({
               text: "",
