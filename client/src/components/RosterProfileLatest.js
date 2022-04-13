@@ -65,7 +65,7 @@ class RosterProfileLatest extends Component {
     render() {
       return(
         <Container fluid className="page-container">
-          <Container className="px-4">
+          <Container className="px-4 dynamic-height">
           <h2 className="sectionTitle">{this.state.latestmeet[0]}</h2>
             <p class="text-muted">{moment(this.state.latestmeet[1]).format('ll')}</p>
             <Table bordered>

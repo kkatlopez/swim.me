@@ -379,17 +379,17 @@ app.post('/edit_swimmer_info', async (req, res) => {
 //Edit user information
 app.post('/edit_user_info', async (req, res) => {
   var user = req.body.username;
-  var pass = req.body.password;
+  // var pass = req.body.password;
   var ad = req.body.type_bool;
   var id = req.body.userid;
 
-  const saltRounds = 10;
-  var hashedPassword = await bcrypt.hash(pass, saltRounds);
+  // const saltRounds = 10;
+  // var hashedPassword = await bcrypt.hash(pass, saltRounds);
   // console.log(user + " " + pass + " " + ad + " " + id + " " + hashedPassword);
   await user_info.findOneAndUpdate({ userID: id },
     { "$set": {
       username: user,
-      password: hashedPassword,
+      // password: hashedPassword,
       admin: ad
     }
     }).then(function (err) {
