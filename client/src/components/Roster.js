@@ -44,6 +44,7 @@ class Roster extends Component {
           this.setState({
             currentswimmers: swimmerlist
           });
+          console.log(this.state.currentswimmers);
         },
         (error) => {
           this.setState({
@@ -92,7 +93,7 @@ class Roster extends Component {
         <Container fluid className="d-flex flex-wrap justify-content-center dynamic-height mx-0">
           {
             this.state.currentswimmers.map( (lister) => {
-              return(<RosterCard first={lister.firstName} last={lister.lastName} year={lister.classYear} hs={lister.highSchool} hometown={lister.hometown} strokes={lister.position} />)
+              return(<RosterCard first={lister.firstName} last={lister.lastName} year={lister.classYear} hs={lister.highSchool} hometown={lister.hometown} strokes={lister.position} img={lister.picture} />)
             })
           }
           {/* <div>{this.state.filteredData.map(i => <p>{i.firstname}</p>)}</div> */}

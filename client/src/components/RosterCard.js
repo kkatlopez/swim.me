@@ -14,16 +14,8 @@ class RosterCard extends Component {
           hs: this.props.hs,
           hometown: this.props.hometown,
           strokes: this.props.strokes,
-          imageurl: ""
+          imageurl: this.props.img
         }
-    }
-
-    getImageUrl() {
-      var url = "https://rpiathletics.com/images/2021/10/5/" + this.state.lastname + "_" + this.state.firstname + ".jpg";
-      this.setState({
-        imageurl: url
-      });
-      // console.log(this.state.imageurl);
     }
 
     redirect() {
@@ -33,15 +25,15 @@ class RosterCard extends Component {
       this.props.history.push("/roster/"+ this.state.firstname + "-" + this.state.lastname, { logged: logged, admin: admin, user: user} );
     }
 
-    componentDidMount() {
-      this.getImageUrl();
-    }
+    // componentDidMount() {
+    //   this.getImageUrl();
+    // }
       
     render() {
       return(
         <Card className="prof-card">
             <Card.Body firstname={this.state.firstname} lastname={this.state.lastname} year={this.state.year} hs={this.state.hs} hometown={this.state.hometown} stroke={this.state.strokes} url={this.state.imageurl} onClick={() => this.redirect()}>
-                <Card.Img variant="top" src="https://picsum.photos/300" />
+                <Card.Img variant="top" src={this.state.imageurl} />
                 <Card.Title className="mt-2">{this.state.firstname} {this.state.lastname}</Card.Title>
                 <Card.Text>
                   <div>{this.state.strokes}</div>
