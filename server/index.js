@@ -485,11 +485,19 @@ app.post("/chats", async (req, res) => {
           collection.find({ "users": req.body.user }).toArray(function (err, data) {
             var message = Promise.all(data.map(async (lister) => {
               var image = lister.groupPicture;
-              if (!image) {
-                var user = await user_info.findOne({"userID": lister.messages[lister.messages.length - 1][0]});
-                image = user.picture;
+              var chat_return = {chatName: lister.chatName, chatID: lister.chatID, lastMessage: ""};
+              if (lister.messages.length > 0) {
+                if (!image) {
+                  var user = await user_info.findOne({"userID": lister.messages[lister.messages.length - 1][0]});
+                  image = user.picture;
+                }
+                chat_return.lastMessage = lister.messages[lister.messages.length - 1][1];
               }
-              return {chatName: lister.chatName, chatID: lister.chatID, chatIMG: image, lastMessage: lister.messages[lister.messages.length - 1][1]}
+              else {
+                image = "https://www.nicepng.com/png/detail/82-824233_class-group-chat-comments-group-chat-icon-free.png";
+              }
+              chat_return.chatIMG = image;
+              return chat_return;
             }));
             message.then((result) => {
               return res.send(result);
@@ -562,6 +570,34 @@ app.post("/get_messages", async (req, res) => {
     console.log(result);
     res.send(result);
   });
+});
+
+app.post("/create_chat", async (req, res) => {
+  // a document instance
+  // var lastChat = await chats.find({}).sort({chatID:-1}).limit(1); // for MAX
+  var count = await chats.countDocuments({});
+  var newChat = { chatID: count+1, messages: [], users: req.body.members, chatName: req.body.name};
+  if (req.body.picture != "") {
+    newChat.groupPicture = req.body.picture;
+  }
+  console.log(newChat);
+  chats.create(newChat, function(err, new_user) {
+    if (err) return console.error(err);
+    console.log("Created new chat");
+  });
+  return res.send({ "Result": true });
+});
+
+app.post("/modify_chat", async (req, res) => {
+  // a document instance
+  var chat = await chats.findOne({ "chatID": req.body.chatID });
+  chat.chatName = req.body.name;
+  chat.users = req.body.members;
+  if (req.body.picture != "") {
+    chat.picture = req.body.picture;
+  }
+  chat.save();
+  return res.send({ "Result": true });
 });
 
 //---------------------------------------------------MISC FUNCTIONS---------------------------------------------------
