@@ -484,11 +484,19 @@ app.post("/chats", async (req, res) => {
           collection.find({ "users": req.body.user }).toArray(function (err, data) {
             var message = Promise.all(data.map(async (lister) => {
               var image = lister.groupPicture;
-              if (!image) {
-                var user = await user_info.findOne({"userID": lister.messages[lister.messages.length - 1][0]});
-                image = user.picture;
+              var chat_return = {chatName: lister.chatName, chatID: lister.chatID, lastMessage: ""};
+              if (lister.messages.length > 0) {
+                if (!image) {
+                  var user = await user_info.findOne({"userID": lister.messages[lister.messages.length - 1][0]});
+                  image = user.picture;
+                }
+                chat_return.lastMessage = lister.messages[lister.messages.length - 1][1];
               }
-              return {chatName: lister.chatName, chatID: lister.chatID, chatIMG: image, lastMessage: lister.messages[lister.messages.length - 1][1]}
+              else {
+                image = "https://www.nicepng.com/png/detail/82-824233_class-group-chat-comments-group-chat-icon-free.png";
+              }
+              chat_return.image = image;
+              return chat_return;
             }));
             message.then((result) => {
               return res.send(result);
