@@ -563,28 +563,32 @@ app.post("/get_messages", async (req, res) => {
   });
 });
 
-app.get("create_chat", async (req, res) => {
+app.post("/create_chat", async (req, res) => {
   // a document instance
-  var newChat = { chatID: user, messages: [], users: req.body.members, chatName: req.body.name}
+  // var lastChat = await chats.find({}).sort({chatID:-1}).limit(1); // for MAX
+  var count = await chats.countDocuments({});
+  var newChat = { chatID: count+1, messages: [], users: req.body.members, chatName: req.body.name};
   if (req.body.picture != "") {
     newChat.groupPicture = req.body.picture;
   }
-  chats.create({ chatID: user, messages: [], users: req.body.members, chatName: req.body.name, groupPicture: req.body.picture}, function(err, new_user) {
+  console.log(newChat);
+  chats.create(newChat, function(err, new_user) {
     if (err) return console.error(err);
-    console.log("Created new user");
+    console.log("Created new chat");
   });
   return res.send({ "Result": true });
 });
 
-app.get("modify_chat", async (req, res) => {
+app.post("/modify_chat", async (req, res) => {
   // a document instance
   var chat = await chats.findOne({ "chatID": req.body.chatID });
   chat.chatName = req.body.name;
-  chat.chatName = req.body.members;
+  chat.users = req.body.members;
   if (req.body.picture != "") {
     chat.picture = req.body.picture;
   }
   chat.save();
+  return res.send({ "Result": true });
 });
 
 //---------------------------------------------------MISC FUNCTIONS---------------------------------------------------
