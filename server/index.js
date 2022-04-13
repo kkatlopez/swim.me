@@ -103,7 +103,8 @@ var chats_schema = new Schema({
   chatID: Number,
   messages: [Object],
   users:[Number],
-  chatName: String
+  chatName: String,
+  groupPicture: String
 }, { versionKey: false }, {collection: 'chats'});
 const chats = mongoose.model('chats', chats_schema, 'chats');
 
@@ -493,8 +494,8 @@ app.post("/chats", async (req, res) => {
                 }
                 chat_return.lastMessage = lister.messages[lister.messages.length - 1][1];
               }
-              else {
-                image = "https://www.nicepng.com/png/detail/82-824233_class-group-chat-comments-group-chat-icon-free.png";
+              else if (!image) {
+                image = "https://www.pngall.com/wp-content/uploads/10/Message-Silhouette-PNG-Image-File.png";
               }
               chat_return.chatIMG = image;
               return chat_return;
@@ -580,7 +581,6 @@ app.post("/create_chat", async (req, res) => {
   if (req.body.picture != "") {
     newChat.groupPicture = req.body.picture;
   }
-  console.log(newChat);
   chats.create(newChat, function(err, new_user) {
     if (err) return console.error(err);
     console.log("Created new chat");
