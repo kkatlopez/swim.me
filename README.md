@@ -13,13 +13,13 @@ Kat Lopez, Lanya Xiang, Matthew Youngbar, Gwyneth Yuen
 3. Run `python -m pip install -r requirements.txt`
 
 **To run the server:**
-1. Run `npm install` in the same directory as the one listed above
-2. Run `npm start` or `nodemon index.js`
+1. Run `npm install --legacy-peer-deps` in the same directory as the one listed above
+2. Run `npm start`
 
 **To start the client:**
 1. Open another terminal window and change the directory to the project
 2. Run `cd client` to change the directory to our client folder
-3. Run `npm install`
+3. Run `npm install --legacy-peer-deps`
 4. Run `npm start`
 
 ## Other Links
