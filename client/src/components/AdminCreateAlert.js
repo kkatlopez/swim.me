@@ -17,36 +17,40 @@ class AdminCreateAlert extends Component {
       showModal: false
     }
 
+    // updates the content of the form whenever there is a change:
     this.changeText = this.changeText.bind(this);
     this.changeType = this.changeType.bind(this);
     this.changeDate = this.changeDate.bind(this);
     this.confirmForm = this.confirmForm.bind(this);
     this.checkSubmittable = this.checkSubmittable.bind(this);
     this.closeModal = this.closeModal.bind(this);
-
-    if(this.props.location.state === undefined){
+    
+    // redirect to login if not logged in
+    if (this.props.location.state === undefined){
       this.props.history.push("/admin", { logged: false });
     }
     else if (!('logged' in this.props.location.state)){
       this.props.history.push("/admin", { logged: false });
     }
-    else if(this.props.location.state.logged === false){
+    else if (this.props.location.state.logged === false){
       this.props.history.push("/admin", { logged: false });
     }
-    else if(this.props.location.state.admin === false){
+    else if (this.props.location.state.admin === false){
       this.props.history.push("/", { logged: true });
     }
   }
 
+  // check if the form is submittable -- if text is empty, priority is not set, OR end date is before the current day (today), set submittable to false; disables Submit button
   checkSubmittable = function(){
     const today = new Date();
-    if (this.state.text.trim() == "" || this.state.type.trim() == "Select alert priority" || this.state.endDate < today){
+    if (this.state.text.trim() === "" || this.state.type.trim() === "Select alert priority" || this.state.endDate < today){
       this.setState({submittable: false});
     } else{
       this.setState({submittable: true});
     }
   }
 
+  // posting alert to database
   confirmForm = function (event) {
     event.preventDefault();
     event.stopPropagation();
@@ -59,9 +63,7 @@ class AdminCreateAlert extends Component {
     }).then(res => res.json())
       .then(
         (result) => {
-          if (result.Result == true) {
-            // this.props.history.push("/admin", { text: result.text, type: result.type, endDate: result.endDate});
-            // this.sendProps();
+          if (result.Result === true) {
             this.setState({
               showModal: true
             });
@@ -82,8 +84,9 @@ class AdminCreateAlert extends Component {
           });
         }
       )
-    }
-
+  }
+  
+  // following 3 functions are used to change state of form:
   changeText = (event) => {
     this.setState({text: event.target.value}, () => this.checkSubmittable());
   }
@@ -96,6 +99,7 @@ class AdminCreateAlert extends Component {
     this.setState({endDate: event.target.value}, () => this.checkSubmittable());
   }
 
+  // used to close modal upon successful submission of alert
   closeModal() {
     this.setState({ 
       showModal: false
@@ -103,6 +107,7 @@ class AdminCreateAlert extends Component {
     this.props.history.push("/admin/", { logged: true });
   }
 
+  // send props to other admin components
   sendProps() {
     var logged = this.props.location.state.logged;
     var admin = this.props.location.state.admin;

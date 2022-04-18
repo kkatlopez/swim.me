@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
-import { Link, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { Container, Navbar, Nav } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome, faStopwatch, faUserGroup, faBell, faMessage } from '@fortawesome/free-solid-svg-icons';
@@ -9,11 +8,10 @@ import '../css/navigation.css';
 class Navigation extends Component {
   constructor(props) {
 	super(props);
-    this.state = {
-
-    };
+    this.state = {};
   }
 
+  // send props to other admin components
   sendProps(url) {
     var logged = this.props.logged;
     var admin = this.props.admin;

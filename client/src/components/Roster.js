@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import ReactDOM from 'react-dom';
-import { Container, Form, FormControl, Button, Card, List } from 'react-bootstrap';
+import { Container, Button } from 'react-bootstrap';
 import '../css/roster.css';
 import RosterCard from './RosterCard.js';
 import Navigation from "./Navigation.js";
-import { useState } from "react";
 import RosterSearch from './RosterSearch.js';
 
 class Roster extends Component {
@@ -15,36 +14,35 @@ class Roster extends Component {
       currentswimmers: []
     };
 
-    if(this.props.location.state == undefined){
+    // redirect to login if not logged in
+    if(this.props.location.state === undefined){
       this.props.history.push("/", { logged: false });
     }
     else if (!('logged' in this.props.location.state)){
       this.props.history.push("/", { logged: false });
     }
-    else if(this.props.location.state.logged == false){
+    else if(this.props.location.state.logged === false){
       this.props.history.push("/", { logged: false });
     }
   }
 
+  // retrieve all swimmer info and identify only current season swimmers
   populateProfiles() {
     fetch("http://localhost:3001/swimmers")
       .then(res => res.json())
       .then(
         (result) => {
           var allswimmers = result;
-          // console.log(allswimmers);
           var i;
           var swimmerlist = [];
           for (i = 0; i < allswimmers.length; i++) {
-            if (allswimmers[i].seasonsSwam.includes("2021-2022") == true) {
+            if (allswimmers[i].seasonsSwam.includes("2021-2022") === true) {
               swimmerlist.push(allswimmers[i]);
             }
           }
-          // console.log(swimmerlist);
           this.setState({
             currentswimmers: swimmerlist
           });
-          console.log(this.state.currentswimmers);
         },
         (error) => {
           this.setState({
@@ -55,16 +53,16 @@ class Roster extends Component {
       )
   }
 
+  // send props to other admin components
   redirect() {
     var node = document.getElementsByClassName('divider text')[0];
     var a = ReactDOM.findDOMNode(node);
-    console.log(a.textContent);
     var name = a.textContent.split(" ");
-    console.log(name);
+    var redirect;
     if (name.length === 2) {
-      var redirect = "/roster/" + name[0] + "-" + name[1];
+      redirect = "/roster/" + name[0] + "-" + name[1];
     } else {
-      var redirect = "/roster/" + name[0] + "-" + name[1] + " " + name[2];
+      redirect = "/roster/" + name[0] + "-" + name[1] + " " + name[2];
     }
     var logged = this.props.location.state.logged;
     var admin = this.props.location.state.adin
@@ -72,6 +70,7 @@ class Roster extends Component {
     this.props.history.push(redirect, { logged: logged, admin: admin, user: user} );
   }
 
+  // initialize component before rendering
   componentDidMount() {
     this.populateProfiles();
   }
@@ -96,7 +95,6 @@ class Roster extends Component {
               return(<RosterCard first={lister.firstName} last={lister.lastName} year={lister.classYear} hs={lister.highSchool} hometown={lister.hometown} strokes={lister.position} img={lister.picture} />)
             })
           }
-          {/* <div>{this.state.filteredData.map(i => <p>{i.firstname}</p>)}</div> */}
         </Container>
         <Navigation logged = {this.props.location.state.logged} admin = {this.props.location.state.admin} user = {this.props.location.state.user}/>
       </Container>

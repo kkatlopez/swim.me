@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-// import ReactDOM from 'react-dom';
 import { Container, Form, Button, Row, Modal } from 'react-bootstrap';
 import { Link, withRouter } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -25,28 +24,27 @@ class CreateChat extends Component {
       edittable: true,
       showModal: false
     }
-
+    
+    // updates the content of the form whenever there is a change:
     this.changePicture = this.changePicture.bind(this);
     this.changeGroup = this.changeGroup.bind(this);
-    // this.updateUser = this.updateUser.bind(this);
-    // this.deleteUser = this.deleteUser.bind(this);
     this.createChat = this.createChat.bind(this);
     this.checkSubmittable = this.checkSubmittable.bind(this);
     this.closeModal = this.closeModal.bind(this);
 
-
-    //BELOW IS THE CODE TO BLOCK OFF WHEN NOT LOGGED IN
-    if(this.props.location.state === undefined){
+    // redirect to login if not logged in
+    if (this.props.location.state === undefined) {
       this.props.history.push("/", { logged: false });
     }
-    else if (!('logged' in this.props.location.state)){
+    else if (!('logged' in this.props.location.state)) {
       this.props.history.push("/", { logged: false });
     }
-    else if(this.props.location.state.logged === false){
+    else if (this.props.location.state.logged === false) {
       this.props.history.push("/", { logged: false });
     }
   }
 
+  // check if the form is submittable -- if there is no userid, username / password are empty, Submit button is disabled
   checkSubmittable = function(){
     var usernames = this.state.users.map(function(value,index) { return value.username; });
     if (this.state.userid === null && this.state.username !== "" && this.state.password !== "" && this.state.type_bool !== null) {
@@ -59,6 +57,7 @@ class CreateChat extends Component {
     }
   }
 
+  // following 4 functions are used to update the state of the form:
   changePicture = (event) => {
     this.setState({picture: event.target.value}, () => this.checkSubmittable());
   }
@@ -67,10 +66,7 @@ class CreateChat extends Component {
     this.setState({group: event.target.value}, () => this.checkSubmittable());
   }
   changeMembers = (value) => {
-    console.log(value);
     this.members = value.map((person) => person.userID);
-    console.log(this.members);
-    // this.setState({members: value}, () => this.checkSubmittable());
   }
 
   createChat = (event) => {
@@ -93,15 +89,6 @@ class CreateChat extends Component {
           this.setState ({
             showModal: true
           });
-          if (result.status !== 200) {
-            this.setState({submittable: false});
-            alert("error");
-          }
-          // if (result.status == 200) {
-          //   this.props.history.push("/admin/", { logged: true });
-          // }
-          // else {
-          //
         },
         (error) => {
           this.setState({
@@ -112,6 +99,7 @@ class CreateChat extends Component {
       )
   }
 
+  // used to close modal upon successful submission of alert
   closeModal() {
     this.setState({
       showModal: false
@@ -120,7 +108,8 @@ class CreateChat extends Component {
     var user = this.props.location.state.user;
     this.props.history.push("/chat", { logged: true, admin: admin, user: user });
   }
-
+  
+  // send props to other components
   sendProps() {
     var logged = this.props.location.state.logged;
     var admin = this.props.location.state.admin;
@@ -128,12 +117,12 @@ class CreateChat extends Component {
     this.props.history.push("/chat", { logged: logged, admin: admin, user: user} );
   }
 
+  // called to populate page with data from database
   populatePage() {
     fetch("http://localhost:3001/user_info")
       .then(res => res.json())
       .then(
         (result) => {
-          // result.unshift({username: "Create a new user"});
           this.setState({
             users: result
           });
@@ -147,6 +136,7 @@ class CreateChat extends Component {
       )
   }
 
+  // initialize component before rendering
   componentDidMount() {
     this.populatePage();
   }
@@ -172,9 +162,6 @@ class CreateChat extends Component {
         getOptionSelected={(option, value) => {console.log(option); return (option.userID === value.userID);}}
         defaultValue={[]}
         freeSolo
-        // onChange={(value) => {
-        //   this.changeMembers(value);
-        // }}
 
         renderTags={(value, getTagProps) => {
           console.log(value);
@@ -207,7 +194,6 @@ class CreateChat extends Component {
                   value={this.state.group}
                   onChange={this.changeGroup}
                   className="me-2"
-                  // isInvalid={!this.state.isubmittable}
                   disabled={!this.state.edittable}
                 />
               </div>
@@ -221,7 +207,6 @@ class CreateChat extends Component {
                   value={this.state.picture}
                   onChange={this.changePicture}
                   className="me-2"
-                  // isInvalid={!this.state.isubmittable}
                   disabled={!this.state.edittable}
                 />
               </div>
@@ -276,7 +261,5 @@ class CreateChat extends Component {
 //     }
 //   </Form.Select>
 // </Form.Group>
-
-
 
 export default withRouter(CreateChat);

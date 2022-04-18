@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
-// import ReactDOM from 'react-dom';
 import { DropdownButton, Dropdown, Table } from 'react-bootstrap';
-import { Link, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import '../css/eventtimes.css';
 import moment from 'moment';
 
 class EventTimes extends Component {
-	
   constructor(props) {
     super(props);
     this.state = {
@@ -17,22 +15,23 @@ class EventTimes extends Component {
     };
   }
 
+  // retrieve events swam by a swimmer
   getEventsSwam() {
     fetch("http://localhost:3001/swimmers")
       .then(res => res.json())
       .then(
         (result) => {
           var specific_result = result.find(x => (x.firstName === this.state.firstname && x.lastName === this.state.lastname));
-          var i, j;
+          var i;
           var eventlist = []
           for (i = 0; i < specific_result.eventsSwam.length; i++) {
             eventlist.push(specific_result.eventsSwam[i][0]);
           }
+          // sorting events in the proper order (using reference to sort eventlist)
           const reference = [ '50 Free', '100 Free', '200 Free', '500 Free', '1000 Free', '1650 Free', '100 Back', '200 Back', '100 Breast', '200 Breast', '100 Fly', '200 Fly', '200 IM', '200 Im', '400 IM', '400 Im' ];
           eventlist.sort(function(a, b) {
             return reference.indexOf(a) - reference.indexOf(b);
           });
-          console.log(eventlist);
           this.setState({
             eventsswam: eventlist
           });
@@ -40,6 +39,7 @@ class EventTimes extends Component {
       )
   }
 
+  // get all times for a specific event for a swimmer
   timesTable(eventname) {
     var link = "http://localhost:3001/swimmers/" + this.state.firstname + " " + this.state.lastname + "/event/" + eventname;
     fetch(link)
@@ -59,6 +59,7 @@ class EventTimes extends Component {
       )
   }
 
+  // show table when event is selected
   showTimes(info) {
     this.timesTable(info);
     switch(info) {
@@ -71,9 +72,9 @@ class EventTimes extends Component {
     }
   }
 
+  // initialize component before rendering
   componentDidMount() {
     var split = this.props.name.split(' ');
-    console.log(split);
     this.setState({
       firstname: split[0],
       lastname: split[1]
@@ -106,7 +107,7 @@ class EventTimes extends Component {
                   <tbody>
                     {
                       this.state.eventtimes.reverse().map( (lister, index) => {
-                        var index = index + 1;
+                        index = index + 1;
                         return(
                           <tr>
                             <td>{lister[0]}</td>

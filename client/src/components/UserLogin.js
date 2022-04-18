@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { Container, Form, Button, FloatingLabel, Col, Row} from 'react-bootstrap';
+import { Container, Form, Button, FloatingLabel} from 'react-bootstrap';
 
 class UserLanding extends Component {
 
@@ -15,16 +15,19 @@ class UserLanding extends Component {
       fakePass: "root"
     }
 
+    // updates the content of the form whenever there is a change:
     this.changeUser = this.changeUser.bind(this);
     this.changePass = this.changePass.bind(this);
     this.confirmCreds = this.confirmCreds.bind(this);
 
+    // redirect to login if not logged in
     if (this.props.location.state !== undefined && this.props.location.state.logged){
       this.props.history.push("/results", this.props.location.state);
     }
 
   }
 
+  // check if login fields are filled in
   checkSubmittable = function(){
     if (this.state.user.trim() === "" || this.state.pass.trim() === ""){
       this.setState({submittable: false});
@@ -33,10 +36,8 @@ class UserLanding extends Component {
     }
   }
 
-
-
+  // verify user's login credentials
   confirmCreds = function () {
-    
     fetch("http://localhost:3001/verify_credentials", {
       method: 'POST',
       headers: {
@@ -46,7 +47,7 @@ class UserLanding extends Component {
     }).then(res => res.json())
       .then(
         (result) => {
-          if (result.Result == true) {
+          if (result.Result === true) {
             this.props.history.push("/results", { logged: true, admin: result.Admin, user: result.User});
           }
           else{
@@ -67,11 +68,13 @@ class UserLanding extends Component {
       )
     }
 
+  // change and check the username field dynamically
   changeUser = (event) => {
     this.setState({user: event.target.value});
     this.checkSubmittable();
   }
 
+  // change and check the password field dynamically
   changePass = (event) => {
     this.setState({pass: event.target.value});
     this.checkSubmittable();
@@ -95,11 +98,9 @@ class UserLanding extends Component {
                 isInvalid={!this.state.isubmittable}
               >
                 <Form.Control type="text" placeholder="Username" value={this.state.user} onChange={this.changeUser} isInvalid={!this.state.isubmittable}/>
-
                 <Form.Control.Feedback type="invalid"></Form.Control.Feedback>
               </FloatingLabel>
             </Form.Group>
-
             <Form.Group>
               <FloatingLabel controlId="floatingPassword" label="Password">
                 <Form.Control type="password" placeholder="Password"
@@ -112,23 +113,18 @@ class UserLanding extends Component {
                     }
                   }}
                 />
-
                 <Form.Control.Feedback type="invalid">
                   Either your username or password is incorrect.
                 </Form.Control.Feedback>
               </FloatingLabel>
             </Form.Group>
-
             <Form.Group className="mt-4 d-flex justify-content-center">
               <Button
               onClick={this.confirmCreds}
               style={{cursor: "pointer"}}
-              // className={"green-button " + (this.state.submittable ? "" : "disabled")}
-              // disabled={!this.state.submittable}
               >Sign in</Button>
             </Form.Group>
             </Form>
-            {/* </div> */}
           </Container>
         </Container>
     );

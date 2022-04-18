@@ -15,6 +15,7 @@ class RosterProfileLatest extends Component {
       };
     }
 
+    // retrieve all swimmer info
     async getSwimmerInfo() {
       fetch("http://localhost:3001/swimmers")
         .then(res => res.json())
@@ -33,6 +34,7 @@ class RosterProfileLatest extends Component {
         )
     }
 
+    // retrieve latest meet info
     async getLatestMeet(latestmeet, fullname) {
       await fetch("http://localhost:3001/meet_info")
         .then(res => res.json())
@@ -57,9 +59,9 @@ class RosterProfileLatest extends Component {
         )
     }
 
+    // initialize component before rendering
     componentDidMount(){
       this.getSwimmerInfo();
-      // this.getLatestMeet(this.state.latestmeet, this.state.fullname);
     }
 
     render() {

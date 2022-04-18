@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-// import ReactDOM from 'react-dom';
 import { Container, Accordion, Alert } from 'react-bootstrap';
 import { withRouter } from 'react-router-dom';
 import '../css/alerts.css';
@@ -14,28 +13,30 @@ class AlertsAndCalendar extends Component {
 
   constructor(props) {
     super(props);
-    if(this.props.location.state === undefined){
+    // redirect to login if not logged in
+    if (this.props.location.state === undefined) {
       this.props.history.push("/", { logged: false });
     }
-    else if (!('logged' in this.props.location.state)){
+    else if (!('logged' in this.props.location.state)) {
       this.props.history.push("/", { logged: false });
     }
-    else if(this.props.location.state.logged === false){
+    else if(this.props.location.state.logged === false) {
       this.props.history.push("/", { logged: false });
     }
+
     this.state = {
       alertList: [],
-      // meetlist: [],
-      // dropdownlist: [],
       logged: this.props.location.state.logged,
       admin: this.props.location.state.admin,
       user: this.props.location.state.user
     }
+
+    // updates the content of the form whenever there is a change:
     this.getBackground = this.getBackground.bind(this);
     this.textString = this.textString.bind(this);
-    // this.renderCal = this.renderCal.bind(this);
   }
 
+  // getting alerts from the database and sorting according to date THEN alert type (high, medium, low, info)
   populateAlerts() {
     fetch("http://localhost:3001/alert_info")
       .then(res => res.json())
@@ -72,6 +73,7 @@ class AlertsAndCalendar extends Component {
             if (y.alert_type === "Info") {
               return 1;
             }
+            return 0;
           });
 
           const today = new Date().toISOString().split('T')[0];
@@ -89,34 +91,26 @@ class AlertsAndCalendar extends Component {
       )
   }
 
+  // initialize component before rendering
   componentDidMount(){
     this.populateAlerts();
-    // this.populateCalendar();
   }
 
-  // sendProps(lister) {
-  //   var logged = this.props.location.state.logged;
-  //   var admin = this.props.location.state.adin
-  //   var user = this.props.location.state.user;
-  //   this.props.history.push("/meet/"+ lister.meetName + "_" + lister.meetStartDate, { logged: logged, admin: admin, user: user} );
-  // }
-
+  // converting dates for alerts ONLY if the alert is high, medium, or low (info does not show date)
   textString = function(lister) {
     var atype = lister.alert_type;
     var date = lister.alert_end_date;
     var text = lister.alert_text;
-
     var return_str = "";
-    if(atype !== "Info") {
+    if (atype !== "Info") {
       return_str += date.substring(5,7) + "/" + date.substring(8,10) + " - ";
     }
-
     return_str += text;
     return return_str
   }
 
+  // returns the background color of the alert depending on the type
   getBackground = function(atype) {
-    // may need to change colors
     if(atype === "High") {
       return "danger";
     }
@@ -146,15 +140,14 @@ class AlertsAndCalendar extends Component {
               </Accordion.Header>
               <Accordion.Body>
                 {this.state.alertList.map( (lister) => {
-                    return(
-                      <Alert
-                        className="mb-3"
-                        variant={this.getBackground(lister.alert_type)}
-                        // variant={"success"}
-                        text={this.getBackground(lister.alert_type) === 'light' ? 'dark' : 'white'}
-                      >
-                      {this.textString(lister)}
-                      </Alert>)
+                  return(
+                    <Alert
+                      className="mb-3"
+                      variant={this.getBackground(lister.alert_type)}
+                      text={this.getBackground(lister.alert_type) === 'light' ? 'dark' : 'white'}
+                    >
+                    {this.textString(lister)}
+                    </Alert>)
                 })}
               </Accordion.Body>
             </Accordion.Item>
@@ -164,7 +157,6 @@ class AlertsAndCalendar extends Component {
               </Accordion.Header>
               <Accordion.Body className="cal">
               <FullCalendar
-                  // plugins={[ dayGridPlugin, timeGridPlugin, listPlugin, iCalendarPlugin ]}
                   plugins={[ dayGridPlugin, googleCalendarPlugin, timeGridPlugin, listPlugin ]}
                   initialView="dayGridMonth"
                   events= {{
@@ -190,5 +182,3 @@ class AlertsAndCalendar extends Component {
 }
 
 export default withRouter(AlertsAndCalendar);
-
-// if the calendar is collapsed - show scroll bar with 5(?) alerts shown

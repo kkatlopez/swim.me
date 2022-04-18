@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-// import ReactDOM from 'react-dom';
 import { Container, Form, Button, Row, Modal } from 'react-bootstrap';
 import { Link, withRouter } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -23,7 +22,8 @@ class AdminEditForm extends Component {
       show: false,
       showModal: false
     }
-
+    
+    // updates the content of the form whenever there is a change:
     this.changeSwimmer = this.changeSwimmer.bind(this);
     this.changeFirst = this.changeFirst.bind(this);
     this.changeLast = this.changeLast.bind(this);
@@ -34,23 +34,24 @@ class AdminEditForm extends Component {
     this.updateSwimmer = this.updateSwimmer.bind(this);
     this.closeModal = this.closeModal.bind(this);
 
-    //BELOW IS THE CODE TO BLOCK OFF WHEN NOT LOGGED IN
-    if(this.props.location.state == undefined){
+    // redirect to login if not logged in
+    if (this.props.location.state === undefined) {
       this.props.history.push("/admin", { logged: false });
     }
-    else if (!('logged' in this.props.location.state)){
+    else if (!('logged' in this.props.location.state)) {
       this.props.history.push("/admin", { logged: false });
     }
-    else if(this.props.location.state.logged == false){
+    else if (this.props.location.state.logged === false) {
       this.props.history.push("/admin", { logged: false });
     }
-    else if(this.props.location.state.admin == false){
+    else if (this.props.location.state.admin === false) {
       this.props.history.push("/", { logged: true });
     }
   }
-  
+
+  // gets the swimmer's info from the database when selected from the dropdown
   changeSwimmer = (event) =>{	
-    if (event.target.value == 'placeholder') {
+    if (event.target.value === 'placeholder') {
       var temp = this.state.placeholderBody;
       this.setState({
         currentSelect: -1,
@@ -64,45 +65,47 @@ class AdminEditForm extends Component {
         });
     } else {
       var selected = event.target.value;
-      var temp = this.state.swimmers.findIndex(record => (record.lastName + ", " + record.firstName) == selected);
+      var temp2 = this.state.swimmers.findIndex(record => (record.lastName + ", " + record.firstName) === selected);
       this.setState ({
         name: selected,
         currentSelect: event.target.value,
-        firsttext: this.state.swimmers[temp].firstName,
-        lasttext: this.state.swimmers[temp].lastName,
-        postext: this.state.swimmers[temp].position,
-        classtext: this.state.swimmers[temp].classYear,
-        hometext: this.state.swimmers[temp].hometown,
-        hightext: this.state.swimmers[temp].highSchool,
+        firsttext: this.state.swimmers[temp2].firstName,
+        lasttext: this.state.swimmers[temp2].lastName,
+        postext: this.state.swimmers[temp2].position,
+        classtext: this.state.swimmers[temp2].classYear,
+        hometext: this.state.swimmers[temp2].hometown,
+        hightext: this.state.swimmers[temp2].highSchool,
         show: true
       });
     }
 	}
   
+  // following 6 functions are used to change state of form:
   changeFirst = (event) => {
-    if (this.state.currentSelect != -1) {this.setState({firsttext: event.target.value})};
+    if (this.state.currentSelect !== -1) {this.setState({firsttext: event.target.value})};
   }
 
   changeLast = (event) => {
-     if(this.state.currentSelect != -1){this.setState({lasttext: event.target.value})};
+     if(this.state.currentSelect !== -1){this.setState({lasttext: event.target.value})};
   }
   
   changePos = (event) => {
-     if(this.state.currentSelect != -1){this.setState({postext: event.target.value});}
+     if(this.state.currentSelect !== -1){this.setState({postext: event.target.value});}
   }
   
   changeClass = (event) => {
-     if(this.state.currentSelect != -1){this.setState({classtext: event.target.value});}
+     if(this.state.currentSelect !== -1){this.setState({classtext: event.target.value});}
   }
   
   changeHome = (event) => {
-     if(this.state.currentSelect != -1){this.setState({hometext: event.target.value});}
+     if(this.state.currentSelect !== -1){this.setState({hometext: event.target.value});}
   }
   
   changeHigh = (event) => {
-    if(this.state.currentSelect != -1){this.setState({hightext: event.target.value});}
+    if(this.state.currentSelect !== -1){this.setState({hightext: event.target.value});}
   }
   
+  // updates the swimmer's information in the database:
   updateSwimmer = (event) => {
     event.preventDefault();
     event.stopPropagation();
@@ -128,7 +131,6 @@ class AdminEditForm extends Component {
           });
           if (result.status !== 200) {
             this.setState({ submittable: false });
-            alert("error");
           }
         },
         (error) => {
@@ -140,6 +142,7 @@ class AdminEditForm extends Component {
       )
   }
 
+  // used to close modal upon successful submission of alert
   closeModal() {
     this.setState({ 
       showModal: false
@@ -147,6 +150,7 @@ class AdminEditForm extends Component {
     this.props.history.push("/admin/", { logged: true });
   }
 
+  // called to populate page with data from database
   populatePage() {
     fetch("http://localhost:3001/swimmer_info")
       .then(res => res.json())
@@ -166,6 +170,7 @@ class AdminEditForm extends Component {
       )
   }
 
+  // initialize component before rendering
   componentDidMount() {
     this.populatePage();
   }

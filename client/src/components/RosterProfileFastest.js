@@ -14,6 +14,7 @@ class RosterProfileLatest extends Component {
       };
     }
 
+    // retrieve all swimmer info
     getSwimmerInfo() {
       fetch("http://localhost:3001/swimmers")
         .then(res => res.json())
@@ -27,6 +28,7 @@ class RosterProfileLatest extends Component {
         )
     }
 
+    // retrieve fastest times
     getFastest() {
       fetch("http://localhost:3001/swimmers")
         .then(res => res.json())
@@ -44,6 +46,7 @@ class RosterProfileLatest extends Component {
         )
     }
 
+    // initialize component before rendering
     componentDidMount(){
       this.getSwimmerInfo();
       this.getFastest();

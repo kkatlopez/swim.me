@@ -1,43 +1,25 @@
-import React, { Component, Route } from 'react';
+import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { withRouter } from 'react-router-dom';
-import { Container, Form, FormControl, Button, Tabs, Tab } from 'react-bootstrap';
-import MeetTimes from './MeetTimes.js';
-import FastestTimes from './FastestTimes.js';
-import EventTimes from './EventTimes.js';
-import Times from './Times.js';
+import { Container, Button } from 'react-bootstrap';
 import SwimmerSearch from './SwimmerSearch.js';
 import Navigation from "./Navigation.js";
-import { Dropdown } from 'semantic-ui-react';
-import pkg from 'semantic-ui-react/package.json'
 import '../css/timessearch.css';
 
 class TimesSearch extends Component {
   constructor(props) {
 	super(props);
-  // if(this.props.location.state == undefined){
-  //   this.props.history.push("/", { logged: false });
-  // }
-  // else if (!('logged' in this.props.location.state)){
-  //   this.props.history.push("/", { logged: false });
-  // }
-  // else if(this.props.location.state.logged == false){
-  //   this.props.history.push("/", { logged: false });
-  // }
   this.state = {
       swimmernames: [],
       allswimmerinfo: [],
-      //showTable: false,
       query: "",
   };
-  //this.showTable = this.showTable.bind(this);
   }
 
-
+  // send props to other admin components
   redirect() {
     var node = document.getElementsByClassName('divider text')[0];
     var a = ReactDOM.findDOMNode(node);
-    console.log(a.textContent);
     var redirect = "/times/" + a.textContent;
     var logged = this.props.location.state.logged;
     var admin = this.props.location.state.adin
@@ -45,6 +27,7 @@ class TimesSearch extends Component {
     this.props.history.push(redirect, { logged: logged, admin: admin, user: user} );
   }
 
+  // retrieve swimmer times info
   getSwimmerTimes() {
     fetch("http://localhost:3001/swimmers")
       .then(res => res.json())
@@ -57,7 +40,6 @@ class TimesSearch extends Component {
             name = result[i].firstName + " " + result[i].lastName;
             swimmerlist.push(name);
           }
-          console.log(swimmerlist);
           this.setState({
             allswimmerinfo: result,
             swimmernames: swimmerlist
@@ -72,10 +54,12 @@ class TimesSearch extends Component {
       )
   }
 
+  // initialize component before rendering
   componentDidMount(){
     this.getSwimmerTimes();
   }
 
+  // send props to other admin components
   goToTop10() {
     var logged = this.props.location.state.logged;
     var admin = this.props.location.state.admin;
@@ -84,7 +68,6 @@ class TimesSearch extends Component {
   }
 
   render() {
-    const { showTable } = this.state;
     return(
       <Container fluid className="page-container">
         <Container fluid className="siteHeader d-flex align-items-end">
@@ -99,9 +82,6 @@ class TimesSearch extends Component {
             <Button onClick={() => this.redirect()}>Show Results</Button>
             <br/>
           </Container>
-
-          {/* {showTable && <Times swimmers={this.state.allswimmerinfo}/>} */}
-
         </Container>
         <Navigation logged = {this.props.location.state.logged} admin = {this.props.location.state.admin} user = {this.props.location.state.user}/>
       </Container>

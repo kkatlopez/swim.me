@@ -1,6 +1,5 @@
 import React from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
-
 import MeetResults from './MeetResults.js';
 import Roster from './Roster.js';
 import SpecificMeet from './SpecificMeet.js'
@@ -20,10 +19,7 @@ import SpecificChat from './SpecificChat.js';
 import CreateChat from './CreateChat.js';
 import AlertsAndCalendar from './AlertsAndCalendar.js';
 
-// localhost:3000
-
 const Main = (props) => {
-  //console.log(props);
   return (
     <Switch>
       <Route exact path='/results' render={

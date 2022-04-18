@@ -1,15 +1,12 @@
 import React, { Component } from 'react';
-// import ReactDOM from 'react-dom';
 import { Container, DropdownButton, Dropdown, Table} from 'react-bootstrap';
-import { Link, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import '../css/alltimetop10.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
-import Top10IndividualEvent from './Top10IndividualEvent.js';
 import Navigation from './Navigation.js';
 
 class AllTimeTop10 extends Component {
-
   constructor(props) {
 		super(props);
 	  this.state = {
@@ -19,55 +16,36 @@ class AllTimeTop10 extends Component {
       events: [],
 	    showTable: false
 	  };
+
+    // updates the content of the form whenever there is a change:
 	  this.showTable = this.showTable.bind(this);
-		// if(this.props.location.state == undefined){
-		// 	this.props.history.push("/", { logged: false });
-		// }
-		// else if (!('logged' in this.props.location.state)){
-		// 	this.props.history.push("/", { logged: false });
-		// }
-		// else if(this.props.location.state.logged == false){
-		// 	this.props.history.push("/", { logged: false });
-		// }
   }
 
-
-
+  // show table when an event is selected from the dropdown
   showTable(eventname) {
-    console.log(eventname.lister);
     var result = this.state.events.find(x => (x.event[0] === eventname.lister));
-    console.log(result);
-    // this.setState({
-    //   name: eventname.lister,
-    //   eventresults: result,
-    //   showTable: true
-    // });
-
     this.setState({ name: eventname.lister, eventresults: result }, function () {
-      console.log(this.state.eventresults);
       this.setState({
         showTable: true
       });
     });
     switch (eventname) {
-      case (eventname.lister != ''):
-        console.log("check");
+      case (eventname.lister !== ''):
         this.setState({ showTable: true });
         break;
-      case "":
-        console.log("check");
+      default:
         this.setState({ showTable: true });
         break;
     }
 
   }
 
+  // fetch data from database
   populateTop10() {
     fetch("http://localhost:3001/top_10")
       .then(res => res.json())
       .then(
         (result) => {
-          console.log(result);
           var names = [];
           var i;
           for (i = 0; i < result.length; i++) {
@@ -77,7 +55,6 @@ class AllTimeTop10 extends Component {
             eventnames: names,
             events: result
           });
-          console.log(names);
         },
         (error) => {
           this.setState({
@@ -88,11 +65,12 @@ class AllTimeTop10 extends Component {
       )
   }
 
+  // initialize component before rendering
   componentDidMount(){
-    console.log("hello");
     this.populateTop10();
   }
 
+  // send props to other components
   backToAllTimes() {
     var logged = this.props.location.state.logged;
     var admin = this.props.location.state.admin;
@@ -119,9 +97,6 @@ class AllTimeTop10 extends Component {
               })
           }
           </DropdownButton>
-
-          {/* {showTable && <Top10IndividualEvent eventinfo = {this.state.eventresults}/>} */}
-
           {showTable &&
             <div className="event-time">
             <h3 className="sectionTitle">Top 10 Times for {this.state.eventresults.event[0]}</h3>
@@ -134,31 +109,22 @@ class AllTimeTop10 extends Component {
                   <th>Year</th>
                   </tr>
               </thead>
-              {/* <tbody>
-                      <tr>
-                      <td>1</td>
-                      <td>{this.state.eventresults.event[1][0][0]}</td>
-                      <td>{this.state.eventresults.event[1][0][1]}</td>
-                      <td>{this.state.eventresults.event[1][0][2]}</td>
-                      </tr>
-                    </tbody> */}
+              <tbody>
+                {
+                  this.state.eventresults.event[1].map( (lister, index) => {
+                    index = index + 1;
+                    return(
 
-                    <tbody>
-              {
-                this.state.eventresults.event[1].map( (lister, index) => {
-                  var index = index + 1;
-                  return(
+                        <tr>
+                        <td>{index}</td>
+                        <td>{lister[0]}</td>
+                        <td>{lister[1]}</td>
+                        <td>{lister[2]}</td>
+                        </tr>
+                      )
 
-                      <tr>
-                      <td>{index}</td>
-                      <td>{lister[0]}</td>
-                      <td>{lister[1]}</td>
-                      <td>{lister[2]}</td>
-                      </tr>
-                    )
-
-                })
-              }
+                  })
+                }
               </tbody>
             </Table>
           </div>

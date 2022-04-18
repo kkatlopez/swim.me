@@ -1,31 +1,21 @@
 import React, { Component } from 'react';
-// import ReactDOM from 'react-dom';
 import { Container, Card } from 'react-bootstrap';
-import { Link, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import '../css/messaging.css';
 
 class ChatCard extends Component {
 
   constructor(props) {
     super(props);
-    // if(this.props.location.state == undefined){
-    //   this.props.history.push("/", { logged: false });
-    // }
-    // else if (!('logged' in this.props.location.state)){
-    //   this.props.history.push("/", { logged: false });
-    // }
-    // else if(this.props.location.state.logged == false){
-    //   this.props.history.push("/", { logged: false });
-    // }
     this.state = {
       name: this.props.chatname,
       chatID: this.props.chatID,
       chatIMG: this.props.chatIMG,
       lastMessage: this.props.lastMessage
     }
-    console.log(this.state.name);
   }
 
+  // send props to other components
   sendProps() {
     var logged = this.props.location.state.logged;
     var admin = this.props.location.state.admin;
@@ -39,7 +29,7 @@ class ChatCard extends Component {
         <Card className="chat-card py-2">
           <div className="row no-gutters d-flex align-items-center">
             <div className="col-xl-1 col-lg-2 col-3 ml-5">
-              <img src={this.state.chatIMG} className="card-img chat-img my-auto" />
+              <img src={this.state.chatIMG} alt="avatar" className="card-img chat-img my-auto" />
             </div>
             <div className="col">
               <Card.Body className="mt-2" startdate={this.state.date} onClick={() => this.sendProps()} >

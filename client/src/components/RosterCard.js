@@ -18,16 +18,13 @@ class RosterCard extends Component {
         }
     }
 
+    // send props to other admin components
     redirect() {
       var logged = this.props.location.state.logged;
       var admin = this.props.location.state.adin
       var user = this.props.location.state.user;
       this.props.history.push("/roster/"+ this.state.firstname + "-" + this.state.lastname, { logged: logged, admin: admin, user: user} );
     }
-
-    // componentDidMount() {
-    //   this.getImageUrl();
-    // }
       
     render() {
       return(

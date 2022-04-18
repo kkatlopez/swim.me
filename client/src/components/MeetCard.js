@@ -1,22 +1,13 @@
 import React, { Component } from 'react';
-// import ReactDOM from 'react-dom';
 import { Container, Card } from 'react-bootstrap';
-import { Link, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import '../css/meetresults.css';
 
 class MeetCard extends Component {
 	
   constructor(props) {
     super(props);
-    // if(this.props.location.state == undefined){
-    //   this.props.history.push("/", { logged: false });
-    // }
-    // else if (!('logged' in this.props.location.state)){
-    //   this.props.history.push("/", { logged: false });
-    // }
-    // else if(this.props.location.state.logged == false){
-    //   this.props.history.push("/", { logged: false });
-    // }
+
     this.state = {
       name: this.props.meetname,
       date: this.props.meetdate,
@@ -24,6 +15,7 @@ class MeetCard extends Component {
     }
   }
 
+  // send props to other admin components
   sendProps() {
     var logged = this.props.location.state.logged;
     var admin = this.props.location.state.admin;

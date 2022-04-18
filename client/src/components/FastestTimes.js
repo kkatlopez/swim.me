@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 import { Table } from 'react-bootstrap';
 import moment from 'moment';
 
@@ -12,6 +11,7 @@ class FastestTimes extends Component {
     };
   }
 
+  // retrieve all swimmer info and sort out fastest times
   populateEvents() {
     fetch("http://localhost:3001/swimmers")
       .then(res => res.json())
@@ -35,9 +35,9 @@ class FastestTimes extends Component {
       )
   }
 
+  // initialize component before rendering
   componentDidMount(){
     var split = this.props.name.split(' ');
-    console.log(split);
     this.setState({
       firstname: split[0],
       lastname: split[1]

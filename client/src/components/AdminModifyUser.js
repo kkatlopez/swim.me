@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-// import ReactDOM from 'react-dom';
 import { Container, Form, Button, Row, Modal } from 'react-bootstrap';
 import { Link, withRouter } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -22,13 +21,13 @@ class AdminModifyUser extends Component {
       userid: null,
       submittable: false,
       isubmittable: true,
-      // createsubmit: false,
       edittable: true,
       userTypes: ['Swimmer', 'Admin'],
       showModal: false,
       showForm: false
     }
 
+    // updates the content of the form whenever there is a change:
     this.changeUser = this.changeUser.bind(this);
     this.changeUsername = this.changeUsername.bind(this);
     this.changeFirst = this.changeFirst.bind(this);
@@ -39,48 +38,33 @@ class AdminModifyUser extends Component {
     this.checkSubmittable = this.checkSubmittable.bind(this);
     this.closeModal = this.closeModal.bind(this);
 
-    //BELOW IS THE CODE TO BLOCK OFF WHEN NOT LOGGED IN
-    if(this.props.location.state === undefined){
+    // redirect to login if not logged in
+    if (this.props.location.state === undefined) {
       this.props.history.push("/admin", { logged: false });
     }
-    else if (!('logged' in this.props.location.state)){
+    else if (!('logged' in this.props.location.state)) {
       this.props.history.push("/admin", { logged: false });
     }
-    else if(this.props.location.state.logged === false){
+    else if (this.props.location.state.logged === false) {
       this.props.history.push("/admin", { logged: false });
     }
-    else if(this.props.location.state.admin === false){
+    else if (this.props.location.state.admin === false) {
       this.props.history.push("/", { logged: true });
     }
   }
 
-  checkSubmittable = function(){
-    // console.log(this.state.users[this.state.users.length-1].userID + 1);
-    // console.log(this.state.userid === null &&
-    //   this.state.currentSelect === "Create a new user" &&
-    //   this.state.username !== "" &&
-    //     this.state.password !== "" &&
-    //     this.state.type_bool !== null);
-    // creating a new user:
-    // if (this.state.userid === null &&
-    //   this.state.currentSelect === "Create a new user" &&
-    //   this.state.username !== "" &&
-    //     this.state.password !== "" &&
-    //     this.state.type_bool !== null) {
-    //       this.setState({createsubmit: true});
-    // }
-    // editing / deleting an existing user:
+  // check if the form is submittable -- if username, password, type, have no content (user is not selected), disable Submit button
+  checkSubmittable = function() {
     if (this.state.username === "Please select a user" ||
-        this.state.password === "Please select a user" ||
-        this.state.type === "Select user type" ||
-        this.state.userid === null ||
-        this.state.currentSelect === -1) {
-      this.setState({submittable: false});
-    // editing / deleting
+      this.state.password === "Please select a user" ||
+      this.state.type === "Select user type" ||
+      this.state.userid === null ||
+      this.state.currentSelect === -1) {
+        this.setState({ submittable: false });
     } else {
-      this.setState({submittable: true});
+      this.setState({ submittable: true });
     }
-
+    // form is not submittable if username already exists in the database
     var usernames = this.state.users.map(function(value,index) { return value.username; });
     if (usernames.includes(this.state.username)) {
       this.setState({ submittable: false });
@@ -89,15 +73,13 @@ class AdminModifyUser extends Component {
     }
   }
   
+  // finding the user's id and setting the state to the user's info
   changeUser = (event) => {
-    // if (event.target.value === "–") {
-    //   alert("Please select a user");
-    // } else {
     var selected = event.target.value;
-    var temp = this.state.users.findIndex(record => record.username == selected);
+    var temp = this.state.users.findIndex(record => record.username === selected);
     if (temp !== -1) {
       var new_type;
-      if (this.state.users[temp].admin == true) {
+      if (this.state.users[temp].admin === true) {
         new_type = "Admin"
       } else {
         new_type = "Swimmer"
@@ -113,7 +95,6 @@ class AdminModifyUser extends Component {
         userid: this.state.users[temp].userID,
         isubmittable: true,
         submittable: true,
-        // createsubmit: false,
         edittable: false,
         showForm: true
       });
@@ -126,6 +107,7 @@ class AdminModifyUser extends Component {
     }
 	}
   
+  // following 4 functions are used to update the state of the form:
   changeUsername = (event) => {
     this.setState({username: event.target.value}, () => this.checkSubmittable());
   }
@@ -139,15 +121,15 @@ class AdminModifyUser extends Component {
   }
   
   changeType = (event) => {
-    if(event.target.value == "Admin") {
+    if(event.target.value === "Admin") {
       this.setState({type: "Admin", type_bool: true}, () => this.checkSubmittable());
     }
     else {
       this.setState({type: "Swimmer", type_bool: false}, () => this.checkSubmittable());
     }
-    // this.checkSubmittable();
   }
 
+  // delete selected user from the database
   deleteUser = function () {
     fetch("http://localhost:3001/delete_user", {
       method: 'POST',
@@ -165,15 +147,7 @@ class AdminModifyUser extends Component {
     })
       .then(
         (result) => {
-          this.setState({
-            showModal: true
-          });
-          // if (result.status == 200) {
-          //   this.props.history.push("/admin/", { logged: true });
-          // }
-          // else {
-          //   alert("error");
-          // }
+          this.setState({ showModal: true });
         },
         (error) => {
           this.setState({
@@ -184,6 +158,7 @@ class AdminModifyUser extends Component {
       )
   }
   
+  // updated selected user in the database
   updateUser = (event) => {
     event.preventDefault();
     event.stopPropagation();
@@ -206,12 +181,6 @@ class AdminModifyUser extends Component {
           this.setState({
             showModal: true
           });
-          // if (result.status == 200) {
-          //   this.props.history.push("/admin/", { logged: true });
-          // }
-          // else {
-          //   alert("error");
-          // }
         },
         (error) => {
           this.setState({
@@ -222,11 +191,13 @@ class AdminModifyUser extends Component {
       )
   }
 
+  // used to close modal upon successful submission of alert
   closeModal() {
     this.setState({ showModal: false });
     this.props.history.push("/admin/", { logged: true });
   }
 
+  // send props to other admin components
   sendProps() {
     var logged = this.props.location.state.logged;
     var admin = this.props.location.state.admin;
@@ -234,6 +205,7 @@ class AdminModifyUser extends Component {
     this.props.history.push("/admin", { logged: logged, admin: admin, user: user} );
   }
 
+  // called to populate page with data from database
   populatePage() {
     fetch("http://localhost:3001/user_info")
       .then(res => res.json())
@@ -252,6 +224,7 @@ class AdminModifyUser extends Component {
       )
   }
 
+  // initialize component before rendering
   componentDidMount() {
     this.populatePage();
   }
@@ -277,7 +250,6 @@ class AdminModifyUser extends Component {
                 value={this.state.currentSelect}
                 onChange={this.changeUser}
                 className="me-2"
-                // isInvalid={!this.state.isubmittable}
               >
                 <option value="Select a user">–</option>
                 {
@@ -297,7 +269,6 @@ class AdminModifyUser extends Component {
                     value={this.state.first}
                     onChange={this.changeFirst}
                     className="me-2"
-                    // isInvalid={!this.state.isubmittable}
                     disabled={!this.state.edittable}
                   />
                 </div>
@@ -311,7 +282,6 @@ class AdminModifyUser extends Component {
                     value={this.state.last}
                     onChange={this.changeLast}
                     className="me-2"
-                    // isInvalid={!this.state.isubmittable}
                     disabled={!this.state.edittable}
                   />
                 </div>
@@ -325,7 +295,6 @@ class AdminModifyUser extends Component {
                     value={this.state.username}
                     onChange={this.changeUsername}
                     className="me-2"
-                    // isInvalid={!this.state.isubmittable}
                   />
 
                   <Form.Control.Feedback id="username_form" type="invalid">
@@ -348,8 +317,6 @@ class AdminModifyUser extends Component {
                             onChange={this.changeType}
                             className="me-2"
                             checked={this.state.type === item ? true : false}
-                            // isInvalid={!this.state.isubmittable}
-                            // disabled={!this.state.edittable}
                           />
                         )
                       })
@@ -365,7 +332,6 @@ class AdminModifyUser extends Component {
                   variant="secondary">
                     Cancel
                 </Button>
-                {/* <Button onClick={this.createUser} disabled={!this.state.createsubmit}>Create</Button> */}
                 <Button onClick={this.deleteUser} disabled={!this.state.submittable}className="mx-3">Delete</Button>
                 <Button type="submit" disabled={this.state.edittable} className="mx-3">Save</Button>
               </Container>

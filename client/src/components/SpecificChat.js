@@ -1,37 +1,33 @@
 import React, { Component, useContext, useState, useEffect } from 'react';
-// import ReactDOM from 'react-dom';
-import { Container, DropdownButton, Dropdown, Form, ToastContainer, Toast } from 'react-bootstrap';
-import { Link, withRouter } from 'react-router-dom';
+import { Container, Form, ToastContainer, Toast } from 'react-bootstrap';
+import { withRouter } from 'react-router-dom';
 import '../css/specificchat.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowUp, faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import moment from 'moment';
 import {SocketContext} from '../context/socket';
 
+// COMMENT THIS MATTHEW
 function Messages(props) {
   const socket = useContext(SocketContext);
   const mes = props.messages;
   const user = props.user;
   const chatID = props.chatID;
-  // console.log(mes);
   const [messages, setMessages] = useState([]);
-  // console.log(messages);
   const allNotes = props.messages;
   useEffect(() => {
-        if(allNotes.length > 0) {
-          setMessages(allNotes);
+    if (allNotes.length > 0) {
+        setMessages(allNotes);
+    }
+    socket.on(user, data => {
+      if (data.chatID === chatID) {
+        setMessages(oldArray => [...oldArray, data]);
       }
-      socket.on(user, data => {
-        // console.log("hey");
-        // const newData = JSON.parse(data);
-        if (data.chatID == chatID) {
-          setMessages(oldArray => [...oldArray, data]);
-        }
-      })
-      return () => {
-      // before the component is destroyed
-      // unbind all event handlers used in this component
-      socket.off(user);
+    })
+    return () => {
+    // before the component is destroyed
+    // unbind all event handlers used in this component
+    socket.off(user);
     };
   }, [allNotes, socket, user]);
   // setMessages(oldArray => props.messages);
@@ -75,15 +71,18 @@ class SpecificChat extends Component {
 
   constructor(props) {
 	  super(props);
-    if(this.props.location.state == undefined){
+
+    // redirect to login if not logged in
+    if(this.props.location.state === undefined){
       this.props.history.push("/", { logged: false });
     }
     else if (!('logged' in this.props.location.state)){
       this.props.history.push("/", { logged: false });
     }
-    else if(this.props.location.state.logged == false){
+    else if(this.props.location.state.logged === false){
       this.props.history.push("/", { logged: false });
     }
+
     this.state = {
       chatName: this.props.location.state.chatName,
       chatID: this.props.location.state.chatID,
@@ -95,6 +94,7 @@ class SpecificChat extends Component {
     }
   }
 
+  // retrieve messages
   populateMessages() {
     fetch("http://localhost:3001/get_messages", {
       method: 'POST',
@@ -126,6 +126,7 @@ class SpecificChat extends Component {
     // });
   }
 
+  // initialize component before rendering
   componentDidMount(){
     var chat = this.props.match.params.chatID;
     this.setState({
@@ -136,10 +137,12 @@ class SpecificChat extends Component {
     console.log(process.env.REACT_APP_API_KEY);
   }
 
+  // change message dynamically
   changeMessage = (event) => {
     this.setState({message: event.target.value}); //, () => this.checkSubmittable()
   }
 
+  // send props to other admin components
   sendProps(eventname) {
     var logged = this.props.location.state.logged;
     var admin = this.props.location.state.admin;
@@ -147,6 +150,7 @@ class SpecificChat extends Component {
     this.props.history.push("/meet/" + this.state.meetname + "_" + this.state.meetdate + "/event/" + eventname, { logged: logged, admin: admin, user: user} );
   }
 
+  // redirect to all chats page
   backToAllChats() {
     var logged = this.props.location.state.logged;
     var admin = this.props.location.state.admin;
@@ -154,6 +158,7 @@ class SpecificChat extends Component {
     this.props.history.push("/chat", { logged: logged, admin: admin, user: user} );
   }
 
+  // post a new message to the server
   sendMessage() {
     fetch("http://localhost:3001/send_message", {
       method: 'POST',
@@ -196,22 +201,17 @@ class SpecificChat extends Component {
           </a>
         </Container>
         <Container className="px-4">
-            {/* <a href="/results" className="standalone">
-                <p><FontAwesomeIcon icon={faChevronLeft} className="px-0"/> Back to all meets</p>
-            </a> */}
-
             <div
             aria-live="polite"
             aria-atomic="true"
-            className="bg-dark position-relative message-height"
+            className="position-relative message-height"
             style={{ minHeight: '240px' }}
-            className="chat-bubbles"
+            className='chat-bubbles'
             >
             <Container className="message-height">
               <div className="d-flex justify-content-center message-body">
                 <Messages user = {this.state.user} messages = {this.state.messages} chatID = {this.state.chatID}/>
               </div>
-
             </Container>
           </div>
         </Container>
@@ -231,6 +231,5 @@ class SpecificChat extends Component {
     );
   }
 }
-// <Navigation logged = {this.props.location.state.logged} admin = {this.props.location.state.admin} user = {this.props.location.state.user}/>
 
 export default withRouter(SpecificChat);

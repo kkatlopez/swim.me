@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-// import ReactDOM from 'react-dom';
 import { Table } from 'react-bootstrap';
 import '../css/alltimetop10.css';
 
@@ -10,10 +9,6 @@ class Top10IndividualEvent extends Component {
     this.state = {
       eventinfo: this.props.eventinfo
     }
-  }
-
-  componentDidMount(){
-    console.log(this.state.eventinfo);
   }
 	
   render() {
@@ -29,7 +24,6 @@ class Top10IndividualEvent extends Component {
                   <th>Year</th>
                   </tr>
               </thead>
-
               {
               this.state.eventinfo.map( (lister, index) => {
                 return(

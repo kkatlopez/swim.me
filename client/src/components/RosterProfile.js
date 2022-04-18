@@ -13,15 +13,18 @@ class RosterProfile extends Component {
 
   constructor(props) {
     super(props);
-    if(this.props.location.state == undefined){
+
+    // redirect to login if not logged in
+    if (this.props.location.state === undefined){
       this.props.history.push("/", { logged: false });
     }
     else if (!('logged' in this.props.location.state)){
       this.props.history.push("/", { logged: false });
     }
-    else if(this.props.location.state.logged == false){
+    else if(this.props.location.state.logged === false){
       this.props.history.push("/", { logged: false });
     }
+
     this.state = {
       firstname: this.props.match.params.firstName,
       lastname: this.props.match.params.lastName,
@@ -35,6 +38,7 @@ class RosterProfile extends Component {
     };
   }
 
+  //retrieve all swimmer info
   getSwimmerInfo() {
     fetch("http://localhost:3001/swimmers")
       .then(res => res.json())
@@ -53,20 +57,13 @@ class RosterProfile extends Component {
         }
       )
   }
-  
 
-  sendProps() {
-    var logged = this.props.location.state.logged;
-    var admin = this.props.location.state.adin
-    var user = this.props.location.state.user;
-    this.props.history.push( { logged: logged, admin: admin, user: user} );
-  }
-
+  // initialize component before rendering
   componentDidMount() {
     this.getSwimmerInfo();
   }
 
-
+  // send props to other admin components
   sendProps() {
     var logged = this.props.location.state.logged;
     var admin = this.props.location.state.adin
@@ -87,7 +84,7 @@ class RosterProfile extends Component {
           <h1 className="sectionTitle">{this.state.firstname} {this.state.lastname}</h1>
           <div className="d-flex row">
               <div className="col-5">
-                  <img src={this.state.imageurl} className="img-thumbnail"></img>
+                  <img src={this.state.imageurl} alt="headshot" className="img-thumbnail"></img>
               </div>
               <div className="col info px-2">
                   <p><b>Position: </b>{this.state.strokes}</p>
@@ -111,9 +108,6 @@ class RosterProfile extends Component {
               <RosterProfileEvent/>
             </Tab>
         </Tabs>
-          {/* {(getLatestMeet && <RosterProfileLatest/>) ||
-          (showFastest && <RosterProfileFastest/>) ||
-          (showEvent && <RosterProfileEvent/> )} */}
         </Container>
         <Navigation logged = {this.props.location.state.logged} admin = {this.props.location.state.admin} user = {this.props.location.state.user}/>
       </Container>

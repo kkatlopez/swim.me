@@ -1,25 +1,23 @@
 import React, { Component } from 'react';
-// import ReactDOM from 'react-dom';
-import { Container, DropdownButton, Dropdown, Card, Button } from 'react-bootstrap';
-import { Link, withRouter } from 'react-router-dom';
+import { Container, Button } from 'react-bootstrap';
+import { withRouter } from 'react-router-dom';
 import '../css/messaging.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowRight, faChevronLeft, faMessage } from '@fortawesome/free-solid-svg-icons';
+import { faMessage } from '@fortawesome/free-solid-svg-icons';
 import ChatCard from "./ChatCard.js";
 import Navigation from "./Navigation.js";
-import moment from 'moment';
 
 class Messaging extends Component {
 
   constructor(props) {
     super(props);
-    if(this.props.location.state == undefined){
+    if(this.props.location.state === undefined){
       this.props.history.push("/", { logged: false });
     }
     else if (!('logged' in this.props.location.state)){
       this.props.history.push("/", { logged: false });
     }
-    else if(this.props.location.state.logged == false){
+    else if(this.props.location.state.logged === false){
       this.props.history.push("/", { logged: false });
     }
     this.state = {
@@ -30,7 +28,7 @@ class Messaging extends Component {
     }
   }
 
-  //AJAX Calls
+  // retrive all chats
   populateChats() {
     fetch("http://localhost:3001/chats", {
       method: 'POST',
@@ -54,15 +52,14 @@ class Messaging extends Component {
           });
         }
       )
-    // this.setState({
-    //   chatlist: [{chatName: "Matthew", chatID: 1, chatIMG: "https://rpiathletics.com/images/2021/10/5/Youngbar_Matthew.jpg", lastMessage: "What are you up to?"}, {chatName: "Gwyenth", chatID: 2, chatIMG: "https://rpiathletics.com/images/2021/10/5/Yuen_Gwyneth.jpg", lastMessage:"hmm, idk"}]
-    // });
   }
 
+  // initialize component before rendering
   componentDidMount(){
     this.populateChats();
   }
 
+  // send props to other admin components
   sendPropsNewChat() {
     var logged = this.state.logged;
     var admin = this.state.admin;

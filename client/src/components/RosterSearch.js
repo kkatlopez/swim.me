@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 import { Dropdown } from 'semantic-ui-react';
-import { Link, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import '../css/swimmersearch.css';
 
 class SwimmerSearch extends Component {
@@ -10,17 +9,9 @@ class SwimmerSearch extends Component {
       this.state = {
           swimmernames: []
       };
-      // if(this.props.location.state == undefined){
-      //   this.props.history.push("/", { logged: false });
-      // }
-      // else if (!('logged' in this.props.location.state)){
-      //   this.props.history.push("/", { logged: false });
-      // }
-      // else if(this.props.location.state.logged == false){
-      //   this.props.history.push("/", { logged: false });
-      // }
   }
   
+  // retrieve swimmer info
   getSwimmers() {
     fetch("http://localhost:3001/swimmers")
       .then(res => res.json())
@@ -30,12 +21,11 @@ class SwimmerSearch extends Component {
           var swimmerlist = [];
           var name = "";
           for (i = 0; i < result.length; i++) {
-            if (result[i].seasonsSwam.includes("2021-2022") == true) {
+            if (result[i].seasonsSwam.includes("2021-2022") === true) {
                 name = result[i].firstName + " " + result[i].lastName;
                 swimmerlist.push({key: name, value: name, text: name});
             }
           }
-          console.log(swimmerlist);
           this.setState({
             swimmernames: swimmerlist
           });
@@ -49,6 +39,7 @@ class SwimmerSearch extends Component {
       )
   }
 
+  // initialize component before rendering
   componentDidMount(){
     this.getSwimmers();
   }

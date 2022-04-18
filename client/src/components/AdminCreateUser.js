@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-// import ReactDOM from 'react-dom';
 import { Container, Form, Button, Row, Modal } from 'react-bootstrap';
 import { Link, withRouter } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -18,7 +17,6 @@ class AdminCreateUser extends Component {
       password: "",
       type: "Select user type",
       type_bool: null, // true === admin, false === swimmer
-      // currentSelect: -1,
       userid: null,
       submittable: false,
       isubmittable: true,
@@ -28,34 +26,32 @@ class AdminCreateUser extends Component {
       showModal: false
     }
 
-    // this.changeUser = this.changeUser.bind(this);
+    // updates the content of the form whenever there is a change:
     this.changeUsername = this.changeUsername.bind(this);
     this.changePassword = this.changePassword.bind(this);
     this.changeFirst = this.changeFirst.bind(this);
     this.changeLast = this.changeLast.bind(this);
     this.changeType = this.changeType.bind(this);
-    // this.updateUser = this.updateUser.bind(this);
-    // this.deleteUser = this.deleteUser.bind(this);
     this.createUser = this.createUser.bind(this);
     this.checkSubmittable = this.checkSubmittable.bind(this);
     this.closeModal = this.closeModal.bind(this);
 
-
-    //BELOW IS THE CODE TO BLOCK OFF WHEN NOT LOGGED IN
-    if(this.props.location.state === undefined){
+    // redirect to login if not logged in
+    if (this.props.location.state === undefined) {
       this.props.history.push("/admin", { logged: false });
     }
-    else if (!('logged' in this.props.location.state)){
+    else if (!('logged' in this.props.location.state)) {
       this.props.history.push("/admin", { logged: false });
     }
-    else if(this.props.location.state.logged === false){
+    else if (this.props.location.state.logged === false) {
       this.props.history.push("/admin", { logged: false });
     }
-    else if(this.props.location.state.admin === false){
+    else if (this.props.location.state.admin === false) {
       this.props.history.push("/", { logged: true });
     }
   }
 
+  // check if the form is submittable -- if username exists in database already, set submittable to false; disables Submit button + shows error
   checkSubmittable = function(){
     var usernames = this.state.users.map(function(value,index) { return value.username; });
     if (this.state.userid === null && this.state.username !== "" && this.state.password !== "" && this.state.type_bool !== null) {
@@ -68,6 +64,7 @@ class AdminCreateUser extends Component {
     }
   }
   
+  // following 5 functions are used to change state of form:
   changeUsername = (event) => {
     this.setState({username: event.target.value}, () => this.checkSubmittable());
   }
@@ -85,13 +82,14 @@ class AdminCreateUser extends Component {
   }
   
   changeType = (event) => {
-    if (event.target.value == "Admin") {
+    if (event.target.value === "Admin") {
       this.setState({type: "Admin", type_bool: true}, () => this.checkSubmittable());
     } else {
       this.setState({type: "Swimmer", type_bool: false}, () => this.checkSubmittable());
     }
   }
-
+  
+  // posting new user to the database
   createUser = (event) => {
     event.preventDefault();
     event.stopPropagation();
@@ -115,14 +113,8 @@ class AdminCreateUser extends Component {
             showModal: true
           });
           if (result.status !== 200) {
-            this.setState({submittable: false});
-            alert("error");
-          }
-          // if (result.status == 200) {
-          //   this.props.history.push("/admin/", { logged: true });
-          // }
-          // else {
-          //   
+            this.setState({ submittable: false });
+          }   
         },
         (error) => {
           this.setState({
@@ -133,6 +125,7 @@ class AdminCreateUser extends Component {
       )
   }
 
+  // used to close modal upon successful submission of alert
   closeModal() {
     this.setState({ 
       showModal: false
@@ -140,6 +133,7 @@ class AdminCreateUser extends Component {
     this.props.history.push("/admin/", { logged: true });
   }
 
+  // send props to other admin components
   sendProps() {
     var logged = this.props.location.state.logged;
     var admin = this.props.location.state.admin;
@@ -147,12 +141,12 @@ class AdminCreateUser extends Component {
     this.props.history.push("/admin", { logged: logged, admin: admin, user: user} );
   }
 
+  // called to populate page with data from database
   populatePage() {
     fetch("http://localhost:3001/user_info")
       .then(res => res.json())
       .then(
         (result) => {
-          // result.unshift({username: "Create a new user"});
           this.setState({
             users: result
           });
@@ -166,6 +160,7 @@ class AdminCreateUser extends Component {
       )
   }
 
+  // initialize component before rendering
   componentDidMount() {
     this.populatePage();
   }
@@ -192,7 +187,6 @@ class AdminCreateUser extends Component {
                   value={this.state.first}
                   onChange={this.changeFirst}
                   className="me-2"
-                  // isInvalid={!this.state.isubmittable}
                   disabled={!this.state.edittable}
                 />
               </div>
@@ -206,7 +200,6 @@ class AdminCreateUser extends Component {
                   value={this.state.last}
                   onChange={this.changeLast}
                   className="me-2"
-                  // isInvalid={!this.state.isubmittable}
                   disabled={!this.state.edittable}
                 />
               </div>
@@ -236,7 +229,6 @@ class AdminCreateUser extends Component {
                     value={this.state.password}
                     onChange={this.changePassword}
                     className="me-2"
-                    // isInvalid={!this.state.isubmittable}
                   />
                 </div>
              </Form.Group>
@@ -255,8 +247,6 @@ class AdminCreateUser extends Component {
                           value={item}
                           onChange={this.changeType}
                           className="me-2"
-                          // isInvalid={!this.state.isubmittable}
-                          // disabled={!this.state.edittable}
                         />
                       )
                     })
@@ -274,7 +264,6 @@ class AdminCreateUser extends Component {
               </Button>
               <Button className="mx-3" type="submit" disabled={!this.state.createsubmit} onClick={this.createUser}>Create User</Button>
             </Container>
-            {console.log(this.state.showModal)}
           </Form>
           {this.state.showModal &&
             <Modal show={this.state.showModal} onHide={this.closeModal} id="contained-modal-title-vcenter">

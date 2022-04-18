@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 import { Dropdown } from 'semantic-ui-react';
-import { Link, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import '../css/swimmersearch.css';
 
 class SwimmerSearch extends Component {
@@ -10,17 +9,9 @@ class SwimmerSearch extends Component {
       this.state = {
           swimmernames: []
       };
-      // if(this.props.location.state == undefined){
-      //   this.props.history.push("/", { logged: false });
-      // }
-      // else if (!('logged' in this.props.location.state)){
-      //   this.props.history.push("/", { logged: false });
-      // }
-      // else if(this.props.location.state.logged == false){
-      //   this.props.history.push("/", { logged: false });
-      // }
   }
   
+  // retrive swimmer times info
   getSwimmerTimes() {
     fetch("http://localhost:3001/swimmers")
       .then(res => res.json())
@@ -33,7 +24,6 @@ class SwimmerSearch extends Component {
             name = result[i].firstName + " " + result[i].lastName;
             swimmerlist.push({key: name, value: name, text: name});
           }
-          console.log(swimmerlist);
           this.setState({
             swimmernames: swimmerlist
           });
@@ -47,16 +37,7 @@ class SwimmerSearch extends Component {
       )
   }
 
-  getTerm() {
-    var node = document.getElementsByClassName('divider text')[0];
-    var a = ReactDOM.findDOMNode(node);
-    console.log(a.textContent);
-    // var logged = this.props.location.state.logged;
-    // var admin = this.props.location.state.adin
-    // var user = this.props.location.state.user;
-    // this.props.history.push( { logged: logged, admin: admin, user: user} );
-  }
-
+  // initialize component before rendering
   componentDidMount(){
     this.getSwimmerTimes();
   }
@@ -71,7 +52,6 @@ class SwimmerSearch extends Component {
         selection
         options={this.state.swimmernames}
         placeholder='Search for a swimmer'
-        onClick={() => this.getTerm("")}
       />
     );
   }

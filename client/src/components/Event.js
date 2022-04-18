@@ -1,52 +1,47 @@
 import React, { Component } from 'react';
-// import ReactDOM from 'react-dom';
-import { Container, DropdownButton, Dropdown, Table } from 'react-bootstrap';
-import { Link, withRouter } from 'react-router-dom';
+import { Container, Table } from 'react-bootstrap';
+import { withRouter } from 'react-router-dom';
 import '../css/event.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft} from '@fortawesome/free-solid-svg-icons';
 import Navigation from "./Navigation.js";
 
 class Event extends Component {
-
   constructor(props) {
 	super(props);
-    // if(this.props.location.state == undefined){
-    //   this.props.history.push("/", { logged: false });
-    // }
-    // else if (!('logged' in this.props.location.state)){
-    //   this.props.history.push("/", { logged: false });
-    // }
-    // else if(this.props.location.state.logged == false){
-    //   this.props.history.push("/", { logged: false });
-    // }
     this.state = {
       name: this.props.match.params.eventName,
       meetname: "",
       meetdate: "",
       results: []
     }
+
+    // redirect to login if not logged in
+    if (this.props.location.state === undefined) {
+      this.props.history.push("/", { logged: false });
+    }
+    else if (!('logged' in this.props.location.state)) {
+      this.props.history.push("/", { logged: false });
+    }
+    else if(this.props.location.state.logged === false) {
+      this.props.history.push("/", { logged: false });
+    }
   }
 
-  // use populateEvents() from SpecificMeet.js
+  // getting information for result table
   showResultTable() {
     fetch("http://localhost:3001/meet_info")
       .then(res => res.json())
       .then(
         (result) => {
-          console.log(result);
           var split = this.props.match.params.meetName.split('_');
-          console.log(split); // ok
-          console.log(this.state.name);
           var meet = split[0];
           var date = split[1];
           var specific_result = result.find(x => (x.meetName === meet && x.meetStartDate === date));
-          console.log(specific_result);
           var i;
           var eventresults = [];
-          console.log(specific_result);
           for (i = 0; i < specific_result.meetEvents.length; i++) {
-            if (specific_result.meetEvents[i][0] == this.state.name) {
+            if (specific_result.meetEvents[i][0] === this.state.name) {
               eventresults = specific_result.meetEvents[i];
             }
           }
@@ -65,23 +60,12 @@ class Event extends Component {
       )
   }
 
+  // initialize component before rendering
   componentDidMount(){
-    // var event = this.props.match.params.eventName;
-    // console.log(event);
-    // var split = this.props.match.params.meetName.split('_');
-    // var meetName = this.props.match.params.meetname;
-    // var meetDate = this.props.match.params.meetdate;
-    // console.log(split);
-    // this.setState({
-    //   meetname: split[0],
-    //   meetdate: split[1]
-    // })
-    // console.log(this.state.name);
-    // console.log(this.state.meetname);
-    // console.log(this.state.meetdate);
     this.showResultTable();
   }
 
+  // send props to other components
   sendProps() {
     var logged = this.props.location.state.logged;
     var admin = this.props.location.state.admin;
@@ -96,7 +80,6 @@ class Event extends Component {
           <h1 className="siteHeaderTitle px-3 mb-3">Event Results</h1>
         </Container>
         <Container className="px-4">
-        {/* href={"/meet/" + this.props.match.params.meetName} */}
             <a onClick={() => this.sendProps()} className="standalone meet-link">
                 <p><FontAwesomeIcon icon={faChevronLeft} className="px-0"/> Back to meet</p>
             </a>

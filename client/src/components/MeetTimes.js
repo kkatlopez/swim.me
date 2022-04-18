@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-// import ReactDOM from 'react-dom';
 import { DropdownButton, Dropdown, Table } from 'react-bootstrap';
-import { Link, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import moment from 'moment';
 
 class MeetTimes extends Component {
@@ -18,24 +17,25 @@ class MeetTimes extends Component {
       date: "",
       showMeet: false
     };
-    if(this.props.location.state == undefined){
+
+    // redirect to login if not logged in
+    if(this.props.location.state === undefined){
       this.props.history.push("/", { logged: false });
     }
     else if (!('logged' in this.props.location.state)){
       this.props.history.push("/", { logged: false });
     }
-    else if(this.props.location.state.logged == false){
+    else if(this.props.location.state.logged === false){
       this.props.history.push("/", { logged: false });
     }
   }
 
-  // finding swimmer:
+  // retrieve all swimmer info
   getSwimmer() {
     fetch("http://localhost:3001/swimmers")
       .then(res => res.json())
       .then(
         (result) => {
-          console.log(result);
           var specific_result = result.find(x => (x.firstName === this.state.firstname && x.lastName === this.state.lastname));
           var sorted = specific_result.meetsSwam.sort(function(a, b) {
             return new Date(a[1]) - new Date(b[1]);
@@ -45,7 +45,6 @@ class MeetTimes extends Component {
             first: this.state.firstname,
             last: this.state.lastname
           });
-          console.log(specific_result.meetsSwam);
         },
         (error) => {
           this.setState({
@@ -57,33 +56,24 @@ class MeetTimes extends Component {
 
   }
 
-  // get times for table:
+  // retrieve all meet info
   timesTable(info) {
-    //console.log(info);
     var link = "http://localhost:3001/meet_info/" + this.state.first + "~" + this.state.last + "~" + info[0] + "~" + info[1];
-    //console.log(link);
     fetch(link)
       .then(res => res.json())
       .then(
         (result) => {
-          console.log(result);
           this.setState({
             events: result
           });
-          console.log(result);
         }
     )
   }
 
-  // show meet table:
+  // show/hide for times table
   showMeet(meetinfo) {
     this.timesTable(meetinfo);
-    console.log(meetinfo);
-    //console.log(meetinfo);
     switch(meetinfo) {
-      // case (meetinfo != ''):
-      //     this.setState({ showMeet: true });
-      //     break;
       default:
         this.setState({ 
           showMeet: true, 
@@ -94,6 +84,7 @@ class MeetTimes extends Component {
     }
   }
 
+  // initialize component before rendering
   componentDidMount(){
     var split = this.props.name.split(' ');
     this.setState({
@@ -101,7 +92,6 @@ class MeetTimes extends Component {
         lastname: split[1]
     });
     this.getSwimmer();
-    // this.timesTable();
   }
 	
   render() {
