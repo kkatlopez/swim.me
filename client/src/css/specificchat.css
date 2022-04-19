@@ -52,7 +52,11 @@
 }
 
 .header-font {
-  font-size: min(8vw, 32px);
+  font-size: min(8vw, 28px);
+}
+
+.edit-button {
+  width: min(30%, 120px)
 }
 
 /* .message-body {

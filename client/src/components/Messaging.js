@@ -3,7 +3,8 @@ import { Container, Button } from 'react-bootstrap';
 import { withRouter } from 'react-router-dom';
 import '../css/messaging.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMessage } from '@fortawesome/free-solid-svg-icons';
+<<<<<<< Updated upstream
+import { faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 import ChatCard from "./ChatCard.js";
 import Navigation from "./Navigation.js";
 
@@ -73,7 +74,7 @@ class Messaging extends Component {
         <Container fluid className="siteHeader d-flex align-items-end justify-content-between">
           <h1 className="siteHeaderTitle px-3 mb-3">Chat</h1>
           <Button className="mb-3" onClick={() => this.sendPropsNewChat()}>
-          <FontAwesomeIcon icon={faMessage} className="new-group fa-xl"/>
+          <FontAwesomeIcon icon={faPenToSquare} className="new-group fa-xl"/>
           New Chat
           </Button>
         </Container>

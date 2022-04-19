@@ -1,9 +1,9 @@
 import React, { Component, useContext, useState, useEffect } from 'react';
-import { Container, Form, ToastContainer, Toast } from 'react-bootstrap';
+import { Container, Form, ToastContainer, Toast, Button } from 'react-bootstrap';
 import { withRouter } from 'react-router-dom';
 import '../css/specificchat.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowUp, faChevronLeft } from '@fortawesome/free-solid-svg-icons';
+import { faArrowUp, faChevronLeft, faMessage } from '@fortawesome/free-solid-svg-icons';
 import moment from 'moment';
 import {SocketContext} from '../context/socket';
 
@@ -132,9 +132,7 @@ class SpecificChat extends Component {
     this.setState({
         chatID: chat
     })
-    console.log(chat);
     this.populateMessages();
-    console.log(process.env.REACT_APP_API_KEY);
   }
 
   // change message dynamically
@@ -187,13 +185,23 @@ class SpecificChat extends Component {
       elem.value = "";
   }
 
+  sendPropsModifyChat() {
+    var logged = this.state.logged;
+    var admin = this.state.admin;
+    var user = this.state.user;
+    this.props.history.push("/modifyChat/" + this.state.chatID, { logged: logged, admin: admin, user: user, chatID: this.state.chatID, chatName: this.state.chatName, chatIMG: this.props.location.state.chatIMG} );
+  }
 
 
   render() {
     return(
       <Container fluid className="page-container">
-        <Container fluid className="siteHeader d-flex align-items-end sticky">
+        <Container fluid className="siteHeader d-flex align-items-end sticky justify-content-between">
           <h1 className="siteHeaderTitle px-3 mb-3 header-font">{this.state.chatName}</h1>
+          <Button className="mb-3 edit-button" onClick={() => this.sendPropsModifyChat()}>
+          <FontAwesomeIcon icon={faMessage} className="new-group fa-xl"/>
+          Edit Chat
+          </Button>
         </Container>
         <Container className="sticky-link sticky">
           <a onClick={() => this.backToAllChats()} className="standalone">

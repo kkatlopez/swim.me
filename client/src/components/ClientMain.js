@@ -17,6 +17,7 @@ import AdminEditForm from './AdminEditForm.js';
 import Messaging from './Messaging.js';
 import SpecificChat from './SpecificChat.js';
 import CreateChat from './CreateChat.js';
+import ModifyChat from './ModifyChat.js';
 import AlertsAndCalendar from './AlertsAndCalendar.js';
 
 const Main = (props) => {
@@ -63,6 +64,7 @@ const Main = (props) => {
       }></Route>
       <Route exact path="/chat/:chatID" component={SpecificChat} />
       <Route exact path="/newChat" component={CreateChat} />
+      <Route exact path="/modifyChat/:chatID" component={ModifyChat} />
       <Route exact path='/' render={
         () => <div><UserLanding/></div>
       }></Route>
