@@ -7,7 +7,7 @@ import { faArrowUp, faChevronLeft, faMessage } from '@fortawesome/free-solid-svg
 import moment from 'moment';
 import {SocketContext} from '../context/socket';
 
-// COMMENT THIS MATTHEW
+// MEssages component allows for socket updates in a functional manner, displays the messages as toasts
 function Messages(props) {
   const socket = useContext(SocketContext);
   const mes = props.messages;
@@ -30,21 +30,6 @@ function Messages(props) {
     socket.off(user);
     };
   }, [allNotes, socket, user]);
-  // setMessages(oldArray => props.messages);
-
-  // messages = props.messages;
-  // this.state
-  // constructor(props) {
-	//   super(props);
-  //   this.state = {
-  //     messages: props.messages
-  //   }
-  // }
-  // newMessage(data) {
-  //   const newData = JSON.parse(data);
-  //   this.setState(prevState => ({messages: [...prevState.messages, newData]}));
-  // };
-  // console.log(props.user);
 
   return <ToastContainer className="p-3" >
   {
@@ -67,6 +52,7 @@ function Messages(props) {
   </ToastContainer>;
 }
 
+// SpecificChat is the frame of the page for a chat page
 class SpecificChat extends Component {
 
   constructor(props) {
@@ -106,7 +92,6 @@ class SpecificChat extends Component {
       .then(res => res.json())
       .then(
           (result) => {
-            console.log(result);
             this.setState({
               messages: result,
             });
@@ -119,11 +104,6 @@ class SpecificChat extends Component {
             });
         }
       )
-    // this.setState({
-    //   messages: [{sender: "Matthew", senderIMG: "https://rpiathletics.com/images/2021/10/5/Youngbar_Matthew.jpg",
-    //   messageBody: "Hey how are you?", timestamp: "1:00 PM"}, {sender: "Gwyneth", senderIMG: "https://rpiathletics.com/images/2021/10/5/Yuen_Gwyneth.jpg",
-    //   messageBody: "I'm good!", timestamp: "1:01 PM"}]
-    // });
   }
 
   // initialize component before rendering
@@ -168,13 +148,11 @@ class SpecificChat extends Component {
       .then(res => res.json())
       .then(
           (result) => {
-            console.log(result);
             this.setState({
               messages: result,
             });
           },
           (error) => {
-            console.log(error);
             this.setState({
               isLoaded: true,
               error

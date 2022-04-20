@@ -8,6 +8,7 @@ import Chip from '@mui/material/Chip';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 
+// Create chat component for the new chat page
 class CreateChat extends Component {
   constructor(props) {
 	  super(props);
@@ -164,7 +165,6 @@ class CreateChat extends Component {
         freeSolo
 
         renderTags={(value, getTagProps) => {
-          console.log(value);
           this.changeMembers(value);
           return value.map((option, index) => (
             <Chip variant="outlined" label={option.firstName + " " + option.lastName} {...getTagProps({ index })} />
