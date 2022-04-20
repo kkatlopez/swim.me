@@ -1,19 +1,15 @@
 .chat-card {
   margin-bottom: 1.25rem;
-  /* height: 6.25rem; */
   cursor: pointer;
 }
 
 .card-img.chat-img {
   border-radius: 50% !important;
   margin-left: 1rem;
-  /* width: 90%; */
+  object-fit: cover;
 }
 
 svg {
-  /* position: absolute;
-  bottom: 1rem;
-  right: 1rem; */
   padding-right: 1rem;
 }
 

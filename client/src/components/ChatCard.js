@@ -29,7 +29,7 @@ class ChatCard extends Component {
         <Card className="chat-card py-2">
           <div className="row no-gutters d-flex align-items-center">
             <div className="col-xl-1 col-lg-2 col-3 ml-5">
-              <img src={this.state.chatIMG} alt="avatar" className="card-img chat-img my-auto" />
+              <img src={this.state.chatIMG} alt="avatar" className="img-responsive card-img chat-img my-auto" />
             </div>
             <div className="col">
               <Card.Body className="mt-2" startdate={this.state.date} onClick={() => this.sendProps()} >
