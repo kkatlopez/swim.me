@@ -56,7 +56,8 @@
 }
 
 .edit-button {
-  width: min(30%, 120px)
+  width: min(25%, 100px);
+  z-index: 100;
 }
 
 /* .message-body {

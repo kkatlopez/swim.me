@@ -13,6 +13,7 @@ class ModifyChat extends Component {
   constructor(props) {
 	  super(props);
     this.members = [];
+    this.membersList = [];
     this.state = {
       chatName: this.props.location.state.chatName,
       chatID: this.props.location.state.chatID,
@@ -25,16 +26,19 @@ class ModifyChat extends Component {
       isubmittable: true,
       createsubmit: false,
       edittable: true,
-      showModal: false
+      showModal: false,
+      inputValue: ""
     }
 
     this.changePicture = this.changePicture.bind(this);
     this.changeGroup = this.changeGroup.bind(this);
     // this.updateUser = this.updateUser.bind(this);
     // this.deleteUser = this.deleteUser.bind(this);
-    this.createChat = this.createChat.bind(this);
+    this.modifyChat = this.modifyChat.bind(this);
+    this.deleteChat = this.deleteChat.bind(this);
     this.checkSubmittable = this.checkSubmittable.bind(this);
     this.closeModal = this.closeModal.bind(this);
+    this.setValue = this.setValue.bind(this);
 
 
     //BELOW IS THE CODE TO BLOCK OFF WHEN NOT LOGGED IN
@@ -66,7 +70,7 @@ class ModifyChat extends Component {
   }
 
   changeGroup = (event) => {
-    this.setState({group: event.target.value}, () => this.checkSubmittable());
+    this.setState({chatName: event.target.value}, () => this.checkSubmittable());
   }
   changeMembers = (value) => {
     console.log(value);
@@ -75,18 +79,19 @@ class ModifyChat extends Component {
     // this.setState({members: value}, () => this.checkSubmittable());
   }
 
-  createChat = (event) => {
+  modifyChat = (event) => {
     event.preventDefault();
     event.stopPropagation();
-    fetch("http://localhost:3001/create_chat", {
+    fetch("http://localhost:3001/modify_chat", {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
         members: this.members,
-        name: this.state.group,
+        name: this.state.chatName,
         picture: this.state.picture,
+        chatID: this.state.chatID
       })
 
     })
@@ -99,11 +104,41 @@ class ModifyChat extends Component {
             this.setState({submittable: false});
             alert("error");
           }
-          // if (result.status == 200) {
-          //   this.props.history.push("/admin/", { logged: true });
-          // }
-          // else {
-          //
+        },
+        (error) => {
+          this.setState({
+            isLoaded: true,
+            error
+          });
+        }
+      )
+  }
+
+  deleteChat = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    fetch("http://localhost:3001/modify_chat", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        members: [],
+        name: this.state.chatName,
+        picture: this.state.picture,
+        chatID: this.state.chatID
+      })
+
+    })
+      .then(
+        (result) => {
+          this.setState ({
+            showModal: true
+          });
+          if (result.status !== 200) {
+            this.setState({submittable: false});
+            alert("error");
+          }
         },
         (error) => {
           this.setState({
@@ -146,7 +181,31 @@ class ModifyChat extends Component {
             error
           });
         }
-      )
+      );
+    console.log(this.state.chatID);
+    fetch("http://localhost:3001/get_chat_users", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        chatID: this.state.chatID
+      }) }).then(res => res.json()).then(
+        (result) => {
+          console.log(result);
+          this.setState( {
+            members: result
+          });
+          console.log(this.state.members);
+        },
+        (error) => {
+          this.setState({
+            isLoaded: true,
+            error
+          });
+        }
+      );
+      // this.membersList = this.state.members;
   }
 
   componentDidMount() {
@@ -155,6 +214,19 @@ class ModifyChat extends Component {
         chatID: chat
     })
     this.populatePage();
+  }
+
+  setValue(val) {
+    console.log(val);
+    this.setState({
+      members: val
+    }, () => this.checkSubmittable())
+    // this.state.members = val;
+    console.log(this.state.members);
+  }
+
+  setInputValue(val) {
+    this.state.inputValue = val;
   }
 
   render() {
@@ -176,7 +248,19 @@ class ModifyChat extends Component {
         options={this.state.users}
         getOptionLabel={option => option.firstName + " " + option.lastName}
         getOptionSelected={(option, value) => {console.log(option); return (option.userID === value.userID);}}
-        defaultValue={[]}
+        value={this.state.members}
+        onChange={(_, newValue) => {
+          console.log(newValue);
+          this.setValue(newValue);
+        }}
+        // inputValue={this.state.inputValue}
+        // onInputChange={(_, newInputValue) => {
+        //   this.setInputValue(newInputValue)
+        // }}
+
+
+        // value={this.state.members}
+        // onChange={this.props.onChange}
         freeSolo
         // onChange={(value) => {
         //   this.changeMembers(value);
@@ -210,7 +294,7 @@ class ModifyChat extends Component {
               <div className="d-flex">
                 <Form.Control
                   type="text"
-                  value={this.state.group}
+                  value={this.state.chatName}
                   onChange={this.changeGroup}
                   className="me-2"
                   // isInvalid={!this.state.isubmittable}
@@ -241,7 +325,8 @@ class ModifyChat extends Component {
                 variant="secondary">
                   Cancel
               </Button>
-              <Button className="mx-3" type="submit" disabled={!this.state.createsubmit} onClick={this.createChat}>Modify Chat</Button>
+              <Button className="mx-3" variant="danger" type="submit" onClick={this.deleteChat}>Delete Chat</Button>
+              <Button className="mx-3" type="submit" disabled={!this.state.createsubmit} onClick={this.modifyChat}>Modify Chat</Button>
             </Container>
             {console.log(this.state.showModal)}
           </Form>

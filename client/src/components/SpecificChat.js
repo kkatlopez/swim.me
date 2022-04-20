@@ -1,5 +1,5 @@
 import React, { Component, useContext, useState, useEffect } from 'react';
-import { Container, Form, ToastContainer, Toast, Button } from 'react-bootstrap';
+import { Container, Form, ToastContainer, Toast, Button, Row, Col } from 'react-bootstrap';
 import { withRouter } from 'react-router-dom';
 import '../css/specificchat.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -199,8 +199,8 @@ class SpecificChat extends Component {
         <Container fluid className="siteHeader d-flex align-items-end sticky justify-content-between">
           <h1 className="siteHeaderTitle px-3 mb-3 header-font">{this.state.chatName}</h1>
           <Button className="mb-3 edit-button" onClick={() => this.sendPropsModifyChat()}>
-          <FontAwesomeIcon icon={faMessage} className="new-group fa-xl"/>
-          Edit Chat
+          <FontAwesomeIcon icon={faMessage} className="new-group fa-md"/>
+          Edit
           </Button>
         </Container>
         <Container className="sticky-link sticky">

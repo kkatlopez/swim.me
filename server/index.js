@@ -529,11 +529,37 @@ app.post("/modify_chat", async (req, res) => {
   var chat = await chats.findOne({ "chatID": req.body.chatID });
   chat.chatName = req.body.name;
   chat.users = req.body.members;
+  console.log(req.body.picture);
   if (req.body.picture != "") {
-    chat.picture = req.body.picture;
+    chat.groupPicture = req.body.picture;
   }
   chat.save();
   return res.send({ "Result": true });
+});
+
+// function async user_map(user) {
+//   var cred = await user_info.findOne({ "userID": user });
+//   return cred;
+// }
+
+// get the users in a specific chat
+app.post("/get_chat_users", async (req, res) => {
+  var members = [];
+  // a document instance
+  var chat = await chats.findOne({ "chatID": req.body.chatID });
+  var returner = Promise.all(chat.users.map((async (user) => {
+    var cred = await user_info.findOne({ "userID": user });
+    return cred;
+  })));
+  returner.then( (thing) => res.send(thing));
+  // return res.send(returner);
+  // chat.chatName = req.body.name;
+  // chat.users = req.body.members;
+  // if (req.body.picture != "") {
+  //   chat.picture = req.body.picture;
+  // }
+  // chat.save();
+  // return res.send({ "Members":  });
 });
 
 // MISC. FUNCTIONS //

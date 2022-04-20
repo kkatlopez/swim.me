@@ -3,7 +3,6 @@ import { Container, Button } from 'react-bootstrap';
 import { withRouter } from 'react-router-dom';
 import '../css/messaging.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-<<<<<<< Updated upstream
 import { faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 import ChatCard from "./ChatCard.js";
 import Navigation from "./Navigation.js";

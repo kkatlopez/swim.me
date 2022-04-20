@@ -24,7 +24,7 @@ class CreateChat extends Component {
       edittable: true,
       showModal: false
     }
-    
+
     // updates the content of the form whenever there is a change:
     this.changePicture = this.changePicture.bind(this);
     this.changeGroup = this.changeGroup.bind(this);
@@ -108,7 +108,7 @@ class CreateChat extends Component {
     var user = this.props.location.state.user;
     this.props.history.push("/chat", { logged: true, admin: admin, user: user });
   }
-  
+
   // send props to other components
   sendProps() {
     var logged = this.props.location.state.logged;
@@ -243,23 +243,5 @@ class CreateChat extends Component {
     );
   }
 }
-
-// <Form.Group className="mb-3">
-//   <Form.Label><h4 className="sectionTitle">Select a User</h4></Form.Label>
-//   <Form.Select
-//     aria-label="Select which user to modify"
-//     value={this.state.currentSelect}
-//     onChange={this.changeUser}
-//     className="me-2"
-//     // isInvalid={!this.state.isubmittable}
-//   >
-//     <option value="Select a user">–</option>
-//     {
-//       this.state.users.map( (item) => {
-//         return(<option value={item.username}>{item.username}</option>)
-//       })
-//     }
-//   </Form.Select>
-// </Form.Group>
 
 export default withRouter(CreateChat);
