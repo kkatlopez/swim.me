@@ -13,7 +13,6 @@ class ModifyChat extends Component {
   constructor(props) {
 	  super(props);
     this.members = [];
-    this.membersList = [];
     this.state = {
       chatName: this.props.location.state.chatName,
       chatID: this.props.location.state.chatID,
@@ -73,10 +72,7 @@ class ModifyChat extends Component {
     this.setState({chatName: event.target.value}, () => this.checkSubmittable());
   }
   changeMembers = (value) => {
-    console.log(value);
     this.members = value.map((person) => person.userID);
-    console.log(this.members);
-    // this.setState({members: value}, () => this.checkSubmittable());
   }
 
   modifyChat = (event) => {
@@ -182,7 +178,6 @@ class ModifyChat extends Component {
           });
         }
       );
-    console.log(this.state.chatID);
     fetch("http://localhost:3001/get_chat_users", {
       method: 'POST',
       headers: {
@@ -192,11 +187,9 @@ class ModifyChat extends Component {
         chatID: this.state.chatID
       }) }).then(res => res.json()).then(
         (result) => {
-          console.log(result);
           this.setState( {
             members: result
           });
-          console.log(this.state.members);
         },
         (error) => {
           this.setState({
@@ -205,7 +198,6 @@ class ModifyChat extends Component {
           });
         }
       );
-      // this.membersList = this.state.members;
   }
 
   componentDidMount() {
@@ -217,12 +209,9 @@ class ModifyChat extends Component {
   }
 
   setValue(val) {
-    console.log(val);
     this.setState({
       members: val
     }, () => this.checkSubmittable())
-    // this.state.members = val;
-    console.log(this.state.members);
   }
 
   setInputValue(val) {
@@ -247,27 +236,14 @@ class ModifyChat extends Component {
         id="tags-filled"
         options={this.state.users}
         getOptionLabel={option => option.firstName + " " + option.lastName}
-        getOptionSelected={(option, value) => {console.log(option); return (option.userID === value.userID);}}
+        getOptionSelected={(option, value) => {return (option.userID === value.userID);}}
         value={this.state.members}
         onChange={(_, newValue) => {
-          console.log(newValue);
           this.setValue(newValue);
         }}
-        // inputValue={this.state.inputValue}
-        // onInputChange={(_, newInputValue) => {
-        //   this.setInputValue(newInputValue)
-        // }}
-
-
-        // value={this.state.members}
-        // onChange={this.props.onChange}
         freeSolo
-        // onChange={(value) => {
-        //   this.changeMembers(value);
-        // }}
 
         renderTags={(value, getTagProps) => {
-          console.log(value);
           this.changeMembers(value);
           return value.map((option, index) => (
             <Chip variant="outlined" label={option.firstName + " " + option.lastName} {...getTagProps({ index })} />
@@ -297,7 +273,6 @@ class ModifyChat extends Component {
                   value={this.state.chatName}
                   onChange={this.changeGroup}
                   className="me-2"
-                  // isInvalid={!this.state.isubmittable}
                   disabled={!this.state.edittable}
                 />
               </div>
@@ -311,7 +286,6 @@ class ModifyChat extends Component {
                   value={this.state.picture}
                   onChange={this.changePicture}
                   className="me-2"
-                  // isInvalid={!this.state.isubmittable}
                   disabled={!this.state.edittable}
                 />
               </div>
@@ -328,7 +302,6 @@ class ModifyChat extends Component {
               <Button className="mx-3" variant="danger" type="submit" onClick={this.deleteChat}>Delete Chat</Button>
               <Button className="mx-3" type="submit" disabled={!this.state.createsubmit} onClick={this.modifyChat}>Modify Chat</Button>
             </Container>
-            {console.log(this.state.showModal)}
           </Form>
           {this.state.showModal &&
             <Modal show={this.state.showModal} onHide={this.closeModal} id="contained-modal-title-vcenter">
