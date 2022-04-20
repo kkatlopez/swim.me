@@ -92,7 +92,6 @@ class SpecificChat extends Component {
       .then(res => res.json())
       .then(
           (result) => {
-            console.log(result);
             this.setState({
               messages: result,
             });

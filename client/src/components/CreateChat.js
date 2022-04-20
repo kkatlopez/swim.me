@@ -165,7 +165,6 @@ class CreateChat extends Component {
         freeSolo
 
         renderTags={(value, getTagProps) => {
-          console.log(value);
           this.changeMembers(value);
           return value.map((option, index) => (
             <Chip variant="outlined" label={option.firstName + " " + option.lastName} {...getTagProps({ index })} />

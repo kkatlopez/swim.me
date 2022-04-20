@@ -9,6 +9,7 @@ import Chip from '@mui/material/Chip';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 
+// Modify chat component for the edit chat page
 class ModifyChat extends Component {
   constructor(props) {
 	  super(props);
@@ -31,8 +32,6 @@ class ModifyChat extends Component {
 
     this.changePicture = this.changePicture.bind(this);
     this.changeGroup = this.changeGroup.bind(this);
-    // this.updateUser = this.updateUser.bind(this);
-    // this.deleteUser = this.deleteUser.bind(this);
     this.modifyChat = this.modifyChat.bind(this);
     this.deleteChat = this.deleteChat.bind(this);
     this.checkSubmittable = this.checkSubmittable.bind(this);
@@ -75,6 +74,7 @@ class ModifyChat extends Component {
     this.members = value.map((person) => person.userID);
   }
 
+  // sends post to server with the information from the page
   modifyChat = (event) => {
     event.preventDefault();
     event.stopPropagation();
@@ -110,6 +110,7 @@ class ModifyChat extends Component {
       )
   }
 
+  // same as modifyChat, but modifies the chat to have no users
   deleteChat = (event) => {
     event.preventDefault();
     event.stopPropagation();
@@ -166,7 +167,6 @@ class ModifyChat extends Component {
       .then(res => res.json())
       .then(
         (result) => {
-          // result.unshift({username: "Create a new user"});
           this.setState({
             users: result
           });

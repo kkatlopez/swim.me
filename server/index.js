@@ -491,7 +491,6 @@ app.post("/get_messages", async (req, res) => {
   var chat = await chats.findOne({ "chatID": req.body.chatID });
   var message = Promise.all(chat.messages.map(async (mess) => {
     var user = await user_info.findOne({"userID": mess[0]});
-    console.log({sender: user.firstName + " " + user.lastName, senderIMG: user.picture, messageBody: mess[1], timestamp: mess[2]});
     return({sender: user.firstName + " " + user.lastName, senderIMG: user.picture, messageBody: mess[1], timestamp: mess[2]});
   }));
   message.then((result) => {
@@ -519,7 +518,6 @@ app.post("/modify_chat", async (req, res) => {
   var chat = await chats.findOne({ "chatID": req.body.chatID });
   chat.chatName = req.body.name;
   chat.users = req.body.members;
-  console.log(req.body.picture);
   if (req.body.picture != "") {
     chat.groupPicture = req.body.picture;
   }
@@ -548,9 +546,8 @@ app.post("/send_message", async (req, res) => {
   console.log(chat);
   await chat.save();
   for (let i = 0; i < chat.users.length; i++) {
-    console.log(chat.users[i]);
-      const response = {chatID: req.body.chatID, sender: user.firstName + " " + user.lastName, senderIMG: user.picture, messageBody: req.body.message, timestamp: new Date()};
-      io.emit(chat.users[i], response);
+    const response = {chatID: req.body.chatID, sender: user.firstName + " " + user.lastName, senderIMG: user.picture, messageBody: req.body.message, timestamp: new Date()};
+    io.emit(chat.users[i], response);
   }
   res.send({"result": true});
 });
