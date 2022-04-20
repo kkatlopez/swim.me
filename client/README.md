@@ -1,40 +1,80 @@
-# Getting Started with Create React App
+# Software Development - swim.me
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+ITWS 6700, Spring 2022
 
-## Available Scripts
+Kat Lopez, Lanya Xiang, Matthew Youngbar, Gwyneth Yuen
 
-In the project directory, you can run:
+## Component Structure
+swim.me includes many components. It is easier to understand each one when considering a hierarchical strucutre.
 
-### `npm start`
+---
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+#### Log in (`UserLogin.js`)
+Upon accessing the application, users are prompted to log in. All passwords are hashed and salted.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+---
 
-### `npm test`
+#### Meet Results (`MeetResults.js`)
+This is the default landing page for all users, regardless of status. This page lists all 48 meets RPI has competed in since October 2017 in descending order by date.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- **`MeetCard.js`:** meet card component that populates **MeetResults.js**
+- **`SpecificMeet.js`:** full results of a specific meet (i.e., "Liberty League Championships 2022")
+- **`SpecificMeetCard.js`:** specific meet card component that populates **SpecificMeet.js**
+- **`Event.js`:** full results for an event within a specific meet (i.e., "Men's 500 Yard Freestyle")
 
-### `npm run build`
+---
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+#### Times Search (`Times.js`)
+Users can search through the 113 RPI swimmers and divers since 2017 on this page. You can view times by Meet (selecting a meet from the dropdown), Fastest (best times), or Event (selecting an event from the dropdown).
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- **`SwimmerSearch.js`:** dropdown search component included in **`TimesSearch.js`** that lists all 113 athletes
+- **`MeetTimes.js`:** displays the meet results for the selected meet for the selected swimmer
+- **`FastestTimes.js`:** displays the fastest times for the selected swimmer
+- **`EventTimes.js`:** all historical times for an event swam by the selected swimmer
+- **`AllTimeTop10.js`:** displays the All-Time Top 10 times for a specific event, by gender (i.e., "Men's 500 Yard Freestyle")
+  * **`Top10IndividualEvent.js`:** table that displays the Top 10 times for the specified event
+  * Accessed from the link **`SwimmerSearch.js`**
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+---
 
-### `npm run eject`
+#### 2021-2022 Roster (`Roster.js`)
+This page displays each athlete in the 2021-2022 RPI Swim & Dive team roster with their name, position/best strokes, hometown, and roster photo. You can also search for swimmers using the search function.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+- **`RosterSearch.js`:** dropdown search component included in **Roster.js** that lists 2021-2022 athletes
+- **`RosterCard.js`:** roster card component that populates **Roster.js** 
+- **`RosterProfile.js`:** specific profile for a swimmer
+  * **`RosterProfileLatest.js`:** displays the latest meet results for a specific swimmer
+  * **`RosterProfileFastest.js`:** displays the fastest times for a specific swimmer
+  * **`RosterProfileEvent.js`:** all historical times for an event swam
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+---
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+#### Alerts and Calendar (`AlertsAndCalendar.js`)
+Swimmers can view any alerts that are posted by admin users or the team's Google Calendar.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+- The calendar is populated used the `FullCalendar` library.
+
+---
+
+#### Chat (`Messages.js`)
+Users on the application can also chat with one another, either directly with one person or in a group.
+
+- **`ChatCard.js`:** chat card component that populates **Messages.js**
+- **`CreateChat.js`:** create a chat with other user(s)
+- **`SpecificChat.js`:** displays the messages for the selected chat
+- **`ModifyChat.js`:** allows users to edit existing chats like changing the group photo, adding/removing members to the group, or deleting chats completely
+
+---
+
+#### Navigation Bar (`Navigation.js`)
+This is the component that allows users to jump from page to page.
+
+---
+
+#### Admin Dashboard (`Admin.js`)
+If a user has the "admin" status, they are able to create alerts and users, edit swimmers, and modify existing accounts. These functions can be accessed on the landing page (Meet Results) by clicking the "Admin" button in the top right.
+
+- **`AdminCreateAlert.js`:** create alerts
+- **`AdminCreateUser.js`:** create users
+- **`AdminEditForm.js`:** edit swimmers in the 2021-2022 season
+- **`AdminModifyUser.js`:** modify or delete existing users
