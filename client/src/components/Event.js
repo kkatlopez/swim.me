@@ -79,7 +79,7 @@ class Event extends Component {
         <Container fluid className="siteHeader d-flex align-items-end">
           <h1 className="siteHeaderTitle px-3 mb-3">Event Results</h1>
         </Container>
-        <Container className="px-4">
+        <Container className="px-4 dynamic-height">
             <a onClick={() => this.sendProps()} className="standalone meet-link">
                 <p><FontAwesomeIcon icon={faChevronLeft} className="px-0"/> Back to meet</p>
             </a>

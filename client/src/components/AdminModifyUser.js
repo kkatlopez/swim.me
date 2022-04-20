@@ -194,7 +194,10 @@ class AdminModifyUser extends Component {
   // used to close modal upon successful submission of alert
   closeModal() {
     this.setState({ showModal: false });
-    this.props.history.push("/admin/", { logged: true });
+    var logged = this.props.location.state.logged;
+    var admin = this.props.location.state.admin;
+    var user = this.props.location.state.user;
+    this.props.history.push("/admin", { logged: logged, admin: admin, user: user} );
   }
 
   // send props to other admin components
@@ -325,13 +328,6 @@ class AdminModifyUser extends Component {
               </Form.Group>
             
               <Container className="d-flex justify-content-center">
-                <Button
-                  className="mx-3"
-                  as={Link}
-                  to={{pathname: "/admin", state: {logged: true}}}
-                  variant="secondary">
-                    Cancel
-                </Button>
                 <Button onClick={this.deleteUser} disabled={!this.state.submittable}className="mx-3">Delete</Button>
                 <Button type="submit" disabled={this.state.edittable} className="mx-3">Save</Button>
               </Container>

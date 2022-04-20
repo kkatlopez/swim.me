@@ -23,7 +23,10 @@ class AdminCreateUser extends Component {
       createsubmit: false,
       edittable: true,
       userTypes: ['Swimmer', 'Admin'],
-      showModal: false
+      showModal: false,
+      logged: this.props.location.state.logged,
+      admin: this.props.location.state.admin,
+      user: this.props.location.state.user
     }
 
     // updates the content of the form whenever there is a change:
@@ -130,7 +133,10 @@ class AdminCreateUser extends Component {
     this.setState({ 
       showModal: false
     });
-    this.props.history.push("/admin/", { logged: true });
+    var logged = this.props.location.state.logged;
+    var admin = this.props.location.state.admin;
+    var user = this.props.location.state.user;
+    this.props.history.push("/admin", { logged: logged, admin: admin, user: user} );
   }
 
   // send props to other admin components
@@ -255,13 +261,6 @@ class AdminCreateUser extends Component {
             </Form.Group>
             
             <Container className="d-flex justify-content-center">
-              <Button
-                className="mx-3"
-                as={Link}
-                to={{pathname: "/admin", state: {logged: true}}}
-                variant="secondary">
-                  Cancel
-              </Button>
               <Button className="mx-3" type="submit" disabled={!this.state.createsubmit} onClick={this.createUser}>Create User</Button>
             </Container>
           </Form>

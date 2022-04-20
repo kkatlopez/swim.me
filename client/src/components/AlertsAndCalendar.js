@@ -162,7 +162,7 @@ class AlertsAndCalendar extends Component {
                   events= {{
                     googleCalendarId: 'swimmeapp@gmail.com'
                   }}
-                  googleCalendarApiKey={process.env.REACT_APP_API_KEY}
+                  googleCalendarApiKey="AIzaSyDG-ydNYpHAxJnhlZ8W7aREzdjxpE_-ycM"
                   headerToolbar={{
                     right: 'prev,next today',
                     left: 'title',

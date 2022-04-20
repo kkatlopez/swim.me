@@ -9,12 +9,12 @@ Kat Lopez, Lanya Xiang, Matthew Youngbar, Gwyneth Yuen
 ## Installation
 **To setup the dependencies for the Python scraper:**
 1. Open your terminal and change the directory to the project
-2. Run `cd server` to change the directory to the server folder
-3. Run `python -m pip install -r requirements.txt`
+2. Run `python -m pip install -r requirements.txt`
 
 **To run the server:**
-1. Run `npm install --legacy-peer-deps` in the same directory as the one listed above
-2. Run `npm start`
+1. Run `cd server` to change the directory to the server folder
+2. Run `npm install --legacy-peer-deps` in the same directory as the one listed above
+3. Run `npm start`
 
 **To start the client:**
 1. Open another terminal window and change the directory to the project

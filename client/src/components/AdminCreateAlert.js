@@ -14,7 +14,10 @@ class AdminCreateAlert extends Component {
       endDate: new Date(),
       submittable: false,
       isubmittable: true,
-      showModal: false
+      showModal: false,
+      logged: this.props.location.state.logged,
+      admin: this.props.location.state.admin,
+      user: this.props.location.state.user
     }
 
     // updates the content of the form whenever there is a change:
@@ -104,7 +107,10 @@ class AdminCreateAlert extends Component {
     this.setState({ 
       showModal: false
     });
-    this.props.history.push("/admin/", { logged: true });
+    var logged = this.props.location.state.logged;
+    var admin = this.props.location.state.admin;
+    var user = this.props.location.state.user;
+    this.props.history.push("/admin", { logged: logged, admin: admin, user: user });
   }
 
   // send props to other admin components

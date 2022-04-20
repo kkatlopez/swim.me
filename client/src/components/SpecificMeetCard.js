@@ -52,7 +52,7 @@ class SpecificMeetCard extends Component {
             <Card className="event-card my-3">
                 <Card.Body onClick={() => this.sendProps(this.state.name)} >
                     <Card.Title className="align-middle">{this.state.name}</Card.Title>
-                    <Card.Text>Winner: {this.state.first}</Card.Text>\
+                    <Card.Text>Winner: {this.state.first}</Card.Text>
                 </Card.Body>
             </Card>
         </Container>  
