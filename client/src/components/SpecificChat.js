@@ -1,13 +1,13 @@
 import React, { Component, useContext, useState, useEffect } from 'react';
-import { Container, Form, ToastContainer, Toast } from 'react-bootstrap';
+import { Container, Form, ToastContainer, Toast, Button, Row, Col } from 'react-bootstrap';
 import { withRouter } from 'react-router-dom';
 import '../css/specificchat.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowUp, faChevronLeft } from '@fortawesome/free-solid-svg-icons';
+import { faArrowUp, faChevronLeft, faMessage } from '@fortawesome/free-solid-svg-icons';
 import moment from 'moment';
 import {SocketContext} from '../context/socket';
 
-// COMMENT THIS MATTHEW
+// MEssages component allows for socket updates in a functional manner, displays the messages as toasts
 function Messages(props) {
   const socket = useContext(SocketContext);
   const mes = props.messages;
@@ -30,21 +30,6 @@ function Messages(props) {
     socket.off(user);
     };
   }, [allNotes, socket, user]);
-  // setMessages(oldArray => props.messages);
-
-  // messages = props.messages;
-  // this.state
-  // constructor(props) {
-	//   super(props);
-  //   this.state = {
-  //     messages: props.messages
-  //   }
-  // }
-  // newMessage(data) {
-  //   const newData = JSON.parse(data);
-  //   this.setState(prevState => ({messages: [...prevState.messages, newData]}));
-  // };
-  // console.log(props.user);
 
   return <ToastContainer className="p-3" >
   {
@@ -67,6 +52,7 @@ function Messages(props) {
   </ToastContainer>;
 }
 
+// SpecificChat is the frame of the page for a chat page
 class SpecificChat extends Component {
 
   constructor(props) {
@@ -106,7 +92,6 @@ class SpecificChat extends Component {
       .then(res => res.json())
       .then(
           (result) => {
-            console.log(result);
             this.setState({
               messages: result,
             });
@@ -119,11 +104,6 @@ class SpecificChat extends Component {
             });
         }
       )
-    // this.setState({
-    //   messages: [{sender: "Matthew", senderIMG: "https://rpiathletics.com/images/2021/10/5/Youngbar_Matthew.jpg",
-    //   messageBody: "Hey how are you?", timestamp: "1:00 PM"}, {sender: "Gwyneth", senderIMG: "https://rpiathletics.com/images/2021/10/5/Yuen_Gwyneth.jpg",
-    //   messageBody: "I'm good!", timestamp: "1:01 PM"}]
-    // });
   }
 
   // initialize component before rendering
@@ -132,9 +112,7 @@ class SpecificChat extends Component {
     this.setState({
         chatID: chat
     })
-    console.log(chat);
     this.populateMessages();
-    console.log(process.env.REACT_APP_API_KEY);
   }
 
   // change message dynamically
@@ -170,13 +148,11 @@ class SpecificChat extends Component {
       .then(res => res.json())
       .then(
           (result) => {
-            console.log(result);
             this.setState({
               messages: result,
             });
           },
           (error) => {
-            console.log(error);
             this.setState({
               isLoaded: true,
               error
@@ -187,13 +163,23 @@ class SpecificChat extends Component {
       elem.value = "";
   }
 
+  sendPropsModifyChat() {
+    var logged = this.state.logged;
+    var admin = this.state.admin;
+    var user = this.state.user;
+    this.props.history.push("/modifyChat/" + this.state.chatID, { logged: logged, admin: admin, user: user, chatID: this.state.chatID, chatName: this.state.chatName, chatIMG: this.props.location.state.chatIMG} );
+  }
 
 
   render() {
     return(
       <Container fluid className="page-container">
-        <Container fluid className="siteHeader d-flex align-items-end sticky">
+        <Container fluid className="siteHeader d-flex align-items-end sticky justify-content-between">
           <h1 className="siteHeaderTitle px-3 mb-3 header-font">{this.state.chatName}</h1>
+          <Button className="mb-3 edit-button" onClick={() => this.sendPropsModifyChat()}>
+          <FontAwesomeIcon icon={faMessage} className="new-group fa-md"/>
+          Edit
+          </Button>
         </Container>
         <Container className="sticky-link sticky">
           <a onClick={() => this.backToAllChats()} className="standalone">

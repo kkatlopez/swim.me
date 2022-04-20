@@ -415,16 +415,6 @@ app.post("/create_alert", async (req, res) => {
 
 // MESSAGING FUNCTIONS //
 app.post("/chats", async (req, res) => {
-  // var chat = await chats.findOne({ "chatID": req.body.chatID });
-  // var message = Promise.all(chat.messages.map(async (mess) => {
-  //
-  //   console.log({sender: user.firstName + " " + user.lastName, senderIMG: user.picture, messageBody: mess[1], timestamp: mess[2]});
-  //   return({sender: user.firstName + " " + user.lastName, senderIMG: user.picture, messageBody: mess[1], timestamp: mess[2]});
-  // }));
-  // message.then((result) => {
-  //   console.log(result);
-  //   res.send(result);
-  // });
   connection.db.collection("chats", function (err, collection) {
     collection.countDocuments({ "users": req.body.user }, function (err, count) {
       try {
@@ -501,7 +491,6 @@ app.post("/get_messages", async (req, res) => {
   var chat = await chats.findOne({ "chatID": req.body.chatID });
   var message = Promise.all(chat.messages.map(async (mess) => {
     var user = await user_info.findOne({"userID": mess[0]});
-    console.log({sender: user.firstName + " " + user.lastName, senderIMG: user.picture, messageBody: mess[1], timestamp: mess[2]});
     return({sender: user.firstName + " " + user.lastName, senderIMG: user.picture, messageBody: mess[1], timestamp: mess[2]});
   }));
   message.then((result) => {
@@ -530,46 +519,25 @@ app.post("/modify_chat", async (req, res) => {
   chat.chatName = req.body.name;
   chat.users = req.body.members;
   if (req.body.picture != "") {
-    chat.picture = req.body.picture;
+    chat.groupPicture = req.body.picture;
   }
   chat.save();
   return res.send({ "Result": true });
 });
 
-// MISC. FUNCTIONS //
-
-// const app2 = express();
-const httpServer = http.createServer(app);
-// const io = socketIo(server);
-
-let interval;
-
-const io = require("socket.io")(httpServer, {
-  cors: {
-    origin: "http://localhost:3000",
-    methods: ["GET", "POST"]
-  }
+// get the users in a specific chat
+app.post("/get_chat_users", async (req, res) => {
+  var members = [];
+  // a document instance
+  var chat = await chats.findOne({ "chatID": req.body.chatID });
+  var returner = Promise.all(chat.users.map((async (user) => {
+    var cred = await user_info.findOne({ "userID": user });
+    return cred;
+  })));
+  returner.then( (thing) => res.send(thing));
 });
 
-// io.on("connection", (socket) => {
-//   console.log("New client connected");
-//   if (interval) {
-//     clearInterval(interval);
-//   }
-//   interval = setInterval(() => getApiAndEmit(socket), 1000);
-//   socket.on("disconnect", () => {
-//     console.log("Client disconnected");
-//     clearInterval(interval);
-//   });
-// });
-
-// const getApiAndEmit = socket => {
-//   // const response = new Date();
-//   const response = {sender: "Gwyneth", senderIMG: "https://rpiathletics.com/images/2021/10/5/Yuen_Gwyneth.jpg", messageBody: "wyd?", timestamp: "1:02 PM"}
-//   // Emitting a new message. Will be consumed by the client
-//   socket.emit("3", response);
-// };
-
+// send a message to database and any listeners
 app.post("/send_message", async (req, res) => {
   var chat = await chats.findOne({ "chatID": req.body.chatID });
   var user = await user_info.findOne({"userID": req.body.user});
@@ -578,47 +546,22 @@ app.post("/send_message", async (req, res) => {
   console.log(chat);
   await chat.save();
   for (let i = 0; i < chat.users.length; i++) {
-    console.log(chat.users[i]);
-    // io.on("Connection", (socket) => {
-      const response = {chatID: req.body.chatID, sender: user.firstName + " " + user.lastName, senderIMG: user.picture, messageBody: req.body.message, timestamp: new Date()};
-      io.emit(chat.users[i], response);
-    // });
+    const response = {chatID: req.body.chatID, sender: user.firstName + " " + user.lastName, senderIMG: user.picture, messageBody: req.body.message, timestamp: new Date()};
+    io.emit(chat.users[i], response);
   }
   res.send({"result": true});
-  // message.then((result) => {
-  //   console.log(result);
-  //   res.send(result);
-  // });
 });
 
-// app.post("/send_message", async (req, res) => {
-//   // console.log(req.body.user);
-//   connection.db.collection("chats", function (err, collection) {
-//     collection.countDocuments({ "chatID": req.body.chatID }, function (err, count) {
-//       try {
-//         if (count > 0) {
-//           collection.find({ "chatID": req.body.chatID }).toArray(function (err, data) {
-//             connection.db.collection("credentials", function (err, collection2) {
-//             collection2.find({ "userID": req.body.chatID }).toArray(function (err, data2) {
-//               const message = {sender: data2[0].firstName + " " + data2[0].lastName, senderIMG: data2[0].picture, messageBody: req.body.message, timestamp: Date()}
-//                 for (let i = 0; i < data2[0].users.length; i++) {
+// MISC. FUNCTIONS //
 
-//                   socket.emit(data2[0].users[i], message);
-//                 }})
+const httpServer = http.createServer(app);
 
-//               }
-//             }
-//           }
-//             else {
-//               return res.send({ "Result": false });
-//             }
-//           }
-//         catch (err) {
-//           console.log(err);
-//         }});
-//       }
-//     });
-  // });
+const io = require("socket.io")(httpServer, {
+  cors: {
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST"]
+  }
+});
 
 httpServer.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);

@@ -48,11 +48,16 @@
 }
 
 .sticky-link {
-  padding-top: 116px;
+  margin-top: 116px;
 }
 
 .header-font {
-  font-size: min(8vw, 32px);
+  font-size: min(8vw, 28px);
+}
+
+.edit-button {
+  width: min(25%, 100px);
+  z-index: 100;
 }
 
 /* .message-body {
